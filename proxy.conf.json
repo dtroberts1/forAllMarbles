@@ -1,0 +1,11 @@
+{
+    "/api/sportsFeeds/*":{
+        "target":"https://api.mysportsfeeds.com",
+        "secure":false,
+        "changeOrigin": true,
+        "logLevel":"debug",
+        "pathRewrite":{
+            "^/api/sportsFeeds":"https://api.mysportsfeeds.com/v2.1/pull/nfl"
+        }
+    }
+}
