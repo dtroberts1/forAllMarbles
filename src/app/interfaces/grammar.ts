@@ -4,10 +4,14 @@ export interface Grammar {
 }
 
 export interface Phrase{
+    component: any,
+    phraseIdentifier: string,
     phraseNbr: number,
     phraseText: string | null,
-    acceptablePattern: string | RegExp,
+    acceptablePattern: string | RegExp | null,
     startIndex: number,
     endIndex: number | null,
-    operation(str: string):void,
+    complete(str: string):void,
+    reset():void,
+    filterSearch():void | null,
 }

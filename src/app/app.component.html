@@ -1,9 +1,9 @@
 <div style="display: inline;">
-  <input #betEl (keyUp)="focusBet($event)" (click)="focusBet($event)" (ngModelChange)="betChanged()" (focus)="focusBet($event)" #phrase1id placeholder="here is my placeholder" [(ngModel)]="bet" matInput>
+  <input #betEl (keyUp)="focusBet($event)" (click)="focusBet($event)" (ngModelChange)="betChanged()" (focus)="focusBet($event)" #phrase1id [placeholder]="phrase1Options[0]" [(ngModel)]="bet" matInput>
 </div>
 <div>
   <ul>
-    <li style="list-style: none;" *ngFor="let item of phrase1Options">
+    <li style="list-style: none;" *ngFor="let item of filteredOptions">
       <div tabindex="1"  (click)="addToBetText(item)">
         {{item}}
       </div>
