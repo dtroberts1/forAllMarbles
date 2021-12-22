@@ -21,10 +21,22 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import { CreateNewBidComponent } from './create-new-bid/create-new-bid.component';
+import { YourBidsComponent } from './your-bids/your-bids.component';
+import { BidFeedsComponent } from './bid-feeds/bid-feeds.component';
+import { environment } from 'src/environments/environment';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DashboardComponent,
+    CreateNewBidComponent,
+    YourBidsComponent,
+    BidFeedsComponent
   ],
   imports: [
     CommonModule,
@@ -48,6 +60,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatNativeDateModule,
     MatTooltipModule,
     MatSortModule,
+    MatTabsModule,
+    AngularFirestoreModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule, // for firestore
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,

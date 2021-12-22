@@ -3,8 +3,16 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
-};
+  production: false,
+  firebase: {
+    apiKey: "AIzaSyDe1g_bqU2yPt652LpJ-Inm73mzcrNZ7GI",
+    authDomain: "forallmarbles-1ac03.firebaseapp.com",
+    projectId: "forallmarbles-1ac03",
+    storageBucket: "https://forallmarbles-1ac03-default-rtdb.firebaseio.com",
+    messagingSenderId: "824383858638",
+    appId: "1:824383858638:web:f08e7cd15dafd56746ad9f"
+  }
+}
 
 /*
  * For easier debugging in development mode, you can import the following file

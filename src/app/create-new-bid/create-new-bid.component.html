@@ -1,0 +1,14 @@
+<div class="bid-text">
+    <textarea matInput 
+    placeholder="I will place a bet that" 
+    [(ngModel)]="betText"
+    (focus)="editInstructions()"
+    (blur)="saveInstructions()"
+    [readonly]="!isEditInstructionsMode"
+    [ngClass]="{'edit-text-mode':isEditInstructionsMode}"
+    >
+    </textarea>
+</div>
+<div class="btn-container">
+    <button mat-raised-button color="accent">Submit</button>
+</div>

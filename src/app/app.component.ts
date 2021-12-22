@@ -113,6 +113,7 @@ export class AppComponent {
       .subscribe(
         (res: {players: Player[], teams: Team[]}) => {
           this.players = [...new Set(res.players)];
+          console.log({"this.players":this.players})
           this.teams = res.teams;
 
           let pipedIntroTexts : string = this.phrase1Options.toString().replace(',','|');
