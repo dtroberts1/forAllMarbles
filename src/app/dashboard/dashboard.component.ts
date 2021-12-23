@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthUser } from '../models/user';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,10 +9,24 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard.component.less']
 })
 export class DashboardComponent implements OnInit {
+  authUser !:AuthUser | null;
 
-  constructor() { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
+    this.authUser = this.authService.getAccount();
+   
+  }
+
+  logout(){
+    this.authService.SignOut()
+      .then((res) => {
+        console.log({"res":res})
+        this.router.navigate(['/login']);
+      })
   }
 
 }

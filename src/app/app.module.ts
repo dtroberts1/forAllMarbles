@@ -29,6 +29,8 @@ import { BidFeedsComponent } from './bid-feeds/bid-feeds.component';
 import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { LoginComponent } from './login/login.component';
+import { FeedComponent } from './feed/feed.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
     DashboardComponent,
     CreateNewBidComponent,
     YourBidsComponent,
-    BidFeedsComponent
+    BidFeedsComponent,
+    LoginComponent,
+    FeedComponent
   ],
   imports: [
     CommonModule,

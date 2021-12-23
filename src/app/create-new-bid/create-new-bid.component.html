@@ -8,7 +8,8 @@
     [ngClass]="{'edit-text-mode':isEditInstructionsMode}"
     >
     </textarea>
+    <input [(ngModel)]="bidAmt" type="number" />
 </div>
 <div class="btn-container">
-    <button mat-raised-button color="accent">Submit</button>
+    <button (click)="createBid()" mat-raised-button color="accent">Submit</button>
 </div>

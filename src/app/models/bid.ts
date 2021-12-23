@@ -1,6 +1,8 @@
 export class Bid {
+    key ?: string;
     bidAmount ?: number;
-    bidChallengerId ?: number;
-    bidCreatorId ?: number;
+    bidChallengerKey ?: string;
+    bidCreatorKey ?: string;
     bidMessage ?: string;
+    bidCreatorChallengerKey ?: string;
 }
