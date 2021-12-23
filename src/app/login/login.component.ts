@@ -22,6 +22,8 @@ export class LoginComponent implements OnInit {
   }
 
   login(){
+    this.loginTxt = 'sarah@sarah.com';
+    this.passwordTxt = 'sarah1234';
     this.authService.SignIn(this.loginTxt, this.passwordTxt)
       .then(() => {
         this.router.navigate(['/dashboard']);

@@ -1,3 +1,96 @@
 .my-bid-list{
     list-style: none;
+    .bid-list-item{
+        margin: 10px;
+    }
+
+    .bid-item-container{
+        background-color: white;
+        height: 250px;
+        width: 720px;
+        border-radius: 10px;
+        padding: 20px;
+        display: grid;
+
+        grid-template-rows: 33% 33% 33%;
+        grid-template-columns: 33% 33% 33%;
+
+        .bid-item-metric-header{
+            font-weight: 600;
+            font-family: system-ui;
+            font-size: 18px;
+            color: #666666
+        }
+
+        #bid-item-bid-text{
+            font-weight: initial;
+            padding-left: 15px;
+            padding-top: 10px;
+        }
+
+        #bid-item-message{
+            grid-column-start: 1;
+            grid-column-end: 3;
+            grid-row-start: 1;
+            grid-row-end: 1;
+        }
+
+        #bid-amt-container{
+            grid-column-start: 3;
+            grid-column-end: 4;
+            grid-row-start: 1;
+            grid-row-end: 1;
+
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+
+            #bid-amt-value{
+                padding-left: 15px;
+                padding-top: 10px;
+                font-weight: bolder;
+                font-size: 20px;
+            }
+        }
+
+        
+        #bid-description{
+            grid-column-start: 1;
+            grid-column-end: 4;
+            grid-row-start: 2;
+            grid-row-end: 2;
+        }
+
+
+        #bid-lower-left-btns{
+            grid-column-start: 1;
+            grid-column-end: 2;
+            grid-row-start: 3;
+            grid-row-end: 3;
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-end;
+            
+            #lower-right-btn-container{
+                display: flex;
+                justify-content: start;
+                gap: 10px;
+            }
+        }
+        #bid-lower-right-btns{
+            grid-column-start: 3;
+            grid-column-end: 4;
+            grid-row-start: 3;
+            grid-row-end: 3;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+
+            #lower-right-btn-container{
+                display: flex;
+                justify-content: flex-end;
+                gap: 10px;
+            }
+        }
+    }
 }
