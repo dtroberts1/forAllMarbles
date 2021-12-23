@@ -1,45 +1,9 @@
 <ul class="my-bid-list">
     <li *ngFor="let bid of myBids" class="bid-list-item">
-        <div class="bid-item-container">
-            <!--
-            <textarea [readonly]="!bid.isEditing"  [(ngModel)]="bid.bidMessage"></textarea>
-            <input [readonly]="!bid.isEditing" type="number" [(ngModel)]="bid.bidAmount" /
-            -->
-            <div id="bid-item-message">
-                <div class="bid-item-metric-header">
-                    Your Offer
-                </div>
-                <div id="bid-item-bid-text">
-                    {{bid.bidMessage}}
-                </div>
-            </div>
-            <div id="bid-amt-container">
-                <div class="bid-item-metric-header">
-                    Bid Amount
-                </div>
-                <div id="bid-amt-value">
-                    $800.00
-                </div>
-            </div>
-            <div id="bid-description">
-            </div>
-            <div id="bid-lower-left-btns">
-                <div>
-                    <div id="lower-left-btn-container">
-                        <button *ngIf="!bid.isEditing" (click)="modifyBid(bid)" mat-raised-button color="accent">View Counter Offers</button>
-                    </div>
-                </div>            </div>
-            <div id="bid-lower-right-btns">
-                <div>
-                    <div id="lower-right-btn-container">
-                        <button *ngIf="!bid.isEditing" (click)="modifyBid(bid)" mat-raised-button color="accent">Modify</button>
-                        <button (click)="deleteBid(bid)" mat-raised-button color="accent">Delete</button>
-                        <button *ngIf="bid.isEditing" (click)="updateBid(bid)" mat-raised-button color="accent">Save</button>
-                        <button *ngIf="bid.isEditing" (click)="cancelModify(bid)" mat-raised-button color="accent">Cancel</button>
-                    </div>
-                </div>
-            </div>
+        <app-nested-accordion
+            [bid]="bid"
+        >
 
-        </div>
+        </app-nested-accordion>
     </li>
 </ul>

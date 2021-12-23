@@ -31,6 +31,8 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { LoginComponent } from './login/login.component';
 import { FeedComponent } from './feed/feed.component';
+import {CdkAccordionModule} from '@angular/cdk/accordion';
+import { NestedAccordionComponent } from './nested-accordion/nested-accordion.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,8 @@ import { FeedComponent } from './feed/feed.component';
     YourBidsComponent,
     BidFeedsComponent,
     LoginComponent,
-    FeedComponent
+    FeedComponent,
+    NestedAccordionComponent
   ],
   imports: [
     CommonModule,
@@ -64,6 +67,7 @@ import { FeedComponent } from './feed/feed.component';
     MatNativeDateModule,
     MatTooltipModule,
     MatSortModule,
+    CdkAccordionModule,
     MatTabsModule,
     AngularFirestoreModule,
     AngularFireModule.initializeApp(environment.firebase),
