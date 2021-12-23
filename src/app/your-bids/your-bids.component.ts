@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { Bid } from '../models/bid';
 import { AuthUser } from '../models/user';
 import { AuthService } from '../services/auth.service';
@@ -42,7 +41,6 @@ export class YourBidsComponent implements OnInit {
   deleteBid(bid: Bid){
     this.bidService.delete(<string>bid.key)
       .then((res) => {
-        console.log("removed..")
       })
   }
 
@@ -52,9 +50,32 @@ export class YourBidsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("in init..")
     this.authUser = this.authService.getAccount();
+    let me = this;
 
-    this.bidService.getBidsForUser(<string>this.authUser?.key);
+    this.bidService.getBidsForUser(<string>this.authUser?.key)
+      .subscribe({
+        next(bids: Bid[]){
+          if (Array.isArray(bids)){
+            me.myBids = bids;
+          }
+        },
+        error(err){
+          console.log("error:" + err);
+
+        },
+      });
   }
 
+  /*
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        let change = changes[propName];
+
+      }
+    }
+  }
+  */
 }

@@ -4,4 +4,5 @@ export class Bid {
     bidChallengerKey ?: string;
     bidCreatorKey ?: string;
     bidMessage ?: string;
+    bidCreatorChallengerKey ?: string;
 }

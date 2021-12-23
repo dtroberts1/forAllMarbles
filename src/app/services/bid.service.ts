@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList, AngularFireObject} from '@angular/fire/database';
-import { map, Observable, tap } from 'rxjs';
+import { combineLatest, map, Observable, Subscriber, tap } from 'rxjs';
 import { Bid } from '../models/bid';
 import { User } from '../models/user';
+declare var querybase: any;
 
 
 @Injectable({
@@ -28,35 +29,39 @@ export class BidService {
       ));
   }
 
-  getBidsForUser(userKey: string){
-    // TODO
-
-    return new Promise((resolve, reject) => {
-      this.db.database.ref('bids')
-        .orderByChild('bidCreatorKey')
+  getBidsForUser(userKey: string): Observable<Bid[]>{
+    return new Observable(
+      subscriber => {
+        let myobj = this.db.database.ref('bids')
+        .orderByChild('bidCreatorChallengerKey')
               .equalTo(userKey)
-              .once('value')
-              .then((snap) => {
+              .on('value', (snap : any) => {
                 let val = snap.val();
-                val = val ? val : [];
-                console.log({"userBids":val});
-                resolve(val);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-
-    });
+                console.log({"val":val})
+                let mappedBids =  Object.keys(val).map((myKey : any, index: number) => <Bid>{
+                    key : myKey,
+                    ...val[Object.keys(val)[index]]
+                  });
+                
+                  mappedBids = mappedBids ? mappedBids : [];
+                  subscriber.next(mappedBids);
+              },
+              error => {
+                subscriber.error(error);
+              }
+            )
+      },      
+    )
   }
 
   create(bid: Bid): Promise<any> {
     return new Promise((resolve, reject) => {
       this.bidsRef.push(bid)
-        .then((res) => {
+        .then((res : any) => {
           console.log({"creationResult":res});
           resolve(res);
         })
-        .catch((err) => {
+        .catch((err : any) => {
           reject(err);
         })
     });
@@ -68,7 +73,7 @@ export class BidService {
         .then(() => {
             resolve(true);
           })
-          .catch((err) => {
+          .catch((err : any) => {
             reject(err);
           })
     });
@@ -81,7 +86,7 @@ export class BidService {
         .then(() => {
             resolve(true);
           })
-          .catch((err) => {
+          .catch((err : any) => {
             reject(err);
           })
     });
@@ -94,7 +99,7 @@ export class BidService {
         .then(() => {
             resolve(true);
           })
-          .catch((err) => {
+          .catch((err : any) => {
             reject(err);
           })
     });

@@ -30,6 +30,7 @@ import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { LoginComponent } from './login/login.component';
+import { FeedComponent } from './feed/feed.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { LoginComponent } from './login/login.component';
     CreateNewBidComponent,
     YourBidsComponent,
     BidFeedsComponent,
-    LoginComponent
+    LoginComponent,
+    FeedComponent
   ],
   imports: [
     CommonModule,

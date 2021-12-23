@@ -27,7 +27,6 @@ export class CreateNewBidComponent implements OnInit {
   }
 
   createBid(){
-    console.log("bid amount is " + this.bidAmt);
     let key = this.authService.getAccount()?.key;
     if (key){
       this.userService.getSingle(key)
@@ -37,6 +36,7 @@ export class CreateNewBidComponent implements OnInit {
               bidAmount : this.bidAmt,
               bidCreatorKey : user.key,
               bidMessage : this.betText,
+              bidCreatorChallengerKey: user.key,
             }
           )
             .then((res : {key: string}) => {
@@ -45,8 +45,6 @@ export class CreateNewBidComponent implements OnInit {
 
               if (res) {
                 existingBids?.push(res.key);
-                console.log({"existingBids":existingBids});
-                console.log({"user":user})
                 this.userService.update(<string>user.key, 
                   {
                     key : user.key,
@@ -54,8 +52,10 @@ export class CreateNewBidComponent implements OnInit {
                     displayName : user.displayName,
                     emailAddress : user.emailAddress,
                   }
-                  )
+                );
               }
+              this.bidAmt = null as any;
+              this.betText = null as any;
             });
         });
     }
