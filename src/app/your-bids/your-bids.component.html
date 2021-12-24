@@ -1,9 +1,10 @@
 <ul class="my-bid-list">
     <li *ngFor="let bid of myBids" class="bid-list-item">
         <app-nested-accordion
+            *ngIf="authUser"
             [bid]="bid"
+            [user]="authUser"
         >
-
         </app-nested-accordion>
     </li>
 </ul>

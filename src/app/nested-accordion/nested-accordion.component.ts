@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { Bid } from '../models/bid';
+import { AuthUser } from '../models/user';
 import { BidService } from '../services/bid.service';
 
 @Component({
@@ -9,8 +10,8 @@ import { BidService } from '../services/bid.service';
 })
 export class NestedAccordionComponent implements OnInit {
   @Input() bid !: Bid | any;
+  @Input() user !:AuthUser | null;
 
-  items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
   expandedIndex = 0;
 
   constructor(
@@ -19,7 +20,7 @@ export class NestedAccordionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log({"bid":this.bid})
+
   }
   updateBid(bid: Bid){
     let currBid = bid as any;
@@ -28,7 +29,6 @@ export class NestedAccordionComponent implements OnInit {
     
     this.bidService.update(currBid.key, currBid)
       .then(() => {
-        console.log("saved..")
       });
   }
 
@@ -46,5 +46,22 @@ export class NestedAccordionComponent implements OnInit {
   modifyBid(bid: Bid){
     let currBid = bid as any;
     currBid.isEditing = true;
+  }
+
+  
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        let change = changes[propName];
+        switch (propName) {
+          case 'user': {
+          }
+          break;
+          case 'bid':{
+          }
+          break;
+        }
+      }
+    }
   }
 }

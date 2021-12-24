@@ -8,7 +8,9 @@
       [attr.aria-expanded]="accordionItem.expanded"
       [attr.aria-controls]="'accordion-body-' + 0">
       <div class="example-accordion-item-header" (click)="accordionItem.toggle()">
+        <div class="bid-item-metric-header">
         {{bid.title}}
+        </div>
         <span class="example-accordion-item-description">
           Click to {{ accordionItem.expanded ? 'close' : 'open' }}
         </span>
@@ -22,7 +24,7 @@
         <div class="bid-item-container">
             <div id="bid-item-message">
                 <div class="bid-item-metric-header">
-                    Your Offer
+                    {{(user?.key == bid.bidCreatorKey ? 'Your': 'Their')}} Offer
                 </div>
                 <div id="bid-item-bid-text">
                     {{bid.bidMessage}}
@@ -33,7 +35,7 @@
                     Bid Amount
                 </div>
                 <div id="bid-amt-value">
-                    $800.00
+                    ${{bid.bidAmount}}
                 </div>
             </div>
             <div id="bid-description">
@@ -43,29 +45,34 @@
                     <div id="lower-left-btn-container">
                         <!--<button *ngIf="!bid.isEditing" (click)="modifyBid(bid)" mat-raised-button color="accent">View Counter Offers</button>-->
                     </div>
-                </div>            </div>
+                </div>            
+            </div>
             <div id="bid-lower-right-btns">
                 <div>
                     <div id="lower-right-btn-container">
-                        <button *ngIf="!bid.isEditing" (click)="modifyBid(bid)" mat-raised-button color="accent">Modify</button>
-                        <button (click)="deleteBid(bid)" mat-raised-button color="accent">Delete</button>
-                        <button *ngIf="bid.isEditing" (click)="updateBid(bid)" mat-raised-button color="accent">Save</button>
-                        <button *ngIf="bid.isEditing" (click)="cancelModify(bid)" mat-raised-button color="accent">Cancel</button>
+                        <button *ngIf="user && user.key === bid.bidCreatorKey" (click)="modifyBid(bid)" mat-raised-button color="accent">Modify</button>
+                        <button *ngIf="user && user.key === bid.bidCreatorKey" (click)="deleteBid(bid)" mat-raised-button color="accent">Delete</button>
+                        <button *ngIf="user && user.key === bid.bidCreatorKey" (click)="updateBid(bid)" mat-raised-button color="accent">Save</button>
+                        <button *ngIf="user && !(user.key === bid.bidCreatorKey)" (click)="cancelModify(bid)" mat-raised-button color="accent">Counter Offer</button>
+                        <button *ngIf="user && user.key === bid.bidChallengerKey && !(user.key === bid.bidCreatorKey)" (click)="cancelModify(bid)" mat-raised-button color="accent">Approve</button>
+                        <!--
+                        <span>User key is {{user?.key}}</span>
+                        <span>bid.bidCreatorKey is {{bid.bidCreatorKey}}</span>
+                        <span>bid.bidChallengerKey is {{bid.bidChallengerKey}}</span>
+                        -->
+
                     </div>
                 </div>
             </div>
 
         </div>
         <div *ngIf="bid.bids && bid.bids.length">
-            <div class="bid-item-metric-header" style="text-align: center;         font-weight: 600 !important;
-            font-family: system-ui !important;
-            font-size: 18px !important;
-            color: #666666 !important;line-height: 25px;
+            <div class="bid-item-metric-header" style="text-align: center;         
             padding-bottom: 10px;">
                 Counter Offers
             </div>
             <div *ngFor="let childBid of bid.bids">
-                <app-nested-accordion [bid]="childBid"></app-nested-accordion>
+                <app-nested-accordion [user]="user" [bid]="childBid"></app-nested-accordion>
     
             </div>
         </div>

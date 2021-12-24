@@ -14,7 +14,6 @@ export class UserService {
 
   constructor(private db: AngularFireDatabase) { 
     this.usersRef = db.list(this.userPath);
-    console.log({"usersRef":this.usersRef})
   }
 
 

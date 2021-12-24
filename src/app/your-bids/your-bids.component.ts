@@ -29,7 +29,6 @@ export class YourBidsComponent implements OnInit {
     
     this.bidService.update(currBid.key, currBid)
       .then(() => {
-        console.log("saved..")
       });
   }
 
@@ -50,7 +49,6 @@ export class YourBidsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("in init..")
     this.authUser = this.authService.getAccount();
     let me = this;
 
@@ -59,7 +57,6 @@ export class YourBidsComponent implements OnInit {
         next(bids: Bid[]){
           if (Array.isArray(bids)){
             me.myBids = me.getBidsFilteredByUser(bids, <string>me.authUser?.key);
-            console.log({"myBids":me.myBids });
           }
         },
         error(err){
