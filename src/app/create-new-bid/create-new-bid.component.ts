@@ -40,6 +40,8 @@ export class CreateNewBidComponent implements OnInit {
               bidMessage : this.betText,
               bidCreatorChallengerKey: user.key,
               rootBidKey: null,
+              bidChallengerKey : 'NULL',
+              parentPath: '/bids/',
             }
           )
             .then((res : {key: string}) => {

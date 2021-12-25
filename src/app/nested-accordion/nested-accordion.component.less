@@ -82,7 +82,6 @@
 
         #bid-amt-value{
             padding-left: 15px;
-            padding-top: 10px;
             font-weight: bolder;
             font-size: 20px;
         }
@@ -106,7 +105,7 @@
         justify-content: flex-start;
         align-items: flex-end;
         
-        #lower-right-btn-container{
+        #lower-left-btn-container{
             display: flex;
             justify-content: flex-end;
             gap: 10px;
@@ -130,8 +129,76 @@
 }
 
 .bid-item-metric-header{
-    font-weight: 600 !important;
-    font-family: system-ui !important;
-    font-size: 18px !important;
-    color: #666666 !important;
+  line-height: 20px;
+  font-weight: 600 !important;
+  font-family: system-ui !important;
+  font-size: 18px !important;
+  color: #666666 !important;
+}
+
+.cell-data-div-img-edit{
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  padding-right:5px;
+  div{
+    width: 23px;
+    height: 23px;
+    content: url("../../assets/icons//EditIcon/outline_edit_black_48dp.png");
+
+    /*visibility: hidden;*/
+    border-color: #42b7ff;
+    border-width: 0px;
+    padding:1px;
+    border-style: solid;
+    border-radius: 5px;
+
+    &:hover{
+        cursor: pointer;
+    }
+  }
+}
+
+textarea, input{
+  outline: none;
+  border: none;
+  line-height: 22px;
+  font-size: 17px;
+  padding-top: 10px;
+  padding-left: 18px;
+}
+
+textarea{
+  width: 500px;
+  height: 130px;
+}
+
+.pending-changes{
+  background: #1D1F20;
+  position: relative;
+  animation: animategrad 1s ease alternate infinite;
+  border-radius: 2px;
+  border-width: 1px;
+}
+
+@keyframes animategrad {
+  0%{
+      background-color: rgba(102, 255, 0, 0);
+  }
+
+  25%{
+      background-color: rgba(102, 255, 0, 0.25);
+  }
+
+  50%{
+      background-color: rgba(102, 255, 0, 0.5);
+  }
+
+  75%{
+      background-color: rgba(102, 255, 0, 0.75);
+  }
+
+  100%{
+      background-color: rgba(102, 255, 0, 1);
+  }
 }

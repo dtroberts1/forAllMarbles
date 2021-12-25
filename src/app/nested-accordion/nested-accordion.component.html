@@ -23,19 +23,54 @@
         [attr.aria-labelledby]="'accordion-header-' + 0">
         <div class="bid-item-container">
             <div id="bid-item-message">
-                <div class="bid-item-metric-header">
+                <div class="bid-item-metric-header" style="line-height: 20px; display:flex;">
                     {{(user?.key == bid.bidCreatorKey ? 'Your': 'Their')}} Offer
+                    <div style="display: inline-block; margin-left: 8px; vertical-align: middle;" [ngStyle]="{'visibility': bidMessageEditMode ? 'visible': 'hidden'}">
+                        <mat-icon *ngIf="bidMessageFormControl.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                        <mat-error *ngIf="bidMessageFormControl.invalid">{{getInputErrorMessage(bidMessageFormControl)}}</mat-error>
+                    </div>
+                    <div [ngStyle]="{'visibility': !bidMessageEditMode ? 'visible' : 'hidden'}"
+                    class="cell-data-div-img-edit" 
+                    style="display: inline-block !important; margin-left: 8px;"
+                    >
+                        <div tabindex="1" (click)="enableBidMessageEditMode()" style="margin-top: -5px;">
+                        </div>
+                    </div>
                 </div>
-                <div id="bid-item-bid-text">
-                    {{bid.bidMessage}}
+                <div style="display: inline-block;">
+                    <textarea matInput 
+                        placeholder="Bid Message" 
+                        style="border: none; outline: none;"
+                        #bidMessageInput
+                        [readonly]="!bidMessageEditMode"
+                        (keydown)="detailDataChanged()"
+                        [formControl]="bidMessageFormControl"
+                    >
+                    </textarea>
                 </div>
             </div>
             <div id="bid-amt-container">
-                <div class="bid-item-metric-header">
+                <div class="bid-item-metric-header" style="display: flex; margin-right: -38px;">
                     Bid Amount
+                    <div [ngStyle]="{'visibility': !bidAmtEditMode && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
+                    class="cell-data-div-img-edit" 
+                    style="display: inline-flex !important; margin-left: 8px;"
+                    >
+                        <div tabindex="1" (click)="enableBidAmtEditMode()" style="margin-top: -5px;">
+                        </div>
+                    </div>
                 </div>
                 <div id="bid-amt-value">
-                    ${{bid.bidAmount}}
+                    <input  matInput 
+                    placeholder="Bid Amount" 
+                    style="border: none; outline: none; height: initial; width: initial; text-align: right;"
+                    #bidAmtInput
+                    type="number"
+                    (click)="detailDataChanged()"
+                    [readonly]="!bidAmtEditMode"
+                    (keydown)="detailDataChanged()"
+                    [formControl]="bidAmtFormControl"
+                    />
                 </div>
             </div>
             <div id="bid-description">
@@ -44,23 +79,22 @@
                 <div>
                     <div id="lower-left-btn-container">
                         <!--<button *ngIf="!bid.isEditing" (click)="modifyBid(bid)" mat-raised-button color="accent">View Counter Offers</button>-->
+                        <button *ngIf="user && !(user.key === bid.bidCreatorKey)" (click)="cancelModify(bid)" mat-raised-button color="accent">Counter Offer</button>
+                        <button *ngIf="user && user.key === bid.bidChallengerKey && !(user.key === bid.bidCreatorKey)" (click)="cancelModify(bid)" mat-raised-button color="accent">Approve</button>
                     </div>
                 </div>            
             </div>
             <div id="bid-lower-right-btns">
                 <div>
                     <div id="lower-right-btn-container">
-                        <button *ngIf="user && user.key === bid.bidCreatorKey" (click)="modifyBid(bid)" mat-raised-button color="accent">Modify</button>
-                        <button *ngIf="user && user.key === bid.bidCreatorKey" (click)="deleteBid(bid)" mat-raised-button color="accent">Delete</button>
-                        <button *ngIf="user && user.key === bid.bidCreatorKey" (click)="updateBid(bid)" mat-raised-button color="accent">Save</button>
-                        <button *ngIf="user && !(user.key === bid.bidCreatorKey)" (click)="cancelModify(bid)" mat-raised-button color="accent">Counter Offer</button>
-                        <button *ngIf="user && user.key === bid.bidChallengerKey && !(user.key === bid.bidCreatorKey)" (click)="cancelModify(bid)" mat-raised-button color="accent">Approve</button>
+                        <button *ngIf="user && user.key === bid.bidCreatorKey" (click)="deleteBid(bid)" mat-raised-button color="warn">Delete</button>
+                        <button *ngIf="detailChangesPending" (click)="saveUpdate()" class="pending-changes" mat-raised-button color="primary">Save Changes</button>
+                        <button *ngIf="bidMessageEditMode || bidAmtEditMode || detailChangesPending" (click)="cancelDetailChanges()" mat-raised-button color="primary">Cancel Change</button>
                         <!--
                         <span>User key is {{user?.key}}</span>
                         <span>bid.bidCreatorKey is {{bid.bidCreatorKey}}</span>
                         <span>bid.bidChallengerKey is {{bid.bidChallengerKey}}</span>
                         -->
-
                     </div>
                 </div>
             </div>

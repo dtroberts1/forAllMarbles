@@ -7,5 +7,6 @@ export class Bid {
     bidMessage ?: string;
     bidCreatorChallengerKey ?: string;
     bids ?: Bid[];
-    rootBidKey !:string | null;
+    rootBidKey ?:string | null;
+    parentPath ?: string | null;
 }

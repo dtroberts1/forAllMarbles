@@ -36,19 +36,20 @@ export class FeedComponent implements OnInit {
     });
   }
 
-  getCounterableBidsHelper(bid: Bid, user: AuthUser) :Bid[]{
+  getCounterableBidsHelper(bid: Bid, user: AuthUser, flatBidStrs : string[]) :Bid[]{
     let tmpArray : Bid[] = [];
     if (user){
     }
     else{
     }
-    if (!bid.rootBidKey || bid.bidCreatorKey == user.key || bid.bidChallengerKey == user.key){
+    if (!bid.rootBidKey || bid.rootBidKey === 'root' || bid.bidCreatorKey == user.key || bid.bidChallengerKey == user.key){
       if (Array.isArray(bid.bids) && bid.bids.length){
         bid.bids.forEach((tmpBid) => {
-          tmpArray = [...tmpArray, ...this.getCounterableBidsHelper(tmpBid, <AuthUser>this.authUser)];
+          tmpArray = [...tmpArray, ...this.getCounterableBidsHelper(tmpBid, <AuthUser>this.authUser, flatBidStrs)];
         });
       }
       tmpArray.push(bid);
+      flatBidStrs.push(<string>bid.key);
     }
 
     return tmpArray;
@@ -56,15 +57,17 @@ export class FeedComponent implements OnInit {
 
   getCounterableBids(allBids: Bid[]) : Bid[]{
     let availableBids : Bid[] = [];
+    let flatBidStrs : string[] = [];
     // Get all bids as long as they are either not counter offers, 
       // or are counter offers but were not created by someone other than the user
 
-    let rootBids = allBids.filter(bid => bid.rootBidKey == null);
+    let rootBids = allBids.filter(bid => bid.rootBidKey == null || bid.rootBidKey === 'root');
     rootBids.forEach((rootBid) => {
       if (Array.isArray(rootBid.bids)){
-        availableBids = [...availableBids, ...this.getCounterableBidsHelper(rootBid, <AuthUser>this.authUser)];
+        availableBids = [...availableBids, ...this.getCounterableBidsHelper(rootBid, <AuthUser>this.authUser, flatBidStrs)];
       }
     });
+    availableBids = availableBids.filter(bid => !bid.rootBidKey || bid.rootBidKey === 'root' || bid.rootBidKey && !flatBidStrs.includes(<string>bid.key));
 
     return availableBids;
   }
