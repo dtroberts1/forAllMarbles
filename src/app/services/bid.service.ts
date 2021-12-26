@@ -1,11 +1,7 @@
-import { isNgTemplate } from '@angular/compiler';
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, AngularFireList, AngularFireObject} from '@angular/fire/database';
-import { combineLatest, map, Observable, Subscriber, tap } from 'rxjs';
+import { AngularFireDatabase, AngularFireList} from '@angular/fire/database';
+import { firstValueFrom, map, Observable, Subscriber, tap } from 'rxjs';
 import { Bid } from '../models/bid';
-import { User } from '../models/user';
-declare var querybase: any;
-
 
 @Injectable({
   providedIn: 'root'
@@ -100,6 +96,21 @@ export class BidService {
     )
   }
 
+  createNested(bid: Bid): Promise<any> {
+    return new Promise((resolve, reject) => {
+      delete bid.isNew;
+
+      let path = '/bids/'
+      this.db.list(path).push(bid)
+        .then((res) => {
+            resolve(true);
+          })
+          .catch((err : any) => {
+            reject(err);
+          })
+    });
+  }
+
   create(bid: Bid): Promise<any> {
     return new Promise((resolve, reject) => {
       this.bidsRef.push(bid)
@@ -114,29 +125,34 @@ export class BidService {
 
   update(key: string, value: Bid): Promise<any> {
     return new Promise((resolve, reject) => {
-      console.log("about to save..")
-      console.log({"key":key})
-      console.log({"value":value});
-      let path = `/bids/-MrZIQXH6HQ8Aa-ys_Mv/bids/`;
-      console.log("path is " + path);
 
       this.db.list(<string>value.parentPath).update(key, value)
         .then((res) => {
-          console.log("updated..")
             resolve(true);
           })
           .catch((err : any) => {
-            console.log("error: " + err)
             reject(err);
           })
     });
     
   }
 
-  delete(key: string): Promise<any> {
-    console.log({"key":key})
+  addNewChildToParent(value: Bid): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.bidsRef.remove(key)
+
+      this.db.list(<string>value.parentPath).push(value)
+        .then((res) => {
+            resolve(true);
+          })
+          .catch((err : any) => {
+            reject(err);
+          })
+    });
+    
+  }
+  delete(path: string, key: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.db.list(path).remove(key)
         .then(() => {
             resolve(true);
           })
@@ -144,6 +160,19 @@ export class BidService {
             reject(err);
           })
     });
+  }
+
+  getSingleBid(bid: Bid): Promise<any>{
+      return firstValueFrom(
+      this.db.object(`${bid.parentPath}${bid.key}`).valueChanges()
+      .pipe(
+        map((itm : any) => 
+          <Bid>{
+            key: bid.key, /* Key Doesn't come back from valueChanges(). Have to set manually */
+            ...itm,
+        }
+      )
+    ));
   }
 
   deleteAll(): Promise<any> {

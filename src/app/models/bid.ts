@@ -9,4 +9,5 @@ export class Bid {
     bids ?: Bid[];
     rootBidKey ?:string | null;
     parentPath ?: string | null;
+    isNew ?: boolean | null;
 }

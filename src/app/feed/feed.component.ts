@@ -12,6 +12,8 @@ import { BidService } from '../services/bid.service';
 export class FeedComponent implements OnInit {
   allBids!: (Bid | any)[];
   authUser !:AuthUser | null;
+  bidCount : number = 0;
+  initialLoad :boolean = true;
 
   constructor(
     private bidService: BidService,
@@ -22,34 +24,58 @@ export class FeedComponent implements OnInit {
     let me = this;
     this.authUser = this.authService.getAccount();
 
+
     this.bidService.getAll()
     .subscribe({
       next(bids: Bid[]){
         if (Array.isArray(bids)){
-          me.allBids = me.getCounterableBids(bids);
+          // Only apply updates to the root if the count has changed.
+
+          if (me.initialLoad/*newCount != me.bidCount*/){
+            me.allBids = me.getCounterableBids(bids);
+            me.initialLoad = false;
+          }
+          else{
+            // Do nothing
+          }
         }
       },
       error(err){
-        console.log("error:" + err);
 
       },
+      complete(){
+      }
     });
+    
+  }
+
+  getNbrBids(bids: Bid[]){
+    let bidCount = 0;
+    if (Array.isArray(bids)){
+      bids.forEach((bid) => {
+        if (Array.isArray(bid.bids) && bid.bids.length){
+          bidCount += this.getNbrBids(bid.bids);
+        }
+        bidCount += 1;
+      });
+    }
+    return bidCount;
   }
 
   getCounterableBidsHelper(bid: Bid, user: AuthUser, flatBidStrs : string[]) :Bid[]{
     let tmpArray : Bid[] = [];
     if (user){
+      if (!bid.rootBidKey || bid.rootBidKey === 'root' || bid.bidCreatorKey == user.key || bid.bidChallengerKey == user.key){
+        if (Array.isArray(bid.bids) && bid.bids.length){
+          bid.bids.forEach((tmpBid) => {
+            tmpArray = [...tmpArray, ...this.getCounterableBidsHelper(tmpBid, <AuthUser>this.authUser, flatBidStrs)];
+          });
+        }
+        tmpArray.push(bid);
+        flatBidStrs.push(<string>bid.key);
+      }
     }
     else{
-    }
-    if (!bid.rootBidKey || bid.rootBidKey === 'root' || bid.bidCreatorKey == user.key || bid.bidChallengerKey == user.key){
-      if (Array.isArray(bid.bids) && bid.bids.length){
-        bid.bids.forEach((tmpBid) => {
-          tmpArray = [...tmpArray, ...this.getCounterableBidsHelper(tmpBid, <AuthUser>this.authUser, flatBidStrs)];
-        });
-      }
-      tmpArray.push(bid);
-      flatBidStrs.push(<string>bid.key);
     }
 
     return tmpArray;

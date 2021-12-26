@@ -38,7 +38,7 @@ export class YourBidsComponent implements OnInit {
   }
 
   deleteBid(bid: Bid){
-    this.bidService.delete(<string>bid.key)
+    this.bidService.delete(<string>bid.parentPath, <string>bid.key)
       .then((res) => {
       })
   }

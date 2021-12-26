@@ -8,8 +8,28 @@
       [attr.aria-expanded]="accordionItem.expanded"
       [attr.aria-controls]="'accordion-body-' + 0">
       <div class="example-accordion-item-header" (click)="accordionItem.toggle()">
-        <div class="bid-item-metric-header">
-        {{bid.title}}
+        <div class="bid-item-metric-header" style="display: flex;">
+            <div [ngStyle]="{'visibility': !titleEditMode && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
+            class="cell-data-div-img-edit"  
+            style="display: inline-flex; margin-left: 12px;"
+            >
+                <div tabindex="1" (click)="enableTitleEditMode()">
+                </div>
+            </div>
+            <div style="display: inline-block;">
+                <input matInput 
+                    placeholder="Bid Title" 
+                    style="border: none; outline: none;"
+                    #titleInput
+                    [readonly]="!titleEditMode"
+                    (keydown)="detailDataChanged()"
+                    [formControl]="titleFormControl"
+                />
+            </div>
+            <div style="display: inline-flex; align-items: center; margin-left: 8px; vertical-align: middle;" [ngStyle]="{'visibility': titleEditMode ? 'visible': 'hidden'}">
+                <mat-icon *ngIf="titleFormControl.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                <mat-error *ngIf="titleFormControl.invalid">{{getInputErrorMessage(titleFormControl)}}</mat-error>
+            </div>
         </div>
         <span class="example-accordion-item-description">
           Click to {{ accordionItem.expanded ? 'close' : 'open' }}
@@ -29,7 +49,7 @@
                         <mat-icon *ngIf="bidMessageFormControl.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
                         <mat-error *ngIf="bidMessageFormControl.invalid">{{getInputErrorMessage(bidMessageFormControl)}}</mat-error>
                     </div>
-                    <div [ngStyle]="{'visibility': !bidMessageEditMode ? 'visible' : 'hidden'}"
+                    <div [ngStyle]="{'visibility': !bidMessageEditMode && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
                     class="cell-data-div-img-edit" 
                     style="display: inline-block !important; margin-left: 8px;"
                     >
@@ -50,7 +70,7 @@
                 </div>
             </div>
             <div id="bid-amt-container">
-                <div class="bid-item-metric-header" style="display: flex; margin-right: -38px;">
+                <div class="bid-item-metric-header" style="display: flex;">
                     Bid Amount
                     <div [ngStyle]="{'visibility': !bidAmtEditMode && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
                     class="cell-data-div-img-edit" 
@@ -79,7 +99,7 @@
                 <div>
                     <div id="lower-left-btn-container">
                         <!--<button *ngIf="!bid.isEditing" (click)="modifyBid(bid)" mat-raised-button color="accent">View Counter Offers</button>-->
-                        <button *ngIf="user && !(user.key === bid.bidCreatorKey)" (click)="cancelModify(bid)" mat-raised-button color="accent">Counter Offer</button>
+                        <button *ngIf="user && !(user.key === bid.bidCreatorKey)" (click)="createCounterOffer()" mat-raised-button color="accent">Counter Offer</button>
                         <button *ngIf="user && user.key === bid.bidChallengerKey && !(user.key === bid.bidCreatorKey)" (click)="cancelModify(bid)" mat-raised-button color="accent">Approve</button>
                     </div>
                 </div>            
@@ -90,11 +110,6 @@
                         <button *ngIf="user && user.key === bid.bidCreatorKey" (click)="deleteBid(bid)" mat-raised-button color="warn">Delete</button>
                         <button *ngIf="detailChangesPending" (click)="saveUpdate()" class="pending-changes" mat-raised-button color="primary">Save Changes</button>
                         <button *ngIf="bidMessageEditMode || bidAmtEditMode || detailChangesPending" (click)="cancelDetailChanges()" mat-raised-button color="primary">Cancel Change</button>
-                        <!--
-                        <span>User key is {{user?.key}}</span>
-                        <span>bid.bidCreatorKey is {{bid.bidCreatorKey}}</span>
-                        <span>bid.bidChallengerKey is {{bid.bidChallengerKey}}</span>
-                        -->
                     </div>
                 </div>
             </div>
@@ -106,7 +121,12 @@
                 Counter Offers
             </div>
             <div *ngFor="let childBid of bid.bids">
-                <app-nested-accordion [user]="user" [bid]="childBid"></app-nested-accordion>
+                <app-nested-accordion 
+                [user]="user" 
+                (refreshCallback)="refreshBid(bid)"
+                [parentBid]="bid"
+                [bid]="childBid">
+            </app-nested-accordion>
     
             </div>
         </div>

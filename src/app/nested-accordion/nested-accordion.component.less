@@ -18,6 +18,7 @@
     display: flex;
     align-content: center;
     justify-content: space-between;
+
   }
   
   .example-accordion-item-description {
@@ -25,15 +26,40 @@
     color: #999;
   }
   
-  .example-accordion-item-header,
-  .example-accordion-item-body {
+  .example-accordion-item-header {
     padding: 16px;
-    background: white;
   }
+
+  .example-accordion-item-header, .example-accordion-item-body{
+    background: white;    
+  }
+
   
   .example-accordion-item-header:hover {
     cursor: pointer;
     background-color: #eee;
+    cursor: pointer;
+
+    input{
+      background-color: #eee;
+    }
+
+    .cell-data-div-img-edit{
+      display: inline-flex;
+      align-items: center;
+      padding-right:5px;
+      div{
+        content: url("../../assets/icons//EditIcon/outline_edit_gray_48dp.png");
+        box-sizing: border-box;
+        &:hover{
+            cursor: pointer;
+            border-color: #42b7ff;
+            border-width: 1px;
+            padding:0px;
+            border-style: dotted;
+        }
+      }
+    }
   }
   
   .example-accordion-item:first-child {
@@ -48,14 +74,32 @@
 
   .bid-item-container{
     background-color: white;
-    height: 250px;
+    
     max-width: 920px;
     border-radius: 10px;
     padding: 20px;
+    padding-left: 75px;
     display: grid;
 
     grid-template-rows: 33% 33% 33%;
     grid-template-columns: 33% 33% 33%;
+
+    .cell-data-div-img-edit{
+      display: inline-flex;
+      align-items: center;
+      padding-right:5px;
+      div{
+        content: url("../../assets/icons//EditIcon/outline_edit_black_48dp.png");
+        box-sizing: border-box;
+        &:hover{
+            cursor: pointer;
+            border-color: #42b7ff;
+            border-width: 1px;
+            padding:0px;
+            border-style: dotted;
+        }
+      }
+    }
 
     #bid-item-bid-text{
         font-weight: initial;
@@ -139,23 +183,11 @@
 .cell-data-div-img-edit{
   display: inline-flex;
   align-items: center;
-  height: 100%;
   padding-right:5px;
   div{
     width: 23px;
     height: 23px;
     content: url("../../assets/icons//EditIcon/outline_edit_black_48dp.png");
-
-    /*visibility: hidden;*/
-    border-color: #42b7ff;
-    border-width: 0px;
-    padding:1px;
-    border-style: solid;
-    border-radius: 5px;
-
-    &:hover{
-        cursor: pointer;
-    }
   }
 }
 
