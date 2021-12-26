@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { Bid } from '../models/bid';
 import { AuthUser } from '../models/user';
 import { AuthService } from '../services/auth.service';
@@ -24,29 +25,31 @@ export class FeedComponent implements OnInit {
     let me = this;
     this.authUser = this.authService.getAccount();
 
-
-    this.bidService.getAll()
-    .subscribe({
-      next(bids: Bid[]){
-        if (Array.isArray(bids)){
-          // Only apply updates to the root if the count has changed.
-
-          if (me.initialLoad/*newCount != me.bidCount*/){
-            me.allBids = me.getCounterableBids(bids);
-            me.initialLoad = false;
+    firstValueFrom(
+      this.bidService.getAll())
+        .then((bids: Bid[]) => {
+          if (Array.isArray(bids)){
+            // Only apply updates to the root if the count has changed.
+            this.allBids = this.getCounterableBids(bids);
           }
           else{
-            // Do nothing
+            this.allBids = [];
           }
-        }
-      },
-      error(err){
+        });
+  }
 
-      },
-      complete(){
-      }
-    });
-    
+  accordionCallback(){
+    firstValueFrom(
+      this.bidService.getAll())
+        .then((bids: Bid[]) => {
+          if (Array.isArray(bids)){
+            // Only apply updates to the root if the count has changed.
+            this.allBids = this.getCounterableBids(bids);
+          }
+          else{
+            this.allBids = [];
+          }
+        });
   }
 
   getNbrBids(bids: Bid[]){

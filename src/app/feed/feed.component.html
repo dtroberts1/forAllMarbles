@@ -4,7 +4,8 @@
             <app-nested-accordion
             [bid]="bid"
             [user]="authUser"
-        >
+            (refreshCallback)="accordionCallback()"
+            >
         </app-nested-accordion>
         </div>
     </li>

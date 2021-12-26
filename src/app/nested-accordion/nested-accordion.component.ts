@@ -90,8 +90,19 @@ export class NestedAccordionComponent implements OnInit {
   deleteBid(bid: Bid){
     this.bidService.delete(<string>bid.parentPath, <string>bid.key)
       .then((res) => {
+        console.log("res is " + res);
+        console.log({"parentBid":this.parentBid})
         // Notify parent to call its refreshBid()
-        this.refreshCallback.emit([this.parentBid]);
+        if (this.parentBid){
+          this.refreshCallback.emit([this.parentBid]);
+        }
+        else{
+          console.log({"bid":bid});
+          this.refreshCallback.emit([null]);
+        }
+      })
+      .catch((err) => {
+        console.log({"err":err});
       })
   }
   detailDataChanged(){
@@ -136,6 +147,7 @@ export class NestedAccordionComponent implements OnInit {
     this.bidService.getSingleBid(myBid)
       .then((res : Bid) => { 
           let bid = res;
+          console.log({"resOfGetSingleBid":res})
           if (bid){
             myBid.bidAmount = bid.bidAmount;
             myBid.bidChallengerKey = bid.bidChallengerKey;
