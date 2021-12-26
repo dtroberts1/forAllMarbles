@@ -13,16 +13,17 @@
             class="cell-data-div-img-edit"  
             style="display: inline-flex; margin-left: 12px;"
             >
-                <div tabindex="1" (click)="enableTitleEditMode()">
+                <div tabindex="1" (click)="enableTitleEditMode($event)">
                 </div>
             </div>
             <div style="display: inline-block;">
                 <input matInput 
                     placeholder="Bid Title" 
                     style="border: none; outline: none;"
+                    (click)="stopPropagation($event, accordionItem.expanded)"
                     #titleInput
                     [readonly]="!titleEditMode"
-                    (keydown)="detailDataChanged()"
+                    (keydown)="detailDataChanged(titleEditMode)"
                     [formControl]="titleFormControl"
                 />
             </div>
@@ -53,7 +54,7 @@
                     class="cell-data-div-img-edit" 
                     style="display: inline-block !important; margin-left: 8px;"
                     >
-                        <div tabindex="1" (click)="enableBidMessageEditMode()" style="margin-top: -5px;">
+                        <div tabindex="1" (click)="enableBidMessageEditMode($event)" style="margin-top: -5px;">
                         </div>
                     </div>
                 </div>
@@ -63,7 +64,7 @@
                         style="border: none; outline: none;"
                         #bidMessageInput
                         [readonly]="!bidMessageEditMode"
-                        (keydown)="detailDataChanged()"
+                        (keydown)="detailDataChanged(bidMessageEditMode)"
                         [formControl]="bidMessageFormControl"
                     >
                     </textarea>
@@ -76,7 +77,7 @@
                     class="cell-data-div-img-edit" 
                     style="display: inline-flex !important; margin-left: 8px;"
                     >
-                        <div tabindex="1" (click)="enableBidAmtEditMode()" style="margin-top: -5px;">
+                        <div *ngIf="!bidAmtEditMode && user && user.key === bid.bidCreatorKey" tabindex="1" (click)="enableBidAmtEditMode($event)" style="margin-top: -5px;">
                         </div>
                     </div>
                 </div>
@@ -86,9 +87,9 @@
                     style="border: none; outline: none; height: initial; width: initial; text-align: right;"
                     #bidAmtInput
                     type="number"
-                    (click)="detailDataChanged()"
                     [readonly]="!bidAmtEditMode"
-                    (keydown)="detailDataChanged()"
+                    (click)="detailDataChanged(bidAmtEditMode)"
+                    (keydown)="detailDataChanged(bidAmtEditMode)"
                     [formControl]="bidAmtFormControl"
                     />
                 </div>
@@ -109,7 +110,7 @@
                     <div id="lower-right-btn-container">
                         <button *ngIf="user && user.key === bid.bidCreatorKey" (click)="deleteBid(bid)" mat-raised-button color="warn">Delete</button>
                         <button *ngIf="detailChangesPending" (click)="saveUpdate()" class="pending-changes" mat-raised-button color="primary">Save Changes</button>
-                        <button *ngIf="bidMessageEditMode || bidAmtEditMode || detailChangesPending" (click)="cancelDetailChanges()" mat-raised-button color="primary">Cancel Change</button>
+                        <button *ngIf="titleEditMode || bidMessageEditMode || bidAmtEditMode || detailChangesPending" (click)="cancelDetailChanges()" mat-raised-button color="primary">Cancel Change</button>
                     </div>
                 </div>
             </div>

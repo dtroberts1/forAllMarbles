@@ -90,26 +90,25 @@ export class NestedAccordionComponent implements OnInit {
   deleteBid(bid: Bid){
     this.bidService.delete(<string>bid.parentPath, <string>bid.key)
       .then((res) => {
-        console.log("res is " + res);
-        console.log({"parentBid":this.parentBid})
         // Notify parent to call its refreshBid()
         if (this.parentBid){
           this.refreshCallback.emit([this.parentBid]);
         }
         else{
-          console.log({"bid":bid});
           this.refreshCallback.emit([null]);
         }
       })
       .catch((err) => {
-        console.log({"err":err});
       })
   }
-  detailDataChanged(){
-    this.detailChangesPending = true;
+  detailDataChanged(canPendChanges: boolean | null){
+    if (canPendChanges){
+      this.detailChangesPending = true;
+    }
   }
 
   cancelDetailChanges(){
+    // For Creator
     this.detailChangesPending = false;
     this.bidMessageEditMode = false;
     this.bidAmtEditMode = false;
@@ -147,7 +146,6 @@ export class NestedAccordionComponent implements OnInit {
     this.bidService.getSingleBid(myBid)
       .then((res : Bid) => { 
           let bid = res;
-          console.log({"resOfGetSingleBid":res})
           if (bid){
             myBid.bidAmount = bid.bidAmount;
             myBid.bidChallengerKey = bid.bidChallengerKey;
@@ -184,19 +182,34 @@ export class NestedAccordionComponent implements OnInit {
     let currBid = bid as any;
     currBid.isEditing = true;
   }
-  enableBidMessageEditMode(){
-    this.bidMessageEditMode = true;
-    this.bidMessageInput.nativeElement.focus();
+  enableBidMessageEditMode(event: any){
+    event.stopPropagation();
+    if (this.user && this.user.key === this.bid.bidCreatorKey){
+      this.bidMessageEditMode = true;
+      this.bidMessageInput.nativeElement.focus();
+    }
   }
 
-  enableBidAmtEditMode(){
-    this.bidAmtEditMode = true;
-    this.bidAmtInput.nativeElement.focus();
+  enableBidAmtEditMode(event: any){
+    event.stopPropagation();
+    if (this.user && this.user.key === this.bid.bidCreatorKey){
+      this.bidAmtEditMode = true;
+      this.bidAmtInput.nativeElement.focus();
+    }
   }
 
-  enableTitleEditMode(){
-    this.titleEditMode = true;
-    this.titleInput.nativeElement.focus();
+  stopPropagation(event: any, isExpanded : boolean){
+    if (isExpanded){
+      event.stopPropagation();
+    }
+  }
+
+  enableTitleEditMode(event: any){
+    event.stopPropagation();
+    if (this.user && this.user.key === this.bid.bidCreatorKey){
+      this.titleEditMode = true;
+      this.titleInput.nativeElement.focus();
+    }
   }
   
   ngOnChanges(changes: SimpleChanges) {
