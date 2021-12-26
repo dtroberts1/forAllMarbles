@@ -140,6 +140,10 @@ export class NestedAccordionComponent implements OnInit {
   }
 
   saveUpdate(){
+
+
+    console.log("amount is " + this.bidAmtFormControl.value)
+
     let thisBid = this.bid as Bid;  
       let bidForSave : Bid = {
         title : this.titleFormControl.value,
@@ -165,9 +169,10 @@ export class NestedAccordionComponent implements OnInit {
   }
 
   refreshBid(myBid: Bid){
-    this.cancelDetailChanges();
     this.bidService.getSingleBid(myBid)
       .then((res : Bid) => { 
+        this.cancelDetailChanges();
+
           let bid = res;
           if (bid){
             myBid.bidAmount = bid.bidAmount;
@@ -186,7 +191,9 @@ export class NestedAccordionComponent implements OnInit {
             }
 
           }
-    });
+    }).catch((err) => {
+      this.cancelDetailChanges();
+    })
   }
   
   getInputErrorMessage(inputField : any){
@@ -233,6 +240,16 @@ export class NestedAccordionComponent implements OnInit {
       this.titleEditMode = true;
       this.titleInput.nativeElement.focus();
     }
+  }
+
+  incrementAmt(){
+    this.detailDataChanged(this.bidAmtEditMode);
+    this.bidAmtFormControl.setValue(this.bidAmtFormControl.value + 1);
+  }
+
+  decrementAmt(){
+    this.detailDataChanged(this.bidAmtEditMode);
+    this.bidAmtFormControl.setValue(this.bidAmtFormControl.value - 1);
   }
   
   ngOnChanges(changes: SimpleChanges) {

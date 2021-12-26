@@ -39,7 +39,7 @@ export class CreateNewBidComponent implements OnInit {
               bidCreatorKey : user.key,
               bidMessage : this.betText,
               bidCreatorChallengerKey: user.key,
-              rootBidKey: null,
+              rootBidKey: 'root',
               bidChallengerKey : 'NULL',
               parentPath: '/bids/',
             }

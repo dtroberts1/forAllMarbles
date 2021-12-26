@@ -32,7 +32,7 @@
                 <mat-error *ngIf="titleFormControl.invalid">{{getInputErrorMessage(titleFormControl)}}</mat-error>
             </div>
         </div>
-        <div style="width: 47.99px;" class="example-accordion-item-description">
+        <div style="width: 47.99px; display: flex;" class="example-accordion-item-description">
             <mat-icon style="float:right;" class="expand-icon"  [@openClose]="!accordionItem.expanded ? 'open' : 'closed'">keyboard_arrow_up</mat-icon>
             <mat-icon *ngIf="user && user.key === bid.bidCreatorKey" tabindex="1" (click)="deleteBid(bid)" id="trash-icon" style="float:right; color: red;">delete</mat-icon>
         </div>
@@ -77,23 +77,33 @@
                     Bid Amount
                     <div [ngStyle]="{'visibility': !bidAmtEditMode && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
                     class="cell-data-div-img-edit" 
-                    style="display: inline-flex !important; margin-left: 8px;"
+                    style="display: inline-flex !important; padding-left: 10px;"
                     >
-                        <div *ngIf="!bidAmtEditMode && user && user.key === bid.bidCreatorKey" tabindex="1" (click)="enableBidAmtEditMode($event)" style="margin-top: -5px;">
+                        <div [ngStyle]="{'visibility':(!bidAmtEditMode && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden')}" tabindex="1" (click)="enableBidAmtEditMode($event)" style="margin-top: -5px;">
                         </div>
                     </div>
                 </div>
                 <div id="bid-amt-value">
-                    <input  matInput 
-                    placeholder="Bid Amount" 
-                    style="border: none; outline: none; height: initial; width: initial; text-align: right;"
-                    #bidAmtInput
-                    type="number"
-                    [readonly]="!bidAmtEditMode"
-                    (click)="detailDataChanged(bidAmtEditMode)"
-                    (keydown)="detailDataChanged(bidAmtEditMode)"
-                    [formControl]="bidAmtFormControl"
-                    />
+                    <div>
+                        <input  matInput 
+                        placeholder="Bid Amount" 
+                        style="border: none; outline: none; height: initial; width: initial; text-align: right; padding-right: 35px;"
+                        #bidAmtInput
+                        type="number"
+                        [readonly]="!bidAmtEditMode"
+                        (click)="detailDataChanged(bidAmtEditMode)"
+                        (keydown)="detailDataChanged(bidAmtEditMode)"
+                        [formControl]="bidAmtFormControl"
+                        />
+                    </div>
+                    <div [ngStyle]="{'visibility': (bidAmtEditMode ? 'visible' : 'hidden')}" id="amt-up-down">
+                        <div>
+                            <mat-icon tabindex="1" (click)="incrementAmt()">keyboard_arrow_up</mat-icon>
+                        </div>
+                        <div>
+                            <mat-icon tabindex="1" (click)="decrementAmt()">keyboard_arrow_down</mat-icon>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div id="bid-description">
