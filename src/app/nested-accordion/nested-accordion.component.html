@@ -32,9 +32,11 @@
                 <mat-error *ngIf="titleFormControl.invalid">{{getInputErrorMessage(titleFormControl)}}</mat-error>
             </div>
         </div>
-        <span class="example-accordion-item-description">
-          Click to {{ accordionItem.expanded ? 'close' : 'open' }}
-        </span>
+        <div style="width: 47.99px;" class="example-accordion-item-description">
+            <mat-icon style="float:right;" class="expand-icon"  [@openClose]="!accordionItem.expanded ? 'open' : 'closed'">keyboard_arrow_up</mat-icon>
+            <mat-icon *ngIf="user && user.key === bid.bidCreatorKey" tabindex="1" (click)="deleteBid(bid)" id="trash-icon" style="float:right; color: red;">delete</mat-icon>
+        </div>
+
       </div>
       <div
         class="example-accordion-item-body"
@@ -108,9 +110,11 @@
             <div id="bid-lower-right-btns">
                 <div>
                     <div id="lower-right-btn-container">
-                        <button *ngIf="user && user.key === bid.bidCreatorKey" (click)="deleteBid(bid)" mat-raised-button color="warn">Delete</button>
                         <button *ngIf="detailChangesPending" (click)="saveUpdate()" class="pending-changes" mat-raised-button color="primary">Save Changes</button>
-                        <button *ngIf="titleEditMode || bidMessageEditMode || bidAmtEditMode || detailChangesPending" (click)="cancelDetailChanges()" mat-raised-button color="primary">Cancel Change</button>
+                        <button *ngIf="titleEditMode || bidMessageEditMode || bidAmtEditMode || detailChangesPending" 
+                        (click)="cancelDetailChanges()"
+                        style="background-color: #36c0ff;"
+                        mat-raised-button color="primary">Cancel</button>
                     </div>
                 </div>
             </div>

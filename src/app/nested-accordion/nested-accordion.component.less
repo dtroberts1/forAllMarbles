@@ -28,6 +28,7 @@
   
   .example-accordion-item-header {
     padding: 16px;
+
   }
 
   .example-accordion-item-header, .example-accordion-item-body{
@@ -39,6 +40,7 @@
     cursor: pointer;
     background-color: #eee;
     cursor: pointer;
+
 
     input{
       background-color: #eee;
@@ -232,5 +234,58 @@ textarea{
 
   100%{
       background-color: rgba(102, 255, 0, 1);
+  }
+}
+
+.expand-icon:hover{
+  cursor: pointer;
+  transition: 1s;
+  transform: rotate(0deg);
+}
+
+::ng-deep cdk-accordion-item{
+  &:not([aria-expanded="true"]){
+    .example-accordion-item-header {
+      &:hover{
+        div{
+          ::ng-deep  #trash-icon{
+            visibility: visible;
+          }
+        }
+      }
+    
+      &:not(:hover){
+        div{
+          ::ng-deep #trash-icon{
+            visibility: hidden;
+          }
+        }
+      }
+    
+    }
+  }
+  &[aria-expanded="true"]{
+    .example-accordion-item-header {
+        div{
+          ::ng-deep  #trash-icon{
+            visibility: visible;
+          }
+        }    
+    }
+  }
+}
+
+::ng-deep #trash-icon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3px;
+  box-sizing: border-box;
+  &:hover{
+    cursor: pointer;
+    border-color: red;
+    border-width: 1px;
+    padding:2px;
+    border-style: dotted;
   }
 }

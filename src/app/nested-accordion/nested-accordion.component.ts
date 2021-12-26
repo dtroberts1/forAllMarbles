@@ -1,3 +1,4 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Bid } from '../models/bid';
@@ -7,7 +8,29 @@ import { BidService } from '../services/bid.service';
 @Component({
   selector: 'app-nested-accordion',
   templateUrl: './nested-accordion.component.html',
-  styleUrls: ['./nested-accordion.component.less']
+  styleUrls: ['./nested-accordion.component.less'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+    trigger('openClose', [
+      // ...
+      state('open', style({
+        transform: 'rotate(0deg)'
+      })),
+      state('closed', style({
+        transform: 'rotate(-180deg)'
+      })),
+      transition('open => closed', [
+        animate('1s')
+      ]),
+      transition('closed => open', [
+        animate('1s')
+      ]),
+    ]),
+  ],
 })
 export class NestedAccordionComponent implements OnInit {
   @Input() bid !: Bid | any;
