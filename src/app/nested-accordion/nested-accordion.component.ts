@@ -244,12 +244,26 @@ export class NestedAccordionComponent implements OnInit {
 
   incrementAmt(){
     this.detailDataChanged(this.bidAmtEditMode);
-    this.bidAmtFormControl.setValue(this.bidAmtFormControl.value + 1);
+    if (!this.bidAmtFormControl.value){
+      this.bidAmtFormControl.setValue(0);
+    }
+    this.bidAmtFormControl.setValue(this.bidAmtFormControl.value + .01);
+
+    if (this.bidAmtFormControl.value < 0){
+      this.bidAmtFormControl.setValue(0.00);
+    }
   }
 
   decrementAmt(){
     this.detailDataChanged(this.bidAmtEditMode);
-    this.bidAmtFormControl.setValue(this.bidAmtFormControl.value - 1);
+    if (!this.bidAmtFormControl.value){
+      this.bidAmtFormControl.setValue(0);
+    }
+    this.bidAmtFormControl.setValue(this.bidAmtFormControl.value - .01);
+
+    if (this.bidAmtFormControl.value < 0){
+      this.bidAmtFormControl.setValue(0.00);
+    }
   }
   
   ngOnChanges(changes: SimpleChanges) {
