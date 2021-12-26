@@ -4,6 +4,7 @@
             *ngIf="authUser"
             [bid]="bid"
             [user]="authUser"
+            (refreshCallback)="accordionCallback()"
         >
         </app-nested-accordion>
     </li>

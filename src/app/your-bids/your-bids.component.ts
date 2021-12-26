@@ -1,4 +1,5 @@
 import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { Bid } from '../models/bid';
 import { AuthUser } from '../models/user';
 import { AuthService } from '../services/auth.service';
@@ -49,21 +50,37 @@ export class YourBidsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("in init")
     this.authUser = this.authService.getAccount();
-    let me = this;
 
-    this.bidService.getAll()
-      .subscribe({
-        next(bids: Bid[]){
+    firstValueFrom(
+      this.bidService.getAll())
+        .then((bids: Bid[]) => {
           if (Array.isArray(bids)){
-            me.myBids = me.getBidsFilteredByUser(bids, <string>me.authUser?.key);
+            this.myBids = this.getBidsFilteredByUser(bids, <string>this.authUser?.key);
           }
-        },
-        error(err){
+          else{
+            this.myBids = [];
+          }
+        })
+        .catch((err) => {
           console.log("error:" + err);
+        });
+  }
 
-        },
-      });
+  public accordionCallback(){
+    console.log("in accordion callback..")
+    firstValueFrom(
+      this.bidService.getAll())
+        .then((bids: Bid[]) => {
+          if (Array.isArray(bids)){
+            // Only apply updates to the root if the count has changed.
+            this.myBids = this.getBidsFilteredByUser(bids, <string>this.authUser?.key);
+          }
+          else{
+            this.myBids = [];
+          }
+        });
   }
 
   getBidsFilteredByUserHelper(bid: Bid, userKey: string){
@@ -104,5 +121,40 @@ export class YourBidsComponent implements OnInit {
 
     return filteredBids;
 
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        let change = changes[propName];
+
+        console.log("prop name" + propName)
+        /*
+        switch (propName) {
+          case 'startDateStr': {
+            this.saleService.getHighLvlSalesData(this.startDateStr, this.endDateStr).toPromise()
+            .then((result : any) => {
+              if (result){
+                this.setMenuItems();
+              }
+            })
+          }
+          break;
+          case 'endDateStr': {
+            this.saleService.getHighLvlSalesData(this.startDateStr, this.endDateStr).toPromise()
+            .then((result : any) => {
+              if (result){
+                this.highLvlSales = result.highLvlSales;
+                this.setMenuItems();
+              }
+            })
+          }
+          break;
+        }
+        */
+      }
+      else{
+      }
+    }
   }
 }

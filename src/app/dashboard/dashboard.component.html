@@ -5,9 +5,9 @@
     
     <button (click)="logout()" mat-raised-button color="accent">Logout</button>
     
-    <mat-tab-group>
-        <mat-tab label="Feed"><app-feed></app-feed></mat-tab>
-        <mat-tab label="Your Bids"><app-your-bids></app-your-bids></mat-tab>
+    <mat-tab-group (selectedTabChange)="notifyChild($event)">
+        <mat-tab label="Feed" #feed><app-feed></app-feed></mat-tab>
+        <mat-tab label="Your Bids" #yourBids><app-your-bids></app-your-bids></mat-tab>
         <mat-tab label="Create Bid"> <app-create-new-bid>
             
         </app-create-new-bid></mat-tab>

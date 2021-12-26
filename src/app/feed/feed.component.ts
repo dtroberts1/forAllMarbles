@@ -38,7 +38,7 @@ export class FeedComponent implements OnInit {
         });
   }
 
-  accordionCallback(){
+  public accordionCallback(){
     firstValueFrom(
       this.bidService.getAll())
         .then((bids: Bid[]) => {
@@ -50,19 +50,6 @@ export class FeedComponent implements OnInit {
             this.allBids = [];
           }
         });
-  }
-
-  getNbrBids(bids: Bid[]){
-    let bidCount = 0;
-    if (Array.isArray(bids)){
-      bids.forEach((bid) => {
-        if (Array.isArray(bid.bids) && bid.bids.length){
-          bidCount += this.getNbrBids(bid.bids);
-        }
-        bidCount += 1;
-      });
-    }
-    return bidCount;
   }
 
   getCounterableBidsHelper(bid: Bid, user: AuthUser, flatBidStrs : string[]) :Bid[]{
