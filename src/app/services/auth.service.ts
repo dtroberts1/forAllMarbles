@@ -43,19 +43,15 @@ export class AuthService {
       this.angularFireAuth
       .createUserWithEmailAndPassword(email, password)
         .then((res: any) => {
-          console.log({"res":res})
           let obj = {
             bids : [],
             displayName : '',
             emailAddress: res.user.email,
           };
           this.db.database.ref('users').child(res.user.uid).set(obj);
-          console.log("pushed!!")
-          console.log('You are Successfully signed up!', res);
           resolve(res);
         })
         .catch((error: any) => {
-          console.log('Something is wrong:', error.message);
           reject(null);
         })
     });
@@ -67,8 +63,6 @@ export class AuthService {
       this.angularFireAuth
       .signInWithEmailAndPassword(email, password)
         .then((res : any) => {
-          console.log({"res":res})
-          console.log('You\'re in!');
           this._isAuthenticated = true;
           this._user = <AuthUser>{
             key : res.user.uid,
@@ -77,7 +71,6 @@ export class AuthService {
           resolve(res);
         })
         .catch((err: any) => {
-          console.log('Something went wrong:',err.message);
           this._isAuthenticated = false;
           this._user = null;
           reject(err);

@@ -1,17 +1,11 @@
 <ul class="my-bid-list">
-    <li *ngFor="let bid of myBids">
-        <div>
-            <textarea [readonly]="!bid.isEditing"  [(ngModel)]="bid.bidMessage">
-
-            </textarea>
-            <input [readonly]="!bid.isEditing" type="number" [(ngModel)]="bid.bidAmount" />
-        </div>
-        <div>
-            <button *ngIf="!bid.isEditing" (click)="modifyBid(bid)" mat-raised-button color="accent">Modify</button>
-            <button (click)="deleteBid(bid)" mat-raised-button color="accent">Delete</button>
-            <button *ngIf="bid.isEditing" (click)="updateBid(bid)" mat-raised-button color="accent">Save</button>
-            <button *ngIf="bid.isEditing" (click)="cancelModify(bid)" mat-raised-button color="accent">Cancel</button>
-
-        </div>
+    <li *ngFor="let bid of myBids" class="bid-list-item">
+        <app-nested-accordion
+            *ngIf="authUser"
+            [bid]="bid"
+            [user]="authUser"
+            (refreshCallback)="accordionCallback()"
+        >
+        </app-nested-accordion>
     </li>
 </ul>

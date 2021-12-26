@@ -12,6 +12,7 @@ import { UserService } from '../services/user.service';
 export class CreateNewBidComponent implements OnInit {
   isEditInstructionsMode: boolean = false;
   betText!: string;
+  betTitle!: string;
   bidAmt!: number;
 
   constructor(
@@ -33,10 +34,14 @@ export class CreateNewBidComponent implements OnInit {
         .then((user : User) => {
           this.bidService.create(
             {
+              title: this.betTitle,
               bidAmount : this.bidAmt,
               bidCreatorKey : user.key,
               bidMessage : this.betText,
               bidCreatorChallengerKey: user.key,
+              rootBidKey: 'root',
+              bidChallengerKey : 'NULL',
+              parentPath: '/bids/',
             }
           )
             .then((res : {key: string}) => {

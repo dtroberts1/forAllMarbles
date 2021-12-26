@@ -1,12 +1,12 @@
-<ul class="feed-list">
-    <li *ngFor="let bid of allBids">
-        <div>
-            <textarea [readonly]="true"  [(ngModel)]="bid.bidMessage">
-
-            </textarea>
-            <input [readonly]="true" type="number" [(ngModel)]="bid.bidAmount" />
-        </div>
-        <div>
+<ul class="my-bid-list">
+    <li *ngFor="let bid of allBids" class="bid-list-item">
+        <div *ngIf="authUser">
+            <app-nested-accordion
+            [bid]="bid"
+            [user]="authUser"
+            (refreshCallback)="accordionCallback()"
+            >
+        </app-nested-accordion>
         </div>
     </li>
 </ul>

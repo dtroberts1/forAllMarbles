@@ -1,0 +1,151 @@
+<cdk-accordion class="example-accordion">
+    <cdk-accordion-item
+      #accordionItem="cdkAccordionItem"
+      class="example-accordion-item"
+      role="button"
+      tabindex="0"
+      [attr.id]="'accordion-header-' + 0"
+      [attr.aria-expanded]="accordionItem.expanded"
+      [attr.aria-controls]="'accordion-body-' + 0">
+      <div class="example-accordion-item-header" (click)="accordionItem.toggle()">
+        <div class="bid-item-metric-header" style="display: flex;">
+            <div [ngStyle]="{'visibility': !titleEditMode && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
+            class="cell-data-div-img-edit"  
+            style="display: inline-flex; margin-left: 12px;"
+            >
+                <div tabindex="1" (click)="enableTitleEditMode($event)">
+                </div>
+            </div>
+            <div style="display: inline-block;">
+                <input matInput 
+                    placeholder="Bid Title" 
+                    style="border: none; outline: none;"
+                    (click)="stopPropagation($event, accordionItem.expanded)"
+                    #titleInput
+                    [readonly]="!titleEditMode"
+                    (keydown)="detailDataChanged(titleEditMode)"
+                    [formControl]="titleFormControl"
+                />
+            </div>
+            <div style="display: inline-flex; align-items: center; margin-left: 8px; vertical-align: middle;" [ngStyle]="{'visibility': titleEditMode ? 'visible': 'hidden'}">
+                <mat-icon *ngIf="titleFormControl.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                <mat-error *ngIf="titleFormControl.invalid">{{getInputErrorMessage(titleFormControl)}}</mat-error>
+            </div>
+        </div>
+        <div style="width: 47.99px; display: flex;" class="example-accordion-item-description">
+            <mat-icon style="float:right;" class="expand-icon"  [@openClose]="!accordionItem.expanded ? 'open' : 'closed'">keyboard_arrow_up</mat-icon>
+            <mat-icon *ngIf="user && user.key === bid.bidCreatorKey" tabindex="1" (click)="deleteBid(bid)" id="trash-icon" style="float:right; color: red;">delete</mat-icon>
+        </div>
+
+      </div>
+      <div
+        class="example-accordion-item-body"
+        role="region"
+        [style.display]="accordionItem.expanded ? '' : 'none'"
+        [attr.id]="'accordion-body-' + 0"
+        [attr.aria-labelledby]="'accordion-header-' + 0">
+        <div class="bid-item-container">
+            <div id="bid-item-message">
+                <div class="bid-item-metric-header" style="line-height: 20px; display:flex;">
+                    {{(user?.key == bid.bidCreatorKey ? 'Your': 'Their')}} Offer
+                    <div style="display: inline-block; margin-left: 8px; vertical-align: middle;" [ngStyle]="{'visibility': bidMessageEditMode ? 'visible': 'hidden'}">
+                        <mat-icon *ngIf="bidMessageFormControl.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                        <mat-error *ngIf="bidMessageFormControl.invalid">{{getInputErrorMessage(bidMessageFormControl)}}</mat-error>
+                    </div>
+                    <div [ngStyle]="{'visibility': !bidMessageEditMode && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
+                    class="cell-data-div-img-edit" 
+                    style="display: inline-block !important; margin-left: 8px;"
+                    >
+                        <div tabindex="1" (click)="enableBidMessageEditMode($event)" style="margin-top: -5px;">
+                        </div>
+                    </div>
+                </div>
+                <div style="display: inline-block;">
+                    <textarea matInput 
+                        placeholder="Bid Message" 
+                        style="border: none; outline: none;"
+                        #bidMessageInput
+                        [readonly]="!bidMessageEditMode"
+                        (keydown)="detailDataChanged(bidMessageEditMode)"
+                        [formControl]="bidMessageFormControl"
+                    >
+                    </textarea>
+                </div>
+            </div>
+            <div id="bid-amt-container">
+                <div class="bid-item-metric-header" style="display: flex;">
+                    Bid Amount
+                    <div [ngStyle]="{'visibility': !bidAmtEditMode && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
+                    class="cell-data-div-img-edit" 
+                    style="display: inline-flex !important; padding-left: 10px;"
+                    >
+                        <div [ngStyle]="{'visibility':(!bidAmtEditMode && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden')}" tabindex="1" (click)="enableBidAmtEditMode($event)" style="margin-top: -5px;">
+                        </div>
+                    </div>
+                </div>
+                <div id="bid-amt-value">
+                    <div>
+                        <input  matInput 
+                        placeholder="Bid Amount" 
+                        style="border: none; outline: none; height: initial; width: initial; text-align: right; padding-right: 35px;"
+                        #bidAmtInput
+                        type="number"
+                        [readonly]="!bidAmtEditMode"
+                        (click)="detailDataChanged(bidAmtEditMode)"
+                        (keydown)="detailDataChanged(bidAmtEditMode)"
+                        [formControl]="bidAmtFormControl"
+                        />
+                    </div>
+                    <div [ngStyle]="{'visibility': (bidAmtEditMode ? 'visible' : 'hidden')}" id="amt-up-down">
+                        <div>
+                            <mat-icon tabindex="1" (click)="incrementAmt()">keyboard_arrow_up</mat-icon>
+                        </div>
+                        <div>
+                            <mat-icon tabindex="1" (click)="decrementAmt()">keyboard_arrow_down</mat-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="bid-description">
+            </div>
+            <div id="bid-lower-left-btns">
+                <div>
+                    <div id="lower-left-btn-container">
+                        <!--<button *ngIf="!bid.isEditing" (click)="modifyBid(bid)" mat-raised-button color="accent">View Counter Offers</button>-->
+                        <button *ngIf="user && !(user.key === bid.bidCreatorKey)" (click)="createCounterOffer()" mat-raised-button color="accent">Counter Offer</button>
+                        <button *ngIf="user && user.key === bid.bidChallengerKey && !(user.key === bid.bidCreatorKey)" (click)="cancelModify(bid)" mat-raised-button color="accent">Approve</button>
+                    </div>
+                </div>            
+            </div>
+            <div id="bid-lower-right-btns">
+                <div>
+                    <div id="lower-right-btn-container">
+                        <button *ngIf="detailChangesPending" (click)="saveUpdate()" class="pending-changes" mat-raised-button color="primary">Save Changes</button>
+                        <button *ngIf="titleEditMode || bidMessageEditMode || bidAmtEditMode || detailChangesPending" 
+                        (click)="cancelDetailChanges()"
+                        style="background-color: #36c0ff;"
+                        mat-raised-button color="primary">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div *ngIf="bid.bids && bid.bids.length">
+            <div class="bid-item-metric-header" style="text-align: center;         
+            padding-bottom: 10px;">
+                Counter Offers
+            </div>
+            <div *ngFor="let childBid of bid.bids">
+                <app-nested-accordion 
+                [user]="user" 
+                (refreshCallback)="refreshBid(bid)"
+                [parentBid]="bid"
+                [bid]="childBid">
+            </app-nested-accordion>
+    
+            </div>
+        </div>
+
+      </div>
+    </cdk-accordion-item>
+  </cdk-accordion>
