@@ -19,7 +19,7 @@
             <div style="display: inline-block;">
                 <input matInput 
                     placeholder="Bid Title" 
-                    style="border: none; outline: none;"
+                    style="border: none; outline: none; font-family: system-ui !important;"
                     (click)="stopPropagation($event, accordionItem.expanded)"
                     #titleInput
                     [readonly]="!titleEditMode"
@@ -112,16 +112,16 @@
                 <div>
                     <div id="lower-left-btn-container">
                         <!--<button *ngIf="!bid.isEditing" (click)="modifyBid(bid)" mat-raised-button color="accent">View Counter Offers</button>-->
-                        <button *ngIf="user && !(user.key === bid.bidCreatorKey)" (click)="createCounterOffer()" mat-raised-button color="accent">Counter Offer</button>
-                        <button *ngIf="user && user.key === bid.bidChallengerKey && !(user.key === bid.bidCreatorKey)" (click)="cancelModify(bid)" mat-raised-button color="accent">Approve</button>
+                        <button style="font-family: system-ui !important;" *ngIf="user && !(user.key === bid.bidCreatorKey)" (click)="createCounterOffer()" mat-raised-button color="accent">Counter Offer</button>
+                        <button style="font-family: system-ui !important;" *ngIf="user && user.key === bid.bidChallengerKey && !(user.key === bid.bidCreatorKey)" (click)="cancelModify(bid)" mat-raised-button color="accent">Approve</button>
                     </div>
                 </div>            
             </div>
             <div id="bid-lower-right-btns">
                 <div>
                     <div id="lower-right-btn-container">
-                        <button *ngIf="detailChangesPending" (click)="saveUpdate()" class="pending-changes" mat-raised-button color="primary">Save Changes</button>
-                        <button *ngIf="titleEditMode || bidMessageEditMode || bidAmtEditMode || detailChangesPending" 
+                        <button style="font-family: system-ui !important;" *ngIf="detailChangesPending" (click)="saveUpdate()" class="pending-changes" mat-raised-button color="primary">Save Changes</button>
+                        <button style="font-family: system-ui !important;" *ngIf="titleEditMode || bidMessageEditMode || bidAmtEditMode || detailChangesPending" 
                         (click)="cancelDetailChanges()"
                         mat-raised-button color="accent">Cancel</button>
                     </div>

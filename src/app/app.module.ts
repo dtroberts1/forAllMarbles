@@ -33,6 +33,7 @@ import { LoginComponent } from './login/login.component';
 import { FeedComponent } from './feed/feed.component';
 import {CdkAccordionModule} from '@angular/cdk/accordion';
 import { NestedAccordionComponent } from './nested-accordion/nested-accordion.component';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import { NestedAccordionComponent } from './nested-accordion/nested-accordion.co
     BidFeedsComponent,
     LoginComponent,
     FeedComponent,
-    NestedAccordionComponent
+    NestedAccordionComponent,
+    ToolbarComponent
   ],
   imports: [
     CommonModule,
