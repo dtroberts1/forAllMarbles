@@ -1,0 +1,119 @@
+#container-background{
+    height: 100vh; 
+    width: 100%; 
+    background: lightgray; /* #F8F8FF;*/
+    display: flex;
+    justify-content: center;
+    background-image:url('../../assets/images/money.jpeg');   
+    background-size:     cover;
+    background-repeat:   no-repeat;
+    background-position: center center;   
+
+    #login-container{
+        background: white;
+        height: 500px;
+        border-radius: 15px;
+        padding: 40px;
+        margin-top: 12vh;
+        width: 55vh;
+        box-sizing: border-box;
+
+        #sign-in-label{
+            color: firebrick;
+            height: 16%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 33px;
+            font-family: monospace;
+            font-weight: 600;
+            filter: brightness(120%)
+        }
+
+        .login-fields{
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px;
+
+            input{
+                line-height: 33px;
+                background-color: lightgray;
+                filter: brightness(113%);
+                border-radius: 6px;
+                font-size: 18px;
+                font-family: Roboto, "Helvetica Neue", sans-serif;
+                padding-top: 3px;
+                padding-left: 8px;
+            }
+        }
+        
+        #or-container{
+            height: 5vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-transform: uppercase;
+            font-size: 20px;
+        }
+
+h2 {
+  width: 70%;
+  margin: .7em auto;
+  overflow: hidden;
+  text-align: center;
+  font-weight:300;
+  color: #EEEEEE;
+  /*font-size: 20px;*/
+}
+h2:before, h2:after {
+  content: "";
+  display: inline-block;
+  width: 90%;
+  margin: 0 .5em 0 -55%;
+  vertical-align: middle;
+  border-bottom: 1px solid #EEEEEF;
+}
+h2:after {
+  margin: 0 -55% 0 .5em;
+}
+
+        .button-container{
+            margin-top: 12px;
+            width: 100%;
+
+            button{
+                width: 100%;
+                background-color: firebrick;
+                filter: brightness(120%);
+
+                &:hover{
+
+                    &:not([id="sign-in-google"]){
+                        filter: brightness(320%);
+                        color : gray;
+                    }
+                    &[id="sign-in-google"]{
+                        filter: brightness(130%);
+                        color : gray;
+                    }
+                }
+            }
+        }
+
+        ::ng-deep mat-tab-header{
+            border-bottom: none;
+            text-transform: uppercase;
+            .mat-tab-label-container{
+                mat-ink-bar{
+                    visibility: hidden !important;
+                }
+
+                .mat-tab-label-active{
+                    .mat-tab-label-content{
+                        font-weight: 800;
+                    }
+                }
+            }
+        }
+    }
+}

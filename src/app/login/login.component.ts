@@ -10,6 +10,7 @@ import { AuthService } from '../services/auth.service';
 export class LoginComponent implements OnInit {
   loginTxt !: string;
   passwordTxt !: string;
+  selectedTabIndex: number = 0;
   constructor(
     private authService : AuthService,
     private router: Router,
@@ -28,5 +29,16 @@ export class LoginComponent implements OnInit {
       .then(() => {
         this.router.navigate(['/dashboard']);
       });
+  }
+
+  signInWithGoogle(){
+    this.authService.SignInWithGoogle()
+      .then(() => {
+        this.router.navigate(['/dashboard']);
+      });
+  }
+
+  tabChanged(event: any){
+    this.selectedTabIndex = event.index;
   }
 }

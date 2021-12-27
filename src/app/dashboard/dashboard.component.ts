@@ -30,7 +30,6 @@ export class DashboardComponent implements OnInit {
         this.yourBids.accordionCallback();
         break;
     }
-
   }
 
   ngOnInit(): void {

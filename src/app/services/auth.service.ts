@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import {AngularFireAuth} from '@angular/fire/auth';
+import {AngularFireAuth, } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { AngularFireDatabase, AngularFireList, AngularFireObject} from '@angular/fire/database';
 import { AuthUser, User } from '../models/user';
 import { Bid } from '../models/bid';
+import * as firebase from 'firebase';
+
 
 @Injectable({
   providedIn: 'root'
@@ -54,6 +56,40 @@ export class AuthService {
         .catch((error: any) => {
           reject(null);
         })
+    });
+  }
+
+  SignInWithGoogle(){
+    return new Promise((resolve, reject) => {
+      let provider = new firebase.default.auth.GoogleAuthProvider()
+
+      this.angularFireAuth.signInWithPopup(provider)
+        .then((result) => {
+          console.log({"result":result})
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          this._isAuthenticated = true;
+          this._user = <AuthUser>{
+            key : result.user?.uid,
+            emailAddress: result.user?.email,
+          }
+          /*
+          const credential = firebase.default.auth.GoogleAuthProvider.credential(result) provider.credentialFromResult(result);
+          const token = credential.accessToken;
+          // The signed-in user info.
+          result.user?.getIdToken()
+            .then((res) => {
+              
+            })
+          const user = result.user;
+          */
+          resolve(result);
+  
+          // ...
+        }).catch((err: any) => {
+          this._isAuthenticated = false;
+          this._user = null;
+          reject(err);
+        });
     });
   }
   

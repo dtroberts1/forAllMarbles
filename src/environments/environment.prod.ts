@@ -3,6 +3,7 @@ export const environment = {
   firebase: {
     apiKey: "AIzaSyDe1g_bqU2yPt652LpJ-Inm73mzcrNZ7GI",
     authDomain: "forallmarbles-1ac03.firebaseapp.com",
+    databaseURL: "https://forallmarbles-1ac03-default-rtdb.firebaseio.com",
     projectId: "forallmarbles-1ac03",
     storageBucket: "forallmarbles-1ac03.appspot.com",
     messagingSenderId: "824383858638",
