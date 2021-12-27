@@ -44,6 +44,18 @@
                 font-family: Roboto, "Helvetica Neue", sans-serif;
                 padding-top: 3px;
                 padding-left: 8px;
+                outline: none;
+                border: none;
+                &:focus-visible{
+                    /*
+                    outline: .5em solid blue;
+                    border: solid blue .5em;
+                    */
+                    outline: firebrick auto 1px;
+                    outline-color: firebrick;
+                    outline-style: auto;
+                    outline-width: 1px;
+                }
             }
         }
         
@@ -106,6 +118,12 @@ h2:after {
             .mat-tab-label-container{
                 mat-ink-bar{
                     visibility: hidden !important;
+                }
+
+                .mat-tab-label{
+                    padding: 0 12px 0 8px !important;
+                    min-width: initial !important;
+                    
                 }
 
                 .mat-tab-label-active{
