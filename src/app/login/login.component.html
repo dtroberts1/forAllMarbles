@@ -1,4 +1,37 @@
-<input [(ngModel)]="loginTxt" />
-<input [(ngModel)]="passwordTxt" />
-<button (click)="login()" mat-raised-button color="accent">Login</button>
-<button (click)="createAcct()" mat-raised-button color="accent">Create Account</button>
+<div id="container-background">
+    <div id="login-container">
+        <div id="sign-in-label">
+            {{(selectedTabIndex == 0 ? 'SIGN IN' : 'SIGN UP')}}
+        </div>
+        <mat-tab-group (selectedTabChange)="tabChanged($event)">
+            <mat-tab label="Sign In">
+                <div class="login-fields">
+                    <input placeholder="Email" [(ngModel)]="loginTxt" />
+                    <input placeholder="Password" [(ngModel)]="passwordTxt" />
+                </div>
+                <div class="button-container">
+                    <button (click)="login()" mat-raised-button color="accent">Sign In</button>
+                </div>
+            </mat-tab>
+            <mat-tab label="Sign Up">
+                <div class="login-fields">
+                    <input placeholder="Email" [(ngModel)]="loginTxt" />
+                    <input placeholder="Password" [(ngModel)]="passwordTxt" />
+                </div>
+                <div class="button-container">
+                    <button (click)="createAcct()" mat-raised-button color="accent">Sign Up</button>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+
+        <h2 *ngIf="selectedTabIndex == 0" id="or-container">
+            Or
+        </h2>
+        <div *ngIf="selectedTabIndex == 0" class="button-container">
+            <button id="sign-in-google" (click)="signInWithGoogle()" style="background-color: #5C91F1; color: white" mat-raised-button>
+                <img style="height: 1.5em; width: 1.5em;" src="../../assets/icons/google.svg" />
+                Sign in with Google
+            </button>
+        </div>
+    </div>    
+</div>

@@ -118,13 +118,13 @@
                 <div>
                     <div id="lower-right-btn-container">
                         <button
-                        style="background-color: #36c0ff;"
+                        color="accent"
                         (click)="clearFields()" mat-raised-button>Clear
                         </button>
                         <button
                             [ngStyle]="{'background-color': (bidMessageFormControl.valid && titleFormControl.valid && bidAmtFormControl.valid ? 'rgba(102, 255, 0, 1)' : 'gray')}"
                             [disabled]="!bidMessageFormControl.valid || !titleFormControl.valid || !bidAmtFormControl.valid" 
-                            (click)="createBid()" mat-raised-button color="primary">Create
+                            (click)="createBid()" mat-raised-button color="accent">Create
                         </button>
                     </div>
                 </div>
