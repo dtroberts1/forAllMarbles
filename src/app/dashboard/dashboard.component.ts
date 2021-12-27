@@ -28,12 +28,15 @@ export class DashboardComponent implements OnInit {
         break;
       case 1:
         this.yourBids.accordionCallback();
-        break;
+        break; 
     }
   }
 
   ngOnInit(): void {
     this.authUser = this.authService.getAccount();
+    if (!this.authUser){
+      this.router.navigate(['/login']);
+    }
    
   }
 
@@ -41,7 +44,7 @@ export class DashboardComponent implements OnInit {
     this.authService.SignOut()
       .then((res) => {
         this.router.navigate(['/login']);
-      })
+      });
   }
 
 }

@@ -140,10 +140,6 @@ export class NestedAccordionComponent implements OnInit {
   }
 
   saveUpdate(){
-
-
-    console.log("amount is " + this.bidAmtFormControl.value)
-
     let thisBid = this.bid as Bid;  
       let bidForSave : Bid = {
         title : this.titleFormControl.value,
@@ -252,6 +248,9 @@ export class NestedAccordionComponent implements OnInit {
     if (this.bidAmtFormControl.value < 0){
       this.bidAmtFormControl.setValue(0.00);
     }
+
+    this.bidAmtFormControl.setValue(Math.round(this.bidAmtFormControl.value * 100) / 100);
+
   }
 
   decrementAmt(){
@@ -264,6 +263,9 @@ export class NestedAccordionComponent implements OnInit {
     if (this.bidAmtFormControl.value < 0){
       this.bidAmtFormControl.setValue(0.00);
     }
+
+    this.bidAmtFormControl.setValue(Math.round(this.bidAmtFormControl.value * 100) / 100);
+
   }
   
   ngOnChanges(changes: SimpleChanges) {

@@ -105,25 +105,21 @@
             </div>
             <div id="bid-description">
             </div>
-            <div id="bid-lower-left-btns">
-                <div>
-                    <div id="lower-left-btn-container">
-                        <!--<button *ngIf="!bid.isEditing" (click)="modifyBid(bid)" mat-raised-button color="accent">View Counter Offers</button>-->
-                        <button *ngIf="user && !(user.key === bid.bidCreatorKey)" (click)="createCounterOffer()" mat-raised-button color="accent">Counter Offer</button>
-                        <button *ngIf="user && user.key === bid.bidChallengerKey && !(user.key === bid.bidCreatorKey)" (click)="cancelModify(bid)" mat-raised-button color="accent">Approve</button>
-                    </div>
-                </div>            
+            <div id="bid-lower-left-btns">          
             </div>
             <div id="bid-lower-right-btns">
                 <div>
                     <div id="lower-right-btn-container">
                         <button
                         color="accent"
-                        (click)="clearFields()" mat-raised-button>Clear
+                        (click)="clearFields()"
+                        style="font-family: system-ui !important;"
+                        mat-raised-button>Clear
                         </button>
                         <button
-                            [ngStyle]="{'background-color': (bidMessageFormControl.valid && titleFormControl.valid && bidAmtFormControl.valid ? 'rgba(102, 255, 0, 1)' : 'gray')}"
+                            [ngStyle]="{'filter': (!bidMessageFormControl.valid || !titleFormControl.valid || !bidAmtFormControl.valid ? 'brightness(50%)' : 'none')}"
                             [disabled]="!bidMessageFormControl.valid || !titleFormControl.valid || !bidAmtFormControl.valid" 
+                            style="font-family: system-ui !important; background-color: forestgreen !important; color: white;"
                             (click)="createBid()" mat-raised-button color="accent">Create
                         </button>
                     </div>

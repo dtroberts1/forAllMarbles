@@ -1,0 +1,33 @@
+<div id="toolbar-container">
+    <div style="float: left; width: 50%;">
+        <img style="height: 40px; width: 40px;" src="../../assets/icons/dice.png" />
+    </div>
+    <div id="toolbar-btns">
+        <div>
+            <mat-icon tabindex="1" (click)="openProfileContext()" >person</mat-icon>
+        </div>
+    </div>
+</div>
+
+<div id="prof-card" *ngIf="selectedFooterItem == 'profile'" class="profile-menu-card" tabindex="1"
+(mousedown)="lockProfileCard($event)"
+(blur)="blurCard($event)"
+  >
+  <div id="logout-btn" tabindex="1" (click)="logout($event)" class="prof-btn">
+    Logout
+  </div>
+  <div class="prof-btn" tabindex="1" (click)="logout($event)" class="prof-btn">
+    Account
+  </div>
+  <div class="prof-btn" tabindex="1" (click)="logout($event)" class="prof-btn">
+    Settings
+  </div>
+  <div style="text-align: right; padding: 0 10px 0 10px;">
+    User
+  </div>
+  <div style="text-align: right; padding: 0 10px 0 10px;">
+      <span style="font-family: system-ui !important;" *ngIf="authUser">
+        {{authUser.emailAddress}}
+      </span>
+  </div>
+</div>
