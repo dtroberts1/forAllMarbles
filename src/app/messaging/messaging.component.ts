@@ -15,8 +15,11 @@ export class MessagingComponent implements OnInit {
   }
   expandCollapseConvoList(){
     this.convoListExpanded = !this.convoListExpanded;
+  }
 
+  userContactSelected(userFullNameStr: any){
 
+    console.log("selected user is " + userFullNameStr);
   }
 
   openNewMessagePopup(event: any){

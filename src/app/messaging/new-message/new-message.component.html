@@ -3,7 +3,7 @@
         <div id="messaging-icons-left">
             <mat-icon tabindex="1" >message</mat-icon>
             <h3 class="messaging-label">
-                Create New Message
+                New Message
             </h3>
         </div>
         <div id="messaging-icons-right">
@@ -16,15 +16,39 @@
     </div>
     <div [ngStyle]="{'visibility': (expanded ? 'visible': 'hidden')}" id="new-message-body-container">
         <div id="new-message-body">
-            <div id="contact-search-input-container">
+            <div *ngIf="!selectedMessageUser" id="contact-search-input-container">
                 <input
+                    [(ngModel)]="userSearchStr"
                     placeholder="Type a name to find a contact"
                     (click)="stopPropagation($event)"
                 />
             </div>
+            <div id="avail-msg-users-parent-container" [ngStyle]="{'visibility' : (userSearchStr && userSearchStr ? 'visible' : 'hidden')}">
+                <app-available-message-users
+                    (userSelected)="userSelected($event)"
+                >
+            
+                </app-available-message-users>
+            </div>
+            <div *ngIf="selectedMessageUser" id="selected-user-area">
+                <div style="display: inline-flex; align-items: center;">
+                        {{selectedMessageUser}}
+                        <mat-icon tabindex="1" (click)="removeSelectedUser()" 
+                        style="color: white; margin-left: 8px; margin-top: 3px;" 
+                        id="arrow">close</mat-icon>
+                </div>
+            </div>
+            <div *ngIf="selectedMessageUser" id="selected-user-profile">
+                <app-message-preview
+                [nameStr]="'Dylan Roberts'"
+                [contents]="'Hey John, just reaching out about that bid we talked about yesterday. I was hoping we could increase it a bit.'"
+                [dateStr]="'Dec 12'"
+                [isLastElm]="true"
+                >
+                </app-message-preview>
+            </div>
             <div id="message-list-container">
                 <app-chat-view>
-
                 </app-chat-view>
             </div>
             <div id="new-message-input-container">

@@ -39,11 +39,25 @@
             </label>
             <ul id="recent-msg-list">
                 <li class="message-prev-li">
-                    <app-message-preview [isLastElm]="false">
-                    </app-message-preview>
+                        <app-message-preview
+                        [nameStr]="'Dylan Roberts'"
+                        [contents]="'Hey John, just reaching out about that bid we talked about yesterday. I was hoping we could increase it a bit.'"
+                        [dateStr]="'Dec 12'"
+                        [isLastElm]="false"
+                        (click)="stopPropagation($event)"
+                        (onSelected)="userContactSelected($event)"
+                        >
+                        </app-message-preview>
                 </li>
                 <li class="message-prev-li">
-                    <app-message-preview [isLastElm]="true">
+                    <app-message-preview
+                    [nameStr]="'Dylan Roberts'"
+                    [contents]="'Hey John, just reaching out about that bid we talked about yesterday. I was hoping we could increase it a bit.'"
+                    [dateStr]="'Dec 12'"
+                    [isLastElm]="true"
+                    (click)="stopPropagation($event)"
+                    (onSelected)="userContactSelected($event)"
+                    >
                     </app-message-preview>
                 </li>
             </ul>

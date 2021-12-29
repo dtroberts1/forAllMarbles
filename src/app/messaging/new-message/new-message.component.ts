@@ -8,6 +8,8 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 export class NewMessageComponent implements OnInit {
   @Output() closeNewMsgCallback : EventEmitter<any> = new EventEmitter();
   expanded: boolean = true;
+  userSearchStr !: null;
+  selectedMessageUser !: string | null;
 
   constructor() { }
 
@@ -16,6 +18,16 @@ export class NewMessageComponent implements OnInit {
   closeNewMsgt(){
     console.log("closing new message")
     this.closeNewMsgCallback.emit();
+  }
+
+  removeSelectedUser(){
+    this.selectedMessageUser = null;
+  }
+
+  userSelected(userSelectedStr: string){
+    this.selectedMessageUser = userSelectedStr;
+    console.log("selected user is " + userSelectedStr);
+    this.userSearchStr = null;
   }
 
   stopPropagation(event: any){

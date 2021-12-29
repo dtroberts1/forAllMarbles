@@ -1,0 +1,24 @@
+<div style="color: black;">
+    <ul id="recent-msg-list">
+        <li class="message-prev-li">
+            <app-message-preview
+            [nameStr]="'Dylan Roberts'"
+            [contents]="'Hey John, just reaching out about that bid we talked about yesterday. I was hoping we could increase it a bit.'"
+            [dateStr]="'Dec 12'"
+            [isLastElm]="false"
+            (onSelected)="userContactSelected($event)"
+            >
+            </app-message-preview>
+        </li>
+        <li class="message-prev-li">
+            <app-message-preview
+            [nameStr]="'Dylan Roberts'"
+            [contents]="'Hey John, just reaching out about that bid we talked about yesterday. I was hoping we could increase it a bit.'"
+            [dateStr]="'Dec 12'"
+            [isLastElm]="true"
+            (onSelected)="userContactSelected($event)"
+            >
+            </app-message-preview>
+        </li>
+    </ul>
+</div>
