@@ -1,0 +1,45 @@
+<div id="new-msg-container" [ngClass]="{'expanded': expanded}">
+    <div id="recent-msg-header" tabindex="1" (click)="expandCollapse()">
+        <div id="messaging-icons-left">
+            <mat-icon tabindex="1" >message</mat-icon>
+            <h3 class="messaging-label">
+                Create New Message
+            </h3>
+        </div>
+        <div id="messaging-icons-right">
+            <div>
+                <div class="arrow-editor-container">
+                    <mat-icon (click)="closeNewMsgt()" id="arrow">close</mat-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div [ngStyle]="{'visibility': (expanded ? 'visible': 'hidden')}" id="new-message-body-container">
+        <div id="new-message-body">
+            <div id="contact-search-input-container">
+                <input
+                    placeholder="Type a name to find a contact"
+                    (click)="stopPropagation($event)"
+                />
+            </div>
+            <div id="message-list-container">
+                <app-chat-view>
+
+                </app-chat-view>
+            </div>
+            <div id="new-message-input-container">
+                <textarea
+                    placeholder="Write a message..." 
+                ></textarea>
+            </div>
+            <div id="message-controls">
+                <div id="left-msg-ctrls">
+                    Left ctrls
+                </div>
+                <div id="right-msg-ctrls">
+                    <button style="font-family: system-ui !important;" mat-raised-button color="accent">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

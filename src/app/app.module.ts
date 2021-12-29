@@ -35,6 +35,9 @@ import {CdkAccordionModule} from '@angular/cdk/accordion';
 import { NestedAccordionComponent } from './nested-accordion/nested-accordion.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { MessagingComponent } from './messaging/messaging.component';
+import { MessagePreviewComponent } from './messaging/message-preview/message-preview.component';
+import { NewMessageComponent } from './messaging/new-message/new-message.component';
+import { ChatViewComponent } from './messaging/chat-view/chat-view.component';
 
 
 @NgModule({
@@ -48,7 +51,10 @@ import { MessagingComponent } from './messaging/messaging.component';
     FeedComponent,
     NestedAccordionComponent,
     ToolbarComponent,
-    MessagingComponent
+    MessagingComponent,
+    MessagePreviewComponent,
+    NewMessageComponent,
+    ChatViewComponent
   ],
   imports: [
     CommonModule,

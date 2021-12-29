@@ -14,6 +14,8 @@ export class DashboardComponent implements OnInit {
   authUser !:AuthUser | null;
   @ViewChild(FeedComponent) feed !: FeedComponent;
   @ViewChild(YourBidsComponent) yourBids !: YourBidsComponent;
+  canDispNewMessageScrn :boolean = false;
+
 
   constructor(
     private authService: AuthService,
@@ -30,6 +32,15 @@ export class DashboardComponent implements OnInit {
         this.yourBids.accordionCallback();
         break; 
     }
+  }
+
+  openCreateNewMsg(){
+    this.canDispNewMessageScrn = true;
+  }
+
+  closeNewMessage(){
+    console.log("callback received")
+    this.canDispNewMessageScrn = false;
   }
 
   ngOnInit(): void {

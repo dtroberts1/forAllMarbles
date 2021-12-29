@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter} from '@angular/core';
 
 @Component({
   selector: 'app-messaging',
@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MessagingComponent implements OnInit {
   convoListExpanded: boolean = false;
+  @Output() createNewMsgtCallback : EventEmitter<any> = new EventEmitter();
 
   constructor() { }
 
@@ -14,8 +15,17 @@ export class MessagingComponent implements OnInit {
   }
   expandCollapseConvoList(){
     this.convoListExpanded = !this.convoListExpanded;
-    
 
+
+  }
+
+  openNewMessagePopup(event: any){
+    event.stopPropagation();
+    this.createNewMsgtCallback.emit();
+  }
+
+  stopPropagation(event: any){
+    event.stopPropagation();
   }
 
 }
