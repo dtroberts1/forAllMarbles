@@ -38,8 +38,21 @@
                 Inbox
             </label>
             <ul id="recent-msg-list">
+
+                <li *ngFor="let preview of previews" class="message-prev-li">
+                    <app-message-preview
+                    [user]="preview.user"
+                    [contents]="preview.contents"
+                    [dateStr]="preview.dateStr"
+                    [isLastElm]="false"
+                    (click)="stopPropagation($event)"
+                    (onSelected)="userContactSelected($event)"
+                    >
+                    </app-message-preview>
+                </li>
                 <!--
                 Need to update!!
+                
 
                 <li class="message-prev-li">
                         <app-message-preview
