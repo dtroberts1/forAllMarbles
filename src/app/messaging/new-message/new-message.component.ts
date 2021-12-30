@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ChangeDetectorRef, Input, SimpleChanges } from '@angular/core';
 import { dateInputsHaveChanged } from '@angular/material/datepicker/datepicker-input-base';
 import { UniqueDay } from 'src/app/interfaces/unique-day';
 import { IM } from 'src/app/models/im';
@@ -14,6 +14,8 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class NewMessageComponent implements OnInit {
   @Output() closeNewMsgCallback : EventEmitter<any> = new EventEmitter();
+  @Input() selectedUser !: User | null;
+
   expanded: boolean = true;
   userSearchStr !: null;
   selectedMessageUser !: User | null;
@@ -21,6 +23,7 @@ export class NewMessageComponent implements OnInit {
   conversationMessageListGroup !: IM[][];
   conversationMessageList !: IM[];
   messageListGrouped : UniqueDay[] = [];
+  isExistingThread : boolean = false;
 
   constructor(
     private  messageService: MessageService,
@@ -40,6 +43,23 @@ export class NewMessageComponent implements OnInit {
     this.selectedMessageUser = null;
     this.conversationMessageList = [];
     this.messageListGrouped = [];
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        let change = changes[propName];
+        switch (propName) {
+          case 'selectedUser': {
+            if (change.currentValue){
+              this.userSelected(change.currentValue);
+              this.isExistingThread = true;
+            }
+          }
+          break;
+        }
+      }
+    }
   }
 
   userSelected(selectedUser: User){

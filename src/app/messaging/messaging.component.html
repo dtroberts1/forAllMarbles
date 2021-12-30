@@ -45,7 +45,7 @@
                     [contents]="preview.contents"
                     [dateStr]="preview.dateStr"
                     [isLastElm]="false"
-                    (click)="stopPropagation($event)"
+                    (click)="openMessageThread($event, preview.user)"
                     (onSelected)="userContactSelected($event)"
                     >
                     </app-message-preview>

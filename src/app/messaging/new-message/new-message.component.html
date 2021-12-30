@@ -1,9 +1,11 @@
 <div id="new-msg-container" [ngClass]="{'expanded': expanded}">
     <div id="recent-msg-header" tabindex="1" (click)="expandCollapse()">
         <div id="messaging-icons-left">
-            <mat-icon tabindex="1" >message</mat-icon>
+            <mat-icon *ngIf="!isExistingThread" tabindex="1" >message</mat-icon>
+            <img *ngIf="isExistingThread && selectedMessageUser && selectedMessageUser.profilePicSrc" 
+            [src]="selectedMessageUser.profilePicSrc" />
             <h3 class="messaging-label">
-                New Message
+                {{(!isExistingThread || !selectedMessageUser) ? 'New Message' : selectedMessageUser.fullName}}
             </h3>
         </div>
         <div id="messaging-icons-right">
@@ -30,7 +32,7 @@
             
                 </app-available-message-users>
             </div>
-            <div *ngIf="selectedMessageUser" id="selected-user-area">
+            <div *ngIf="selectedMessageUser && !isExistingThread" id="selected-user-area">
                 <div style="display: inline-flex; align-items: center;">
                         {{selectedMessageUser.fullName}}
                         <mat-icon tabindex="1" (click)="removeSelectedUser()" 
