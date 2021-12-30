@@ -16,7 +16,11 @@
                         </div>
                         <div id="im-item-right">
                             <div id="full-name">
-                                {{msg.fromUserFullName}} {{msg.timeFormatted}}
+                                {{msg.fromUserFullName}} 
+                                <span style="font-size: 1.5em;  padding: 0 5px 2px 5px">
+                                    &middot;
+                                </span>
+                                {{msg.timeFormatted}}
                             </div>
                             <div style="padding-top: 10px;">
                                 {{msg.msgText}}
