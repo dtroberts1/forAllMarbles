@@ -62,6 +62,10 @@ export class NewMessageComponent implements OnInit {
     }
   }
 
+  searchChanged(){
+    
+  }
+
   userSelected(selectedUser: User){
 
     this.selectedMessageUser = selectedUser;

@@ -1,14 +1,20 @@
 <div style="color: black;">
-    <ul id="recent-msg-list" *ngIf="availUsers && availUsers.length">
-        <li *ngFor="let user of availUsers; let i = index;"  class="message-prev-li">
+    <ul id="recent-msg-list" *ngIf="filteredUsers && filteredUsers.length">
+        <li *ngFor="let user of filteredUsers; let i = index;"  class="message-prev-li">
             <app-message-preview
             [user]="user"
             [contents]="user.cityState ? user.cityState : ''"
             [dateStr]="'Dec 12'"
-            [isLastElm]="i == (availUsers.length - 1)"
+            [isLastElm]="i == (filteredUsers.length - 1)"
             (onSelected)="userContactSelected($event)"
             >
             </app-message-preview>
         </li>
     </ul>
+    <div *ngIf="!filteredUsers || !filteredUsers.length"
+        id="no-results-found"
+    >
+        <mat-icon>info</mat-icon>
+        No Results Found
+    </div>
 </div>

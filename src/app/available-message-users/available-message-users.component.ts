@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { User } from '../models/user';
 import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user.service';
@@ -10,7 +10,9 @@ import { UserService } from '../services/user.service';
 })
 export class AvailableMessageUsersComponent implements OnInit {
   @Output() userSelected : EventEmitter<any> = new EventEmitter();
-  availUsers!: User[];
+  @Input() searchParameters !: string | null;
+  filteredUsers!: User[];
+  allUsers!: User[];
 
   constructor(
     private userService: UserService,
@@ -21,13 +23,46 @@ export class AvailableMessageUsersComponent implements OnInit {
     this.userService.getAll()
       .subscribe(
         res => {
-          this.availUsers = res.filter(user => user.emailAddress != this.authService.getAccount()?.emailAddress);
+          this.allUsers = res.filter(user => user.emailAddress != this.authService.getAccount()?.emailAddress);
+          this.filteredUsers = this.getFilteredAvailUsers(this.allUsers);
+
         }
       )
   }
 
+  getFilteredAvailUsers(availUsers : User[]){
+    if (this.searchParameters && this.searchParameters.length){
+      return availUsers.filter(user => user.fullName?.toLowerCase()?.startsWith(<string>this.searchParameters?.toLowerCase()))
+    }
+    else{
+      return [];
+    }
+  }
+
   userContactSelected(user: User){
     this.userSelected.emit(user);
+  }
+  
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        let change = changes[propName];
+        switch (propName) {
+          case 'searchParameters': {
+            if (change.currentValue){
+              if (Array.isArray(this.allUsers)){
+                this.filteredUsers = this.getFilteredAvailUsers(this.allUsers);
+              }
+              else{
+                this.filteredUsers = [];
+                this.allUsers = [];
+              }
+            }
+          }
+          break;
+        }
+      }
+    }
   }
 
 }

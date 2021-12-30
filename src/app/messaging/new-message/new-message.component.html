@@ -28,8 +28,8 @@
             <div id="avail-msg-users-parent-container" [ngStyle]="{'visibility' : (userSearchStr && userSearchStr ? 'visible' : 'hidden')}">
                 <app-available-message-users
                     (userSelected)="userSelected($event)"
+                    [searchParameters]="userSearchStr"
                 >
-            
                 </app-available-message-users>
             </div>
             <div *ngIf="selectedMessageUser && !isExistingThread" id="selected-user-area">
@@ -42,10 +42,9 @@
             </div>
             <div *ngIf="selectedMessageUser" id="selected-user-profile">
                 <app-message-preview
-                [user]="selectedMessageUser"
-                [contents]="(selectedMessageUser.city ? selectedMessageUser.city : '') + ', ' + (selectedMessageUser.state ? selectedMessageUser.state : '')"
-                [dateStr]="'Dec 12'"
-                [isLastElm]="true"
+                    [user]="selectedMessageUser"
+                    [contents]="(selectedMessageUser.city ? selectedMessageUser.city : '') + ', ' + (selectedMessageUser.state ? selectedMessageUser.state : '')"
+                    [isLastElm]="true"
                 >
                 </app-message-preview>
             </div>
