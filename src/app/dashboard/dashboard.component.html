@@ -14,12 +14,13 @@
             
         </app-create-new-bid></mat-tab>
     </mat-tab-group>
-    <app-messaging
+    <div>
+        <app-messaging
         (createNewMsgtCallback)="openCreateNewMsg()"
-    >
-    </app-messaging>
-    <app-new-message *ngIf="canDispNewMessageScrn" 
-    (closeNewMsgCallback)="closeNewMessage()"
-    ></app-new-message>
-
+        >
+        </app-messaging>
+        <app-new-message *ngIf="canDispNewMessageScrn" 
+        (closeNewMsgCallback)="closeNewMessage()"
+        ></app-new-message>
+    </div>
 </div>

@@ -5,6 +5,11 @@ export class User {
     bids ?: string[];
     displayName ?: string;
     emailAddress ?: string;
+    fullName ?: string;
+    firstName ?: string;
+    lastName ?: string;
+    cityState ?: string;
+    profilePicSrc ?: string;
 }
 
 export class AuthUser{

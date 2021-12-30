@@ -32,7 +32,7 @@
             </div>
             <div *ngIf="selectedMessageUser" id="selected-user-area">
                 <div style="display: inline-flex; align-items: center;">
-                        {{selectedMessageUser}}
+                        {{selectedMessageUser.fullName}}
                         <mat-icon tabindex="1" (click)="removeSelectedUser()" 
                         style="color: white; margin-left: 8px; margin-top: 3px;" 
                         id="arrow">close</mat-icon>
@@ -40,7 +40,7 @@
             </div>
             <div *ngIf="selectedMessageUser" id="selected-user-profile">
                 <app-message-preview
-                [nameStr]="'Dylan Roberts'"
+                [user]="selectedMessageUser"
                 [contents]="'Hey John, just reaching out about that bid we talked about yesterday. I was hoping we could increase it a bit.'"
                 [dateStr]="'Dec 12'"
                 [isLastElm]="true"
@@ -48,11 +48,14 @@
                 </app-message-preview>
             </div>
             <div id="message-list-container">
-                <app-chat-view>
+                <app-chat-view 
+                    [imMessages]="conversationMessageList"
+                >
                 </app-chat-view>
             </div>
             <div id="new-message-input-container">
                 <textarea
+                    [(ngModel)]="msgText"
                     placeholder="Write a message..." 
                 ></textarea>
             </div>
@@ -61,7 +64,7 @@
                     Left ctrls
                 </div>
                 <div id="right-msg-ctrls">
-                    <button style="font-family: system-ui !important;" mat-raised-button color="accent">Send</button>
+                    <button [disabled]="!selectedMessageUser" (click)="sendMessage()" style="font-family: system-ui !important;" mat-raised-button color="accent">Send</button>
                 </div>
             </div>
         </div>

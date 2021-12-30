@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-message-preview',
@@ -7,7 +8,7 @@ import { Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 })
 export class MessagePreviewComponent implements OnInit {
   @Input() isLastElm!: boolean;
-  @Input() nameStr !: string;
+  @Input() user !: User;
   @Input() contents !: string;
   @Input() dateStr !: string;
   @Input() imgSrc !: string;
@@ -21,7 +22,7 @@ export class MessagePreviewComponent implements OnInit {
   }
 
   itemSelected(){
-    this.onSelected.emit(this.nameStr);
+    this.onSelected.emit(this.user);
   }
 
 }

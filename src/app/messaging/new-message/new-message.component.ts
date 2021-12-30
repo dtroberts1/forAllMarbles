@@ -1,4 +1,9 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
+import { IM } from 'src/app/models/im';
+import { User } from 'src/app/models/user';
+import { AuthService } from 'src/app/services/auth.service';
+import { MessageService } from 'src/app/services/message.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-new-message',
@@ -9,9 +14,17 @@ export class NewMessageComponent implements OnInit {
   @Output() closeNewMsgCallback : EventEmitter<any> = new EventEmitter();
   expanded: boolean = true;
   userSearchStr !: null;
-  selectedMessageUser !: string | null;
+  selectedMessageUser !: User | null;
+  msgText !: null;
+  conversationMessageList !: IM[];
 
-  constructor() { }
+  constructor(
+    private  messageService: MessageService,
+    private authService: AuthService,
+    private changeDetectRef: ChangeDetectorRef,
+    private userService: UserService,
+  ) { 
+  }
 
   ngOnInit(): void {
   }
@@ -24,10 +37,53 @@ export class NewMessageComponent implements OnInit {
     this.selectedMessageUser = null;
   }
 
-  userSelected(userSelectedStr: string){
-    this.selectedMessageUser = userSelectedStr;
-    console.log("selected user is " + userSelectedStr);
+  userSelected(selectedUser: User){
+
+    this.selectedMessageUser = selectedUser;
     this.userSearchStr = null;
+    this.messageService.getMessagesBetweenUsers(<string>this.authService.getAccount()?.key, <string>selectedUser.key)
+      .subscribe({
+        next: ((res) => {
+          if (Array.isArray(res) && res.length){
+            this.conversationMessageList = res;
+            this.changeDetectRef.detectChanges();
+          }
+          else{
+            this.conversationMessageList = [];
+            this.changeDetectRef.detectChanges();
+          }
+        }),
+        error: ((err) => {
+          console.log("error" + err)
+        }),
+        complete: () => {
+          console.log("completed!!")
+        },
+      });
+        
+  }
+
+  sendMessage(){
+
+    let fromAuthUser = this.authService.getAccount();
+    let toUser = this.selectedMessageUser;
+    this.userService.getSingle(<string>fromAuthUser?.key)
+      .then((user) => {
+        let fromUser = user;
+        this.messageService.create(
+          {
+            fromUser : fromUser?.key,
+            toUser : toUser?.key,
+            fromToPair : `${fromUser?.key}_${toUser?.key}`,
+            msgDateStr : new Date().toISOString(),
+            msgText : this.msgText ? this.msgText : '',
+            fromUserFullName : `${fromUser?.firstName} ${fromUser.lastName}`,
+            toUserFullName : `${(toUser ? toUser?.firstName : '')} ${(toUser ? toUser.lastName : '')}`,
+            fromUserImgSrc : fromUser.profilePicSrc,
+            toUserImgSrc : toUser?.profilePicSrc,
+          }
+        );
+      });
   }
 
   stopPropagation(event: any){

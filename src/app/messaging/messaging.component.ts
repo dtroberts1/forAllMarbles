@@ -1,4 +1,6 @@
 import { Component, OnInit, Output, EventEmitter} from '@angular/core';
+import { User } from '../models/user';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-messaging',
@@ -8,10 +10,20 @@ import { Component, OnInit, Output, EventEmitter} from '@angular/core';
 export class MessagingComponent implements OnInit {
   convoListExpanded: boolean = false;
   @Output() createNewMsgtCallback : EventEmitter<any> = new EventEmitter();
+  availUsers!: User[];
 
-  constructor() { }
+  constructor(
+    private userService: UserService,
+  ) { }
 
   ngOnInit(): void {
+    this.userService.getAll()
+      .subscribe(
+        res => {
+          console.log({"users":res});
+        }
+
+      );
   }
   expandCollapseConvoList(){
     this.convoListExpanded = !this.convoListExpanded;
