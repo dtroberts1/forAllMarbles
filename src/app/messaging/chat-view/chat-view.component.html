@@ -1,26 +1,30 @@
 <div style="color: black; min-height: 300px; overflow-y: scroll; max-height: 300px; padding-right: 10px;">
-    <ul id="message-list">
-        <li *ngFor="let msg of imMessages">
-            <div style="width: 100%; min-height: 120px;">
-                <div id="im-item-left">
-                    <div>
-                        <img [src]="msg.fromUserImgSrc"
-                            style="height: 84px; width: 84px; border-radius: 40px;"
-                        />
+    <ul style="list-style: none; padding-inline-start: 0;">
+        <li *ngFor="let messageGroup of imMessagesGrouped" style="position: relative; padding-top: 60px;">
+                <h2 id="or-container">
+                    {{messageGroup.dateFormatted}}
+                </h2>
+            <ul id="message-list">
+                <li *ngFor="let msg of messageGroup.imList">
+                    <div style="width: 100%; min-height: 120px;">
+                        <div id="im-item-left">
+                            <div>
+                                <img [src]="msg.fromUserImgSrc"
+                                    style="height: 84px; width: 84px; border-radius: 40px;"
+                                />
+                            </div>
+                        </div>
+                        <div id="im-item-right">
+                            <div id="full-name">
+                                {{msg.fromUserFullName}} {{msg.timeFormatted}}
+                            </div>
+                            <div style="padding-top: 10px;">
+                                {{msg.msgText}}
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div id="im-item-right">
-                    <div id="full-name">
-                        {{msg.fromUserFullName}} {{msg.time}}
-                    </div>
-                    <div style="padding-top: 10px;">
-                        {{msg.msgText}}
-                    </div>
-                    <div id="msg-date">
-                        {{msg.msgDateStr}}
-                    </div>
-                </div>
-            </div>
+                </li>
+            </ul>
         </li>
     </ul>
 </div>

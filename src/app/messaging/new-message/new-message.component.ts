@@ -1,4 +1,6 @@
 import { Component, OnInit, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
+import { dateInputsHaveChanged } from '@angular/material/datepicker/datepicker-input-base';
+import { UniqueDay } from 'src/app/interfaces/unique-day';
 import { IM } from 'src/app/models/im';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -16,7 +18,9 @@ export class NewMessageComponent implements OnInit {
   userSearchStr !: null;
   selectedMessageUser !: User | null;
   msgText !: null;
+  conversationMessageListGroup !: IM[][];
   conversationMessageList !: IM[];
+  messageListGrouped : UniqueDay[] = [];
 
   constructor(
     private  messageService: MessageService,
@@ -29,7 +33,6 @@ export class NewMessageComponent implements OnInit {
   ngOnInit(): void {
   }
   closeNewMsgt(){
-    console.log("closing new message")
     this.closeNewMsgCallback.emit();
   }
 
@@ -46,22 +49,63 @@ export class NewMessageComponent implements OnInit {
       .subscribe({
         next: ((res) => {
           if (Array.isArray(res) && res.length){
-            this.conversationMessageList = res;
+            let groupedMessages = this.groupMessagesByDate(res);
+            if (Array.isArray(groupedMessages)){
+              this.messageListGrouped = groupedMessages;
+            }
+            else{
+              this.messageListGrouped = [];
+            }
+            //this.conversationMessageList = res;
             this.changeDetectRef.detectChanges();
           }
           else{
             this.conversationMessageList = [];
+            this.messageListGrouped = [];
             this.changeDetectRef.detectChanges();
           }
         }),
         error: ((err) => {
-          console.log("error" + err)
         }),
         complete: () => {
-          console.log("completed!!")
         },
       });
         
+  }
+
+  groupMessagesByDate(messageList: IM[]) : UniqueDay[] {
+    let uniqueDays : UniqueDay[] = [];
+    
+    messageList.forEach((mL) => {
+      let dateMillisec = new Date(<string>mL.msgDateStr).setHours(0,0,0,0);
+      if (!uniqueDays.some((uniqueDay) => {
+        return uniqueDay.dateMillisec == dateMillisec;
+      })){
+        let parsedDate = Date.parse(<string>mL.msgDateStr);
+        let currDate = new Date(parsedDate);
+
+        uniqueDays.push({
+          dateMillisec: dateMillisec,
+          imList: [mL], 
+          dateFormatted: `${currDate.toLocaleString('default', { month: 'short' })} ${currDate.getDay()}`
+        });
+      }
+      else{
+        // Case where it does have the date, it should push on to (or create new) IM[]
+        let existingUniqueDay = uniqueDays.find(day => day.dateMillisec == dateMillisec);
+        if (existingUniqueDay){
+
+          if (!Array.isArray(existingUniqueDay?.imList) || !existingUniqueDay?.imList.length){
+            existingUniqueDay.imList = [mL];
+          }
+          else{
+            existingUniqueDay.imList.push(mL);
+          }
+        }
+      }
+    });
+
+    return uniqueDays;
   }
 
   sendMessage(){
