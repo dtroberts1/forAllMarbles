@@ -39,6 +39,7 @@ export class NewMessageComponent implements OnInit {
   removeSelectedUser(){
     this.selectedMessageUser = null;
     this.conversationMessageList = [];
+    this.messageListGrouped = [];
   }
 
   userSelected(selectedUser: User){
