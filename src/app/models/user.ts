@@ -10,6 +10,8 @@ export class User {
     lastName ?: string;
     cityState ?: string;
     profilePicSrc ?: string;
+    city ?: string;
+    state ?: string;
 }
 
 export class AuthUser{

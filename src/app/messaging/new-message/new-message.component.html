@@ -41,7 +41,7 @@
             <div *ngIf="selectedMessageUser" id="selected-user-profile">
                 <app-message-preview
                 [user]="selectedMessageUser"
-                [contents]="'Hey John, just reaching out about that bid we talked about yesterday. I was hoping we could increase it a bit.'"
+                [contents]="(selectedMessageUser.city ? selectedMessageUser.city : '') + ', ' + (selectedMessageUser.state ? selectedMessageUser.state : '')"
                 [dateStr]="'Dec 12'"
                 [isLastElm]="true"
                 >
@@ -64,7 +64,10 @@
                     Left ctrls
                 </div>
                 <div id="right-msg-ctrls">
-                    <button [disabled]="!selectedMessageUser" (click)="sendMessage()" style="font-family: system-ui !important;" mat-raised-button color="accent">Send</button>
+                    <button [disabled]="!selectedMessageUser || !msgText" 
+                    (click)="sendMessage()" 
+                    style="font-family: system-ui !important;"
+                     mat-raised-button color="accent">Send</button>
                 </div>
             </div>
         </div>

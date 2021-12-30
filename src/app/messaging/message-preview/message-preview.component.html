@@ -1,6 +1,8 @@
 <div tabindex="1" (click)="itemSelected()" class="msg-preview-main-container">
     <div id="msg-profileimg-container">
-        Img
+        <div>
+            <img style="height: 84px; width: 84px; border-radius: 40px;" [src]="user.profilePicSrc">
+        </div>
     </div>
     <div id="msg-preview-container" [ngStyle]="{'border-bottom': ( !isLastElm ? '1px lightgray dotted' : 'none')}">
         <div id="message-profile-name">

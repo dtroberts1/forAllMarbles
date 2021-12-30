@@ -35,6 +35,7 @@ export class NewMessageComponent implements OnInit {
 
   removeSelectedUser(){
     this.selectedMessageUser = null;
+    this.conversationMessageList = [];
   }
 
   userSelected(selectedUser: User){
@@ -83,7 +84,11 @@ export class NewMessageComponent implements OnInit {
             toUserImgSrc : toUser?.profilePicSrc,
           }
         );
-      });
+      })
+        .finally(() => {
+          this.msgText = null;
+          
+        });
   }
 
   stopPropagation(event: any){
