@@ -21,6 +21,8 @@ export class LoginComponent implements OnInit {
   percentage = 0;
   passwordTxt !: string;
   stateSelected !: string;
+  fNameInput = new FormControl('', [Validators.required]);
+  lNameInput = new FormControl('', [Validators.required]);
   addressStreet1Input = new FormControl('', [Validators.required, Validators.pattern(/\d+(\s+\w+\.?){1,}\s+(?:st(?:\.|reet)?|dr(?:\.|ive)?|pl(?:\.|ace)?|ave(?:\.|nue)?|rd(\.?)|road|lane|drive|way|court|plaza|square|run|parkway|point|pike|square|driveway|trace|park|terrace|blvd)+$/i)]);
   addressStreet2Input  = new FormControl('', [Validators.pattern(/^((APT|APARTMENT|SUITE|STE|UNIT){1} (NUMBER|NO|#)(\s){0,1}([0-9A-Z-]+)){0,1}/i)]);
   cityInput = new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z\u0080-\u024F]+(?:. |-| |')*([1-9a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$")]);
@@ -41,6 +43,8 @@ export class LoginComponent implements OnInit {
     this.states = this.stateService.getStateList();
   }
   createAcct(){
+    let fName = this.fNameInput.value;
+    let lName = this.lNameInput.value;
     let stA1 = this.addressStreet1Input.value;
     let stA2 = this.addressStreet2Input.value;
     let city = this.cityInput.value;
@@ -48,9 +52,12 @@ export class LoginComponent implements OnInit {
     let zipcodeInput = this.zipcodeInput.value;
     this.upload()
       ?.then((res: any) => {
+        console.log({"this.currentFileUpload":this.currentFileUpload})
         if (this.currentFileUpload && this.currentFileUpload.url){
-          this.authService.SignUp(this.loginTxt, this.passwordTxt, stA1, stA2, city, state, zipcodeInput,<string>this.currentFileUpload.url)
+          this.authService.SignUp(this.loginTxt, this.passwordTxt, fName, lName, stA1, stA2, city, state, zipcodeInput,<string>this.currentFileUpload.url)
             .then((res) =>{
+              this.fNameInput.setValue(null);
+              this.lNameInput.setValue(null);
               this.addressStreet1Input.setValue(null);
               this.addressStreet2Input.setValue(null);
               this.cityInput.setValue(null);
@@ -58,9 +65,14 @@ export class LoginComponent implements OnInit {
               this.zipcodeInput.setValue(null);
               this.selectedFile = null;
               this.selectedTabIndex = 0;
+            }).catch((err) =>{ 
+              console.log({"err":err});
             })
         }
-      });
+      })
+      .catch((err) => {
+        console.log({"err":err})
+      })
   }
 
   login(){
@@ -73,6 +85,7 @@ export class LoginComponent implements OnInit {
       .then(() => {
         this.router.navigate(['/dashboard']);
       }).catch((err) => {
+
         this.credentialsInvalid = true;
       })
   }
@@ -101,6 +114,13 @@ export class LoginComponent implements OnInit {
     }
 
     return taskPromise;
+  }
+
+  keyDown(event : any){
+    console.log({"event":event})
+    if (event.keyCode == 13){
+      this.login();
+    }
   }
 
   getInputErrorMessage(inputField : any){

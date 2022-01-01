@@ -1,13 +1,13 @@
 <div id="container-background">
-    <div id="login-container" [ngStyle]="{'height': selectedTabIndex == 0 ? '560px': '650px'}">
+    <div id="login-container" [ngStyle]="{'height': selectedTabIndex == 0 ? '460px': '700px'}">
         <div id="sign-in-label">
             {{(selectedTabIndex == 0 ? 'SIGN IN' : 'SIGN UP')}}
         </div>
         <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="tabChanged($event)">
             <mat-tab label="Sign In">
                 <div class="login-fields">
-                    <input type="email" placeholder="Email" [(ngModel)]="loginTxt" />
-                    <input type="password" placeholder="Password" [(ngModel)]="passwordTxt" />
+                    <input type="email" (keydown)="keyDown($event)" placeholder="Email" [(ngModel)]="loginTxt" />
+                    <input type="password" (keydown)="keyDown($event)" placeholder="Password" [(ngModel)]="passwordTxt" />
                 </div>
                 <div class="button-container">
                     <button (click)="login()" mat-raised-button color="accent">Sign In</button>
@@ -20,6 +20,16 @@
                     </div>
                     <div class="signup-field">
                         <input type="password" style="width: 100%" placeholder="Password" [(ngModel)]="passwordTxt" />
+                    </div>
+                    <div class="signup-field">
+                        <label>First Name</label>
+                        <input matInput size="25" style="white-space: nowrap; width: calc(100% - 156px);" maxlength="25" required placeholder="First Name" 
+                        [formControl]="fNameInput" />
+                    </div>
+                    <div class="signup-field">
+                        <label>Last Name</label>
+                        <input matInput size="25" style="white-space: nowrap; width: calc(100% - 156px);" maxlength="25" required placeholder="Last Name" 
+                        [formControl]="lNameInput" />
                     </div>
                     <div class="signup-field">
                         <label>Address (Line 1)</label>
@@ -67,6 +77,7 @@
                                 Upload            
                             <input 
                                 type="file"
+                                accept=".png, .jpg, .jpeg"
                                 class="text-nowrap text-truncate"
                                 (change)="selectFile($event)"
                             />
@@ -79,9 +90,11 @@
                 </div>
                 <div class="button-container">
                     <button
-                    [ngClass]="{'disabled-signup-btn': addressStreet1Input.invalid || (addressStreet2Input.invalid && addressStreet2Input.value.length) || 
+                    [ngClass]="{'disabled-signup-btn': fNameInput.invalid || lNameInput.invalid ||
+                    addressStreet1Input.invalid || (addressStreet2Input.invalid && addressStreet2Input && addressStreet2Input.value && addressStreet2Input.value.length) || 
                     cityInput.invalid || stateInput.invalid || zipcodeInput.invalid || !selectedFile}"
-                    [disabled]="addressStreet1Input.invalid || (addressStreet2Input.invalid && addressStreet2Input.value.length) || 
+                    [disabled]="fNameInput.invalid || lNameInput.invalid || 
+                    addressStreet1Input.invalid || (addressStreet2Input.invalid && addressStreet2Input && addressStreet2Input.value && addressStreet2Input.value.length) || 
                     cityInput.invalid || !stateSelected || !stateSelected.length || zipcodeInput.invalid || !selectedFile"
                     (click)="createAcct()" mat-raised-button color="accent">Sign Up</button>
                 </div>
@@ -97,7 +110,7 @@
                 Sign in with Google
             </button>
         </div>
-        <div *ngIf="credentialsInvalid" id="error-container">
+        <div *ngIf="credentialsInvalid && selectedTabIndex == 0" id="error-container">
             <mat-icon style="color: red;">error</mat-icon>
             <span style="padding-left: 8px;">
                 Error. Invalid username or password

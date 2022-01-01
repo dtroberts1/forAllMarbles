@@ -32,19 +32,24 @@ export class MessagingComponent implements OnInit {
           // Get The most recent message for each user that the logged-in user has contacted
           if (Array.isArray(users)){
             users.forEach((user) => {
-              this.messageService.getMessagesBetweenUsers(<string>this.authService.getAccount()?.key, <string>user.key)
+              let thisUsersKey = <string>this.authService.getAccount()?.key;
+              this.messageService.getMessagesBetweenUsers(thisUsersKey, <string>user.key)
                 .subscribe((messages) => {
                   if (Array.isArray(messages) && messages.length){
-                    let message = messages[messages.length - 1];
-                    let parsedDate = Date.parse(message.msgDateStr ? message.msgDateStr : '');
-                    let date = new Date(parsedDate);
 
-                    this.previews.push(
-                      {
-                        user: user, 
-                        contents: message.msgText ? message.msgText : '',
-                        dateStr: `${date.toLocaleString('default', { month: 'short' })} ${date.getDay()}`,
-                      });
+                    if (!this.previews.map(prev => prev.user.key).some(key => key == thisUsersKey || key == <string>user.key)){
+                      // If previews doesn't yet contain a preview whose key matches either user, add preview
+                      let message = messages[messages.length - 1];
+                      let parsedDate = Date.parse(message.msgDateStr ? message.msgDateStr : '');
+                      let date = new Date(parsedDate);
+  
+                      this.previews.push(
+                        {
+                          user: user, 
+                          contents: message.msgText ? message.msgText : '',
+                          dateStr: `${date.toLocaleString('default', { month: 'short' })} ${date.getDate()}`,
+                        });
+                    }
                   }
                 })
             })

@@ -18,19 +18,23 @@ export class FileService {
     return new Promise((resolve, reject) => {
       //const filePath = `C:\\Users\\drobe\\Desktop\\chessgame.PNG`;
       console.log({"storageFileName": storageFileName})
-      const storageRef = this.storage.ref(`profileImages`);
-      const uploadTask = this.storage.upload(`profileImages/${storageFileName}`, fileUpload.file);
-      
-      firstValueFrom(uploadTask.snapshotChanges())
-        .then(() => {
-            firstValueFrom(storageRef.getDownloadURL()).then(downloadURL => {
-              fileUpload.url = downloadURL;
-              this.saveFileData(fileUpload);
-              resolve(true);
-            }).catch((err) => {reject(err)})
-        }).catch((err) => {
-          reject(err);
-        })
+      const storageRef = this.storage.ref(`profileImages/${(<File>fileUpload.file).name}`);
+      if (fileUpload){
+        this.storage.upload(`profileImages/${(<File>fileUpload.file).name}`, fileUpload.file)
+        .then((res) => {
+          console.log({"res":res})
+          console.log("in then..");
+          firstValueFrom(storageRef.getDownloadURL()).then(downloadURL => {
+            console.log({"downloadUrl":downloadURL})
+            fileUpload.url = downloadURL;
+            this.saveFileData(fileUpload);
+            resolve(true);
+          }).catch((err) => {reject(err)})
+      });
+      }
+      else{
+        reject('rejecting..')
+      }
       });
   }
 

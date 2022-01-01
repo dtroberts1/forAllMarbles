@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, ChangeDetectorRef, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ChangeDetectorRef, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { dateInputsHaveChanged } from '@angular/material/datepicker/datepicker-input-base';
 import { UniqueDay } from 'src/app/interfaces/unique-day';
 import { IM } from 'src/app/models/im';
@@ -112,7 +112,7 @@ export class NewMessageComponent implements OnInit {
         uniqueDays.push({
           dateMillisec: dateMillisec,
           imList: [mL], 
-          dateFormatted: `${currDate.toLocaleString('default', { month: 'short' })} ${currDate.getDay()}`
+          dateFormatted: `${currDate.toLocaleString('default', { month: 'short' })} ${currDate.getDate()}`
         });
       }
       else{

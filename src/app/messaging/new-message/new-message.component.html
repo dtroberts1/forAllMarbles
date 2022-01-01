@@ -2,7 +2,7 @@
     <div id="recent-msg-header" tabindex="1" (click)="expandCollapse()">
         <div id="messaging-icons-left">
             <mat-icon *ngIf="!isExistingThread" tabindex="1" >message</mat-icon>
-            <img *ngIf="isExistingThread && selectedMessageUser && selectedMessageUser.profilePicSrc" 
+            <img style="object-fit: cover;" *ngIf="isExistingThread && selectedMessageUser && selectedMessageUser.profilePicSrc" 
             [src]="selectedMessageUser.profilePicSrc" />
             <h3 class="messaging-label">
                 {{(!isExistingThread || !selectedMessageUser) ? 'New Message' : selectedMessageUser.fullName}}
@@ -48,7 +48,7 @@
                 >
                 </app-message-preview>
             </div>
-            <div id="message-list-container">
+            <div id="message-list-container" #scrollMe >
                 <app-chat-view 
                     [imMessagesGrouped]="messageListGrouped"
                 >
