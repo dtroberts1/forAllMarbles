@@ -15,12 +15,12 @@
         border-radius: 15px;
         padding: 40px;
         margin-top: 12vh;
-        width: 55vh;
+        width: 560px;
         box-sizing: border-box;
 
         #sign-in-label{
             color: firebrick;
-            height: 16%;
+            height: 12%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -68,35 +68,36 @@
             font-size: 20px;
         }
 
-h2 {
-  width: 70%;
-  margin: .7em auto;
-  overflow: hidden;
-  text-align: center;
-  font-weight:300;
-  color: #EEEEEE;
-  /*font-size: 20px;*/
-}
-h2:before, h2:after {
-  content: "";
-  display: inline-block;
-  width: 90%;
-  margin: 0 .5em 0 -55%;
-  vertical-align: middle;
-  border-bottom: 1px solid #EEEEEF;
-}
-h2:after {
-  margin: 0 -55% 0 .5em;
-}
+        h2 {
+        width: 70%;
+        margin: .7em auto;
+        overflow: hidden;
+        text-align: center;
+        font-weight:300;
+        color: #EEEEEE;
+        /*font-size: 20px;*/
+        }
+        h2:before, h2:after {
+        content: "";
+        display: inline-block;
+        width: 90%;
+        margin: 0 .5em 0 -55%;
+        vertical-align: middle;
+        border-bottom: 1px solid #EEEEEF;
+        }
+        h2:after {
+        margin: 0 -55% 0 .5em;
+        }
 
         .button-container{
-            margin-top: 12px;
+            margin-top: 22px;
             width: 100%;
 
-            button{
+            button, label{
                 width: 100%;
                 background-color: firebrick;
                 filter: brightness(120%);
+                color: white;
 
                 &:hover{
 
@@ -152,9 +153,10 @@ h2:after {
     gap: 10px;
 
     label{
-        font-family: system-ui;
-        font-weight: 500;
-        font-size: 20px;
+        font-size: 18px;
+        opacity: .6;
+        font-weight: 600;
+        font-family: Roboto, "Helvetica Neue", sans-serif;
     }
     input{
         white-space: nowrap; 
@@ -169,15 +171,52 @@ h2:after {
             padding-bottom: initial;
             .mat-form-field-flex{
                 /*padding: 0;*/
+                .mat-form-field-outline{
+                    /*
+                    outline: firebrick auto 1px;
+                    outline-color: firebrick;
+                    outline-style: auto;
+                    outline-width: 1px;
+                    border-radius: 0 5px 5px 0;
+                    */
+                }
+
                 background-color: lightgray !important;
                 filter: brightness(113%);
 
                 .mat-form-field-infix{
                     padding: 10px;
+                    outline:none;
                 }
 
             }
             
         }
     }
+}
+
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+#error-container{
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 90px;
+    /* width: 100%; */
+    justify-content: center;
+
+    span{
+        color: #D62929;
+        font-weight: 600;
+        font-size: 18px !important;
+    }
+
 }

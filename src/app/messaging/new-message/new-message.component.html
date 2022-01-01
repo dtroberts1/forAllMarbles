@@ -1,0 +1,76 @@
+<div id="new-msg-container" [ngClass]="{'expanded': expanded}">
+    <div id="recent-msg-header" tabindex="1" (click)="expandCollapse()">
+        <div id="messaging-icons-left">
+            <mat-icon *ngIf="!isExistingThread" tabindex="1" >message</mat-icon>
+            <img style="object-fit: cover;" *ngIf="isExistingThread && selectedMessageUser && selectedMessageUser.profilePicSrc" 
+            [src]="selectedMessageUser.profilePicSrc" />
+            <h3 class="messaging-label">
+                {{(!isExistingThread || !selectedMessageUser) ? 'New Message' : selectedMessageUser.fullName}}
+            </h3>
+        </div>
+        <div id="messaging-icons-right">
+            <div>
+                <div class="arrow-editor-container">
+                    <mat-icon (click)="closeNewMsgt()" id="arrow">close</mat-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div [ngStyle]="{'visibility': (expanded ? 'visible': 'hidden')}" id="new-message-body-container">
+        <div id="new-message-body">
+            <div *ngIf="!selectedMessageUser" id="contact-search-input-container">
+                <input
+                    [(ngModel)]="userSearchStr"
+                    placeholder="Type a name to find a contact"
+                    (click)="stopPropagation($event)"
+                />
+            </div>
+            <div id="avail-msg-users-parent-container" [ngStyle]="{'visibility' : (userSearchStr && userSearchStr ? 'visible' : 'hidden')}">
+                <app-available-message-users
+                    (userSelected)="userSelected($event)"
+                    [searchParameters]="userSearchStr"
+                >
+                </app-available-message-users>
+            </div>
+            <div *ngIf="selectedMessageUser && !isExistingThread" id="selected-user-area">
+                <div style="display: inline-flex; align-items: center;">
+                        {{selectedMessageUser.fullName}}
+                        <mat-icon tabindex="1" (click)="removeSelectedUser()" 
+                        style="color: white; margin-left: 8px; margin-top: 3px;" 
+                        id="arrow">close</mat-icon>
+                </div>
+            </div>
+            <div *ngIf="selectedMessageUser" id="selected-user-profile">
+                <app-message-preview
+                    [user]="selectedMessageUser"
+                    [contents]="(selectedMessageUser.city ? selectedMessageUser.city : '') + ', ' + (selectedMessageUser.state ? selectedMessageUser.state : '')"
+                    [isLastElm]="true"
+                >
+                </app-message-preview>
+            </div>
+            <div id="message-list-container" #scrollMe >
+                <app-chat-view 
+                    [imMessagesGrouped]="messageListGrouped"
+                >
+                </app-chat-view>
+            </div>
+            <div id="new-message-input-container">
+                <textarea
+                    [(ngModel)]="msgText"
+                    placeholder="Write a message..." 
+                ></textarea>
+            </div>
+            <div id="message-controls">
+                <div id="left-msg-ctrls">
+                    Left ctrls
+                </div>
+                <div id="right-msg-ctrls">
+                    <button [disabled]="!selectedMessageUser || !msgText" 
+                    (click)="sendMessage()" 
+                    style="font-family: system-ui !important;"
+                     mat-raised-button color="accent">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,7 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { FeedComponent } from '../feed/feed.component';
-import { AuthUser } from '../models/user';
+import { IM } from '../models/im';
+import { AuthUser, User } from '../models/user';
 import { AuthService } from '../services/auth.service';
 import { YourBidsComponent } from '../your-bids/your-bids.component';
 
@@ -14,6 +15,10 @@ export class DashboardComponent implements OnInit {
   authUser !:AuthUser | null;
   @ViewChild(FeedComponent) feed !: FeedComponent;
   @ViewChild(YourBidsComponent) yourBids !: YourBidsComponent;
+  canDispNewMessageScrn :boolean = false;
+  existingMessage !: IM;
+  selectedUser !: User | null;
+
 
   constructor(
     private authService: AuthService,
@@ -30,6 +35,21 @@ export class DashboardComponent implements OnInit {
         this.yourBids.accordionCallback();
         break; 
     }
+  }
+
+  openMessageThread(user: User){
+    this.selectedUser = user;
+    this.canDispNewMessageScrn = true;
+  }
+
+  openCreateNewMsg(){
+    this.canDispNewMessageScrn = true;
+  }
+
+  closeNewMessage(){
+    console.log("callback received")
+    this.canDispNewMessageScrn = false;
+    this.selectedUser = null;
   }
 
   ngOnInit(): void {

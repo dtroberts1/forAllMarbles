@@ -1,0 +1,117 @@
+<div class="messages" [ngClass]="{'expanded': convoListExpanded}" (click)="expandCollapseConvoList()">
+    <div id="recent-msg-header">
+        <div id="messaging-icons-left">
+            <mat-icon tabindex="1" >person</mat-icon>
+            <h3 class="messaging-label">
+                Messaging
+            </h3>
+        </div>
+        <div id="messaging-icons-right">
+            <div>
+                <div
+                    tabindex="1"
+                    (click)="openNewMessagePopup($event)"
+                    class="arrow-editor-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" data-supported-dps="16x16" fill="currentColor" class="mercado-match" width="24" height="24" focusable="false">
+                        <path d="M15 2.53a1.51 1.51 0 01-.44 1L9.15 9 6 10l1-3.12 5.44-5.44A1.5 1.5 0 0115 2.53zM12 11a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1h3V2H5a3 3 0 00-3 3v6a3 3 0 003 3h6a3 3 0 003-3V8h-2z"></path>
+                    </svg>
+                </div>
+                <div class="arrow-editor-container">
+                    <mat-icon id="arrow">arrow_back_ios</mat-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div [ngStyle]="{'visibility': (convoListExpanded ? 'visible' : 'hidden')}"
+        style="visibility: visible; display: flex; flex-direction: column; width: 100%; gap: 10px;"
+    >
+        <div style="display: flex; justify-content: center; width: 100%;">
+            <input style="width: 90%; height: 30px; margin-top: 8px; background: #EEF3F8; border-radius: 3px;
+                font-size: 17px; font-family: 'system ui' !important; padding: 8px;
+            " placeholder="Search Messages"
+            (click)="stopPropagation($event)"
+
+            />
+        </div>
+        <div>
+            <label class="messaging-label">
+                Inbox
+            </label>
+            <ul id="recent-msg-list">
+
+                <li *ngFor="let preview of previews" class="message-prev-li">
+                    <app-message-preview
+                    [user]="preview.user"
+                    [contents]="preview.contents"
+                    [dateStr]="preview.dateStr"
+                    [isLastElm]="false"
+                    (click)="openMessageThread($event, preview.user)"
+                    (onSelected)="userContactSelected($event)"
+                    >
+                    </app-message-preview>
+                </li>
+            </ul>
+        </div>
+        <!--
+        Other Div
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        <div>Other Div</div>
+        -->
+
+    </div>
+
+</div>

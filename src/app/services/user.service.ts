@@ -20,8 +20,15 @@ export class UserService {
   getAll(): Observable<User[]> {
     return this.usersRef.snapshotChanges()
       .pipe(
+        tap(
+          (list: any[]) => {
+            console.log({"list":list})
+          }
+        ),
         map((list : any[]) => {
           return list.map((itm: any) => <User>{
+            fullName: `${itm.payload.val().firstName} ${itm.payload.val().lastName}`,
+            cityState: `${itm.payload.val().city} ${itm.payload.val().state}`,
             key: itm.payload.key, ...itm.payload.val() 
         })}
       ));

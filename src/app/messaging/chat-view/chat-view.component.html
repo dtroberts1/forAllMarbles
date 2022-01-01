@@ -1,0 +1,40 @@
+<div style="position: relative; color: black; min-height: 300px; overflow-y: scroll; max-height: 300px; padding-right: 10px;" #scrollMe (scroll)="onScroll($event)">
+    <ul style="list-style: none; padding-inline-start: 0;">
+        <li *ngFor="let messageGroup of imMessagesGrouped" style="position: relative; padding-top: 60px;">
+                <h2 id="or-container">
+                    {{messageGroup.dateFormatted}}
+                </h2>
+            <ul id="message-list">
+                <li *ngFor="let msg of messageGroup.imList; let i = index;">
+                    <div [ngStyle]="{'background' : (i % 2 == 0 ? 'lightgray': 'initial'), 'filter' : (i % 2 == 0 ? 'brightness(1.18)' : 'initial')}" style="width: 100%; min-height: 120px; display: flex;">
+                        <div id="im-item-left">
+                            <div>
+                                <img [src]="msg.fromUserImgSrc"
+                                    style="height: 84px; width: 84px; border-radius: 40px; object-fit: cover;"
+                                />
+                            </div>
+                        </div>
+                        <div id="im-item-right">
+                            <div id="full-name">
+                                {{msg.fromUserFullName}} 
+                                <span style="font-size: 1.5em;  padding: 0 5px 2px 5px">
+                                    &middot;
+                                </span>
+                                {{msg.timeFormatted}}
+                            </div>
+                            <div style="padding-top: 10px;">
+                                {{msg.msgText}}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <div *ngIf="hasUnreadMessages" style="position: absolute; position: sticky; bottom: 0;width: 100%; 
+        display: flex; justify-content: flex-end;margin-right: 10px; padding-bottom: 4px;">
+        <div style=" color: red; ">
+            Unread Messages...
+        </div>
+    </div>
+</div>

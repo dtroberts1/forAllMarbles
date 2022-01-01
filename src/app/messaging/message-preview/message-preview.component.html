@@ -1,0 +1,18 @@
+<div tabindex="1" (click)="itemSelected()" class="msg-preview-main-container">
+    <div id="msg-profileimg-container">
+        <div>
+            <img style="object-fit: cover; height: 84px; width: 84px; border-radius: 40px;" [src]="user.profilePicSrc">
+        </div>
+    </div>
+    <div id="msg-preview-container" [ngStyle]="{'border-bottom': ( !isLastElm ? '1px lightgray dotted' : 'none')}">
+        <div id="message-profile-name">
+            <!--Name -->
+            <div>{{user.fullName}}</div>
+            <div style="position: absolute; top: 0; right: 4px;">{{dateStr}}</div>
+        </div>
+        <div style="padding-top: 10px;">
+            <!-- Message Preview Text-->
+            {{contents}}
+        </div>
+    </div>
+</div>

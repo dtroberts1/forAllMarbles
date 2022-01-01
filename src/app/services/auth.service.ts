@@ -40,7 +40,7 @@ export class AuthService {
  
   
   /* Sign up */
-  SignUp(email: string, password: string, stA1: string, 
+  SignUp(email: string, password: string, fName :string, lName: string, stA1: string, 
     stA2: string, city: string, state: string, zipcode: string, picSrc: string) : Promise<firebase.default.auth.UserCredential> {
     return new Promise((resolve, reject) => {
       this.angularFireAuth
@@ -50,6 +50,8 @@ export class AuthService {
             bids : [],
             displayName : '',
             emailAddress: res.user.email,
+            firstName: fName,
+            lastName: lName,
             streetAddress1: stA1,
             streetAddress2: stA2,
             city: city, 
