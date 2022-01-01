@@ -6,66 +6,7 @@ import { finalize, firstValueFrom, Observable } from 'rxjs';
 import { FileService } from '../file-service.service';
 import { FileUpload } from '../models/file-upload';
 import { AuthService } from '../services/auth.service';
-
-
-const states = [
-'AL',
-'AK',
-'AS',
-'AZ',
-'AR',
-'CA',
-'CO',
-'CT',
-'DE',
-'DC',
-'FL',
-'GA',
-'GU',
-'HI',
-'ID',
-'IL',
-'IN',
-'IA',
-'KS',
-'KY',
-'LA',
-'ME',
-'MD',
-'MA',
-'MI',
-'MN',
-'MS',
-'MO',
-'MT',
-'NE',
-'NV',
-'NH',
-'NJ',
-'NM',
-'NY',
-'NC',
-'ND',
-'MP',
-'OH',
-'OK',
-'OR',
-'PA',
-'PR',
-'RI',
-'SC',
-'SD',
-'TN',
-'TX',
-'UT',
-'VT',
-'VA',
-'VI',
-'WA',
-'WV',
-'WI',
-'WY',
-]
+import { StateService } from '../services/state.service';
 
 @Component({
   selector: 'app-login',
@@ -74,6 +15,7 @@ const states = [
 })
 export class LoginComponent implements OnInit {
   loginTxt !: string;
+  selectedFile !: File | null;
   selectedFiles?: FileList;
   currentFileUpload?: FileUpload;
   percentage = 0;
@@ -84,16 +26,19 @@ export class LoginComponent implements OnInit {
   cityInput = new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z\u0080-\u024F]+(?:. |-| |')*([1-9a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$")]);
   stateInput  = new FormControl('',[Validators.required, Validators.pattern('^((A[LKZR])|(C[AOT])|(D[EC])|(FL)|(GA)|(HI)|(I[DLNA])|(K[SY])|(LA)|(M[EDAINSOT])|(N[EVHJMYCD])|(O[HKR])|(PA)|(RI)|(S[CD])|(T[NX])|(UT)|(V[TA])|(W[AVIY]))$')]);
   zipcodeInput = new FormControl('',  [Validators.required, Validators.pattern('^[0-9]{5}(?:-[0-9]{4})?$')]);
-  states: string[] = states;
+  states: string[] = [];
+  credentialsInvalid : boolean = false;
   selectedTabIndex: number = 0;
   constructor(
     private authService : AuthService,
     private router: Router,
     private fileService: FileService,
     private db: AngularFireDatabase,
+    private stateService: StateService,
   ) { }
 
   ngOnInit(): void {
+    this.states = this.stateService.getStateList();
   }
   createAcct(){
     let stA1 = this.addressStreet1Input.value;
@@ -104,7 +49,16 @@ export class LoginComponent implements OnInit {
     this.upload()
       ?.then((res: any) => {
         if (this.currentFileUpload && this.currentFileUpload.url){
-          this.authService.SignUp(this.loginTxt, this.passwordTxt, stA1, stA2, city, state, zipcodeInput,<string>this.currentFileUpload.url);
+          this.authService.SignUp(this.loginTxt, this.passwordTxt, stA1, stA2, city, state, zipcodeInput,<string>this.currentFileUpload.url)
+            .then((res) =>{
+              this.addressStreet1Input.setValue(null);
+              this.addressStreet2Input.setValue(null);
+              this.cityInput.setValue(null);
+              this.stateInput.setValue(null);
+              this.zipcodeInput.setValue(null);
+              this.selectedFile = null;
+              this.selectedTabIndex = 0;
+            })
         }
       });
   }
@@ -118,7 +72,9 @@ export class LoginComponent implements OnInit {
     this.authService.SignIn(this.loginTxt, this.passwordTxt)
       .then(() => {
         this.router.navigate(['/dashboard']);
-      });
+      }).catch((err) => {
+        this.credentialsInvalid = true;
+      })
   }
 
   signInWithGoogle(){
@@ -130,19 +86,18 @@ export class LoginComponent implements OnInit {
 
   selectFile(event: any): void {
     this.selectedFiles = event.target.files;
+    if(this.selectedFiles){
+      this.selectedFile = this.selectedFiles.item(0);
+
+    }
   }
 
   upload(): Promise<any> | null{
     let taskPromise = null;
 
-    if (this.selectedFiles) {
-      const file: File | null = this.selectedFiles.item(0);
-      this.selectedFiles = undefined;
-
-      if (file) {
-        this.currentFileUpload = new FileUpload(file);
-        taskPromise = this.fileService.pushFileToStorage(`profImage_${new Date().getMilliseconds()}`, this.currentFileUpload);
-      }
+    if (this.selectedFile) {
+      this.currentFileUpload = new FileUpload(this.selectedFile);
+      taskPromise = this.fileService.pushFileToStorage(`profImage_${new Date().getMilliseconds()}`, this.currentFileUpload);
     }
 
     return taskPromise;

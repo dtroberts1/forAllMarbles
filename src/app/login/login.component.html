@@ -1,9 +1,9 @@
 <div id="container-background">
-    <div id="login-container" [ngStyle]="{'height': selectedTabIndex == 0 ? '500px': '700px'}">
+    <div id="login-container" [ngStyle]="{'height': selectedTabIndex == 0 ? '560px': '650px'}">
         <div id="sign-in-label">
             {{(selectedTabIndex == 0 ? 'SIGN IN' : 'SIGN UP')}}
         </div>
-        <mat-tab-group (selectedTabChange)="tabChanged($event)">
+        <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="tabChanged($event)">
             <mat-tab label="Sign In">
                 <div class="login-fields">
                     <input type="email" placeholder="Email" [(ngModel)]="loginTxt" />
@@ -23,19 +23,19 @@
                     </div>
                     <div class="signup-field">
                         <label>Address (Line 1)</label>
-                        <input matInput size="25" style="white-space: nowrap; width: calc(100% - 166px);" maxlength="25" required placeholder="Address (Line 1)" 
+                        <input matInput size="25" style="white-space: nowrap; width: calc(100% - 156px);" maxlength="25" required placeholder="Address (Line 1)" 
                         [formControl]="addressStreet1Input" />
                     </div>
                     <div class="signup-field">
                         <label>Address (Line 2)</label>
-                        <input matInput size="25" style="white-space: nowrap; width: calc(100% - 169px);" maxlength="25" required placeholder="Address (Line 2)" 
+                        <input matInput size="25" style="white-space: nowrap; width: calc(100% - 156px);" maxlength="25" required placeholder="Address (Line 2)" 
                         [formControl]="addressStreet2Input" />
                     </div>
                     
                     <div style="display: flex; gap: 10px;">
                         <div class="signup-field">
                             <label>City</label>
-                            <input matInput size="25" style="width: 230px; margin-left: 40px;"maxlength="25" required placeholder="City" 
+                            <input matInput size="25" style="width: 130px;"maxlength="25" required placeholder="City" 
                             [formControl]="cityInput" />
                         </div>
                         <div class="signup-field state-selector">
@@ -43,7 +43,7 @@
                             <input matInput size="25" style="width: 45px;" maxlength="25" required placeholder="State" 
                             [formControl]="stateInput" />
                             -->
-                            <mat-form-field appearance="outline">
+                            <mat-form-field style="width: 124px;" appearance="outline">
                                 <mat-label>State</mat-label>
                                 <mat-select [(value)]="stateSelected">
                                     <mat-option>None</mat-option>
@@ -57,20 +57,32 @@
                         <label>Zipcode</label><input matInput size="25" style="width: 230px;" maxlength="25" required placeholder="Zipcode" 
                         [formControl]="zipcodeInput" />
                     </div>
-                    <div>
-                        <input
-                        type="file"
-                        class="text-nowrap text-truncate"
-                        (change)="selectFile($event)"
-                      />npm
+                    <div style="display: flex; align-items: center;">
+                        <div class="signup-field" style="width: 170px;">
+                            <label>Profile Image</label>
+                        </div>
+                        <div class="button-container" style="height: 100%; align-items: center; display: flex;">
+                            <label style="color: white; width: 48px;" 
+                                class="custom-file-upload">
+                                Upload            
+                            <input 
+                                type="file"
+                                class="text-nowrap text-truncate"
+                                (change)="selectFile($event)"
+                            />
+                            </label>
+    
+                            <span *ngIf="selectedFile" style="color: darkgreen; font-weight: 600; padding-left: 8px;">File Selected: {{selectedFile.name}}</span>
+                            <span *ngIf="!selectedFile" style="color: #D62929; font-weight: 600; padding-left: 8px;">No file selected</span>
+                        </div>
                     </div>
                 </div>
                 <div class="button-container">
                     <button
                     [ngClass]="{'disabled-signup-btn': addressStreet1Input.invalid || (addressStreet2Input.invalid && addressStreet2Input.value.length) || 
-                    cityInput.invalid || stateInput.invalid || zipcodeInput.invalid}"
+                    cityInput.invalid || stateInput.invalid || zipcodeInput.invalid || !selectedFile}"
                     [disabled]="addressStreet1Input.invalid || (addressStreet2Input.invalid && addressStreet2Input.value.length) || 
-                    cityInput.invalid || !stateSelected || !stateSelected.length || zipcodeInput.invalid"
+                    cityInput.invalid || !stateSelected || !stateSelected.length || zipcodeInput.invalid || !selectedFile"
                     (click)="createAcct()" mat-raised-button color="accent">Sign Up</button>
                 </div>
             </mat-tab>
@@ -84,6 +96,12 @@
                 <img style="height: 1.5em; width: 1.5em;" src="../../assets/icons/google.svg" />
                 Sign in with Google
             </button>
+        </div>
+        <div *ngIf="credentialsInvalid" id="error-container">
+            <mat-icon style="color: red;">error</mat-icon>
+            <span style="padding-left: 8px;">
+                Error. Invalid username or password
+            </span>
         </div>
     </div>    
 </div>
