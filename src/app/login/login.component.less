@@ -101,8 +101,10 @@
                 &:hover{
 
                     &:not([id="sign-in-google"]){
-                        filter: brightness(320%);
-                        color : gray;
+                        &:not(.disabled-signup-btn){
+                            filter: brightness(320%);
+                            color : gray;
+                        }
                     }
                     &[id="sign-in-google"]{
                         filter: brightness(130%);
@@ -132,6 +134,50 @@
                     }
                 }
             }
+        }
+    }
+}
+
+::ng-deep mat-tab-body{
+    .mat-tab-body-content{
+        overflow-x: hidden;
+    }
+}
+
+    
+.signup-field{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+
+    label{
+        font-family: system-ui;
+        font-weight: 500;
+        font-size: 20px;
+    }
+    input{
+        white-space: nowrap; 
+    }
+}
+
+.state-selector{
+    ::ng-deep mat-form-field{
+        /*padding: 0;*/
+        .mat-form-field-wrapper{
+            /*padding-bottom: 0;*/
+            padding-bottom: initial;
+            .mat-form-field-flex{
+                /*padding: 0;*/
+                background-color: lightgray !important;
+                filter: brightness(113%);
+
+                .mat-form-field-infix{
+                    padding: 10px;
+                }
+
+            }
+            
         }
     }
 }
