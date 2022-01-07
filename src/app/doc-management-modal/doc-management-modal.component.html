@@ -71,7 +71,7 @@ style="width: 1000px;"
                 </div>
             </div>
             <div *ngIf="selectedNoteAttachment" style="padding: 10px; display: flex; gap: 10px;">
-                <button style="font-family: system-ui !important;" (click)="saveNotes()" mat-raised-button color="accent">Save Notes</button>
+                <button *ngIf="selectedNoteAttachment" style="font-family: system-ui !important;" (click)="saveNotes()" mat-raised-button color="accent">Save Notes</button>
                 <button style="font-family: system-ui !important;" (click)="cancelAttachmentChange()" mat-raised-button color="accent">Cancel</button>
             </div>
         </div>
@@ -118,6 +118,9 @@ style="width: 1000px;"
                     >
                     </textarea>
                 </div>
+            </div>
+            <div *ngIf="selectedNoteAttachment" style="padding: 10px; display: flex; gap: 10px;">
+                <button style="font-family: system-ui !important;" (click)="cancelAttachmentChange()" mat-raised-button color="accent">Close Notes</button>
             </div>
         </div>
     </mat-tab>

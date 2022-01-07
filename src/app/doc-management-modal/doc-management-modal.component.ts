@@ -263,14 +263,15 @@ export class DocManagementModalComponent implements OnInit {
                 .then(() => {
                   this.bidService.getSingleBid(this.bid)
                   .then((res) => {
+                    let forThisUser = true;
                     this.bid = res;
                     let existingAttachments : SupportingDoc[] = [];
-                    if (this.bid.winnerSupportingDocs){
+                    if (this.bid.winnerSupportingDocs && ((!forThisUser && !this.data.isWinner) || (this.data.isWinner && forThisUser))){
                       existingAttachments = Object.values(this.bid.winnerSupportingDocs).map(doc => <SupportingDoc>{
                         name: doc.name, isLinked: true, notes: doc.notes, url: doc.url, path : doc.path,
                       })
                     }
-                    else if (this.bid.loserSupportingDocs){
+                    else if (this.bid.loserSupportingDocs && ((!forThisUser &&  this.data.isWinner ) || (!this.data.isWinner && forThisUser))){
                       existingAttachments = Object.values(this.bid.loserSupportingDocs).map(doc => <SupportingDoc>{
                         name: doc.name, isLinked: true, notes: doc.notes, url: doc.url, path : doc.path,
                       });                      

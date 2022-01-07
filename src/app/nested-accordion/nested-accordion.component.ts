@@ -74,15 +74,20 @@ export class NestedAccordionComponent implements OnInit {
   }
 
   getHasWinnerDocs(){
-
+    let supportingDocsArray : SupportingDoc[];
     let notDeclaredWinner = !(this.user && this.user.key && this.user.key == this.bid.declaredWinner);
     if (notDeclaredWinner){
       return false;
     }
 
-    let supportingDocsArray : SupportingDoc[] = Object.values(this.bid.winnerSupportingDocs).map((doc : any) => <SupportingDoc>{
-      name: doc.name, isLinked: doc.isLinked, url: doc.url, notes: doc.notes, path : doc.path,
-    });
+    if (this.bid.winnerSupportingDocs){
+      supportingDocsArray = Object.values(this.bid.winnerSupportingDocs).map((doc : any) => <SupportingDoc>{
+        name: doc.name, isLinked: doc.isLinked, url: doc.url, notes: doc.notes, path : doc.path,
+      });
+    }
+    else{
+      return false;
+    }
 
     if (Array.isArray(supportingDocsArray) && supportingDocsArray.length){
       return true;
@@ -94,6 +99,20 @@ export class NestedAccordionComponent implements OnInit {
 
   approveBid(bid: Bid){
     bid.isApproved = true;
+    if (this.user && this.user.key != bid.bidCreatorKey){
+      bid.bidChallengerKey = this.user.key;
+      bid.bidCreatorChallengerKey = `${bid.bidCreatorKey}_${bid.bidChallengerKey}`;
+      console.log("setting bid challenger key to " + this.user.key);
+    }
+    else{
+      console.log("not setting bid challenger key... :(")
+    }
+    delete bid.declaredLoser;
+    delete bid.declaredWinner;
+    delete bid.winnerSupportingDocs;
+    delete bid.loserSupportingDocs;
+
+    console.log({"updateBid":bid})
 
     this.bidService.update(<string>bid.key, bid)
     .then(() => {
@@ -142,9 +161,13 @@ export class NestedAccordionComponent implements OnInit {
     bid.resultVerified = false;
     bid.declaredWinner = this.user?.key;
     bid.declaredLoser = bid.bidCreatorKey != this.user?.key ? bid.bidCreatorKey : bid.bidChallengerKey;
+    console.log("declaredWinner is " + bid.declaredWinner);
+    console.log("declaredLoser is " + bid.declaredLoser);
 
     this.bidService.update(<string>bid.key, bid)
     .then(() => {
+      console.log("updated..")
+      console.log({"bid":bid});
     })
     .catch((err) => console.log("error: "+ err))
   }

@@ -137,8 +137,8 @@
                         <!--Challenge Result button will also prompt for upload of documentation-->
                         <label *ngIf="!bid.resultVerified && bid.hasResult && user && user.key && user.key == bid.declaredWinner && !hasWinnerDocs" style="color: white; width: 48px;" 
                             class="custom-file-upload mat-raised-button" 
-                            style="background-color: #DA3E3E; font-family: system-ui !important; color: white; width: 183px; display: flex; align-items: center;">
-                            Upload Documentation
+                            style="background-color: #DA3E3E; font-family: system-ui !important; color: white; width: 123px; display: flex; align-items: center;">
+                            Prove Victory
                             <input 
                                 type="file"
                                 accept=".png, .jpg, .jpeg"
@@ -148,7 +148,7 @@
                             />
                         </label>
                         <button *ngIf="hasWinnerDocs" style="font-family: system-ui !important;"  (click)="manageDocumentation()" mat-raised-button color="accent">Manage Documentation</button>
-                        <button style="font-family: system-ui !important;" *ngIf="user && user.key === bid.bidChallengerKey && !(user.key === bid.bidCreatorKey) && !bid.isApproved" (click)="approveBid(bid)" mat-raised-button color="accent">Approve</button>
+                        <button style="font-family: system-ui !important;" *ngIf="user && user.key && !(user.key === bid.bidCreatorKey) && !bid.isApproved" (click)="approveBid(bid)" mat-raised-button color="accent">Approve</button>
                     </div>
                 </div>            
             </div>
