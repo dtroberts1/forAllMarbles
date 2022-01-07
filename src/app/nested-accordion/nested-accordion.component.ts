@@ -1,7 +1,10 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { DocManagementModalComponent } from '../doc-management-modal/doc-management-modal.component';
 import { Bid } from '../models/bid';
+import { SupportingDoc } from '../models/supporting-doc';
 import { AuthUser } from '../models/user';
 import { BidService } from '../services/bid.service';
 
@@ -46,6 +49,8 @@ export class NestedAccordionComponent implements OnInit {
   bidMessageFormControl = new FormControl('', [Validators.required]);
   bidAmtFormControl = new FormControl('', [Validators.required]);
   titleFormControl = new FormControl('', [Validators.required]);
+  attachedFile !: File;
+  hasWinnerDocs : boolean = false;
 
   amountPositionX !: number;
   @Output() refreshCallback: EventEmitter<any> = new EventEmitter();
@@ -55,22 +60,44 @@ export class NestedAccordionComponent implements OnInit {
 
   constructor(
     private bidService: BidService,
+    public dialog: MatDialog,
 
   ) { }
 
   ngOnInit(): void {
     //this.theBoundCallback = this.refreshBid.bind(this);
+    console.log({"this.bid":this.bid})
+    this.hasWinnerDocs = this.getHasWinnerDocs();
 
     this.setFormControlInputs();
-    /*
-    setTimeout(() => {
-      if (this.bidAmtInput && this.bidAmtInput.nativeElement){
-        this.amountPositionX = this.bidAmtInput.nativeElement.offsetLeft;
-      }
 
-    }, 3000);
-    */
+  }
 
+  getHasWinnerDocs(){
+
+    let notDeclaredWinner = !(this.user && this.user.key && this.user.key == this.bid.declaredWinner);
+    if (notDeclaredWinner){
+      return false;
+    }
+
+    let supportingDocsArray : SupportingDoc[] = Object.values(this.bid.winnerSupportingDocs).map((doc : any) => <SupportingDoc>{
+      name: doc.name, isLinked: doc.isLinked, url: doc.url, notes: doc.notes, path : doc.path,
+    });
+
+    if (Array.isArray(supportingDocsArray) && supportingDocsArray.length){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  approveBid(bid: Bid){
+    bid.isApproved = true;
+
+    this.bidService.update(<string>bid.key, bid)
+    .then(() => {
+    });
   }
   updateBid(bid: Bid){
     let currBid = bid as any;
@@ -108,6 +135,107 @@ export class NestedAccordionComponent implements OnInit {
   cancelModify(bid: Bid){
     let currBid = bid as any;
     currBid.isEditing = false;
+  }
+
+  declareVictory(bid: Bid){
+    bid.hasResult = true;
+    bid.resultVerified = false;
+    bid.declaredWinner = this.user?.key;
+    bid.declaredLoser = bid.bidCreatorKey != this.user?.key ? bid.bidCreatorKey : bid.bidChallengerKey;
+
+    this.bidService.update(<string>bid.key, bid)
+    .then(() => {
+    })
+    .catch((err) => console.log("error: "+ err))
+  }
+  
+  concedeDefeat(bid: Bid){
+    bid.hasResult = true;
+    bid.resultVerified = true;
+    bid.declaredWinner = bid.bidCreatorKey != this.user?.key ? bid.bidCreatorKey : bid.bidChallengerKey;
+    bid.declaredLoser = this.user?.key;
+    bid.verifiedLoser = this.user?.key;
+    bid.verifiedWinner = bid.declaredWinner;
+
+    // Update Win/Loss Status -- TODO
+    // Distribute Funds -- TODO
+
+    this.bidService.update(<string>bid.key, bid)
+    .then(() => {
+    })
+    .catch((err) => console.log("error: "+ err))
+  }
+
+  challengeResult(bid: Bid){
+    let isWinner = this.user && this.user.key && this.user.key == this.bid.declaredWinner;
+    const dialogRef = this.dialog.open(DocManagementModalComponent, {
+      width: '550px',
+      height: '640px',
+      data: {
+        attachedFile: null,
+        isWinner: isWinner,
+        bid: this.bid,
+      },
+      panelClass: 'modal-class'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.bidService.getSingleBid(this.bid)
+      .then((res) => {
+        this.bid = res;
+        this.hasWinnerDocs = this.getHasWinnerDocs();
+      });
+    });
+  }
+
+  manageDocumentation(){
+    let isWinner = this.user && this.user.key && this.user.key == this.bid.declaredWinner;
+    const dialogRef = this.dialog.open(DocManagementModalComponent, {
+      width: '550px',
+      height: '640px',
+      data: {
+        attachedFile: null,
+        isWinner: isWinner,
+        bid: this.bid,
+      },
+      panelClass: 'modal-class'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.bidService.getSingleBid(this.bid)
+      .then((res) => {
+        this.bid = res;
+        this.hasWinnerDocs = this.getHasWinnerDocs();
+      });
+    });
+  }
+
+  attachmentAdded(event: any, bid: Bid){
+    if (event.target.files){
+      this.attachedFile = event.target.files.item(0);
+    }
+
+    if (this.user){
+    }
+    let isWinner = this.user && this.user.key && this.user.key == bid.declaredWinner;
+    const dialogRef = this.dialog.open(DocManagementModalComponent, {
+      width: '550px',
+      height: '640px',
+      data: {
+        attachedFile: this.attachedFile,
+        isWinner: isWinner,
+        bid: bid,
+      },
+      panelClass: 'modal-class'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.bidService.getSingleBid(this.bid)
+      .then((res) => {
+        this.bid = res;
+        this.hasWinnerDocs = this.getHasWinnerDocs();
+      });
+    });
   }
 
   deleteBid(bid: Bid){

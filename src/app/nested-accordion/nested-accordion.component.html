@@ -9,7 +9,7 @@
       [attr.aria-controls]="'accordion-body-' + 0">
       <div class="example-accordion-item-header" (click)="accordionItem.toggle()">
         <div class="bid-item-metric-header" style="display: flex;">
-            <div [ngStyle]="{'visibility': !titleEditMode && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
+            <div [ngStyle]="{'visibility': !titleEditMode && user && user.key === bid.bidCreatorKey && !bid.hasResult ? 'visible' : 'hidden'}"
             class="cell-data-div-img-edit"  
             style="display: inline-flex; margin-left: 12px;"
             >
@@ -32,9 +32,27 @@
                 <mat-error *ngIf="titleFormControl.invalid">{{getInputErrorMessage(titleFormControl)}}</mat-error>
             </div>
         </div>
-        <div style="width: 47.99px; display: flex;" class="example-accordion-item-description">
-            <mat-icon style="float:right;" class="expand-icon"  [@openClose]="!accordionItem.expanded ? 'open' : 'closed'">keyboard_arrow_up</mat-icon>
-            <mat-icon *ngIf="user && user.key === bid.bidCreatorKey" tabindex="1" (click)="deleteBid(bid)" id="trash-icon" style="float:right; color: red;">delete</mat-icon>
+        <div style="width: 50%; display: flex; justify-content: flex-end; line-height: 20px; align-items: center;
+        font-weight: 600 !important;
+        font-family: system-ui !important;
+        font-size: 18px !important;
+        color: #666666 !important;" class="example-accordion-item-description">
+            <div *ngIf="bid.resultVerified" style="font-weight: 700;">
+                Status: 
+                <span 
+                    style="
+                    font-weight: bold;
+                    color: rgb(255,74,74);
+                    padding-left: 8px;
+                    padding-right: 10px;" 
+                    [ngStyle]="{'color': user && bid.verifiedWinner == user.key ? 'green' : 'red'}">
+                    {{(user && bid.verifiedWinner == user.key ? 'Won' : 'Lost')}}
+                </span>
+            </div>
+            <div>
+                <mat-icon style="float:right;" class="expand-icon"  [@openClose]="!accordionItem.expanded ? 'open' : 'closed'">keyboard_arrow_up</mat-icon>
+                <mat-icon *ngIf="user && user.key === bid.bidCreatorKey" tabindex="1" (click)="deleteBid(bid)" id="trash-icon" style="float:right; color: red;">delete</mat-icon>
+            </div>
         </div>
 
       </div>
@@ -52,7 +70,7 @@
                         <mat-icon *ngIf="bidMessageFormControl.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
                         <mat-error *ngIf="bidMessageFormControl.invalid">{{getInputErrorMessage(bidMessageFormControl)}}</mat-error>
                     </div>
-                    <div [ngStyle]="{'visibility': !bidMessageEditMode && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
+                    <div [ngStyle]="{'visibility': !bidMessageEditMode && user && user.key === bid.bidCreatorKey && !bid.hasResult ? 'visible' : 'hidden'}"
                     class="cell-data-div-img-edit" 
                     style="display: inline-block !important; margin-left: 8px;"
                     >
@@ -75,7 +93,7 @@
             <div id="bid-amt-container">
                 <div class="bid-item-metric-header" style="display: flex;">
                     Bid Amount
-                    <div [ngStyle]="{'visibility': !bidAmtEditMode && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
+                    <div [ngStyle]="{'visibility': !bidAmtEditMode && user && user.key === bid.bidCreatorKey && !bid.hasResult ? 'visible' : 'hidden'}"
                     class="cell-data-div-img-edit" 
                     style="display: inline-flex !important; padding-left: 10px;"
                     >
@@ -112,8 +130,25 @@
                 <div>
                     <div id="lower-left-btn-container">
                         <!--<button *ngIf="!bid.isEditing" (click)="modifyBid(bid)" mat-raised-button color="accent">View Counter Offers</button>-->
-                        <button style="font-family: system-ui !important;" *ngIf="user && !(user.key === bid.bidCreatorKey)" (click)="createCounterOffer()" mat-raised-button color="accent">Counter Offer</button>
-                        <button style="font-family: system-ui !important;" *ngIf="user && user.key === bid.bidChallengerKey && !(user.key === bid.bidCreatorKey)" (click)="cancelModify(bid)" mat-raised-button color="accent">Approve</button>
+                        <button style="font-family: system-ui !important;" *ngIf="user && !(user.key === bid.bidCreatorKey) && !bid.isApproved" (click)="createCounterOffer()" mat-raised-button color="accent">Counter Offer</button>
+                        <button *ngIf="bid.isApproved && !bid.hasResult" style="font-family: system-ui !important;" (click)="declareVictory(bid)" mat-raised-button color="accent">Declare Victory</button>
+                        <button *ngIf="!bid.resultVerified && bid.isApproved && user && user.key && ((user.key == bid.declaredLoser && !bid.resultVerified) || (!bid.hasResult))" style="font-family: system-ui !important;" (click)="concedeDefeat(bid)" mat-raised-button color="accent">Concede Defeat</button>
+                        <button *ngIf="!bid.resultVerified && bid.hasResult && user && bid.declaredWinner != user.key" style="font-family: system-ui !important;" (click)="challengeResult(bid)" mat-raised-button color="accent">Challenge Result</button>
+                        <!--Challenge Result button will also prompt for upload of documentation-->
+                        <label *ngIf="!bid.resultVerified && bid.hasResult && user && user.key && user.key == bid.declaredWinner && !hasWinnerDocs" style="color: white; width: 48px;" 
+                            class="custom-file-upload mat-raised-button" 
+                            style="background-color: #DA3E3E; font-family: system-ui !important; color: white; width: 183px; display: flex; align-items: center;">
+                            Upload Documentation
+                            <input 
+                                type="file"
+                                accept=".png, .jpg, .jpeg"
+                                class="text-nowrap text-truncate"
+                                style="visibility: hidden;"
+                                (change)="attachmentAdded($event, bid)"
+                            />
+                        </label>
+                        <button *ngIf="hasWinnerDocs" style="font-family: system-ui !important;"  (click)="manageDocumentation()" mat-raised-button color="accent">Manage Documentation</button>
+                        <button style="font-family: system-ui !important;" *ngIf="user && user.key === bid.bidChallengerKey && !(user.key === bid.bidCreatorKey) && !bid.isApproved" (click)="approveBid(bid)" mat-raised-button color="accent">Approve</button>
                     </div>
                 </div>            
             </div>

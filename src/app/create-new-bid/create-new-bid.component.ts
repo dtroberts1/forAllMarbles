@@ -51,6 +51,12 @@ export class CreateNewBidComponent implements OnInit {
               rootBidKey: 'root',
               bidChallengerKey : 'NULL',
               parentPath: '/bids/',
+              isApproved: false,
+              hasResult: false,
+              resultVerified: false,
+              isCancelled: false,
+              declaredWinner: null,
+              declaredLoser: null,
             }
           )
             .then((res : {key: string}) => {
@@ -116,6 +122,12 @@ export class CreateNewBidComponent implements OnInit {
       rootBidKey : parentBid.rootBidKey === 'root' ? parentBid.key : parentBid.rootBidKey,
       parentPath : `${parentBid.parentPath}${parentBid.key}/bids/`,
       isNew: true,
+      isApproved : false,
+      hasResult : false,
+      resultVerified : false,
+      isCancelled : false,
+      declaredWinner: null,
+      declaredLoser: null,
     });
     this.refreshBid(this.bid);
   }
@@ -127,7 +139,7 @@ export class CreateNewBidComponent implements OnInit {
 
   deleteBid(bid: Bid){
     this.bidService.delete(<string>bid.parentPath, <string>bid.key)
-      .then((res) => {
+      .then((res : any) => {
         // Notify parent to call its refreshBid()
         if (this.parentBid){
           this.refreshCallback.emit([this.parentBid]);
@@ -136,7 +148,7 @@ export class CreateNewBidComponent implements OnInit {
           this.refreshCallback.emit([null]);
         }
       })
-      .catch((err) => {
+      .catch((err : any) => {
       })
   }
   detailDataChanged(canPendChanges: boolean | null){
@@ -170,7 +182,13 @@ export class CreateNewBidComponent implements OnInit {
         bids : thisBid.bids,
         rootBidKey : thisBid.rootBidKey,
         parentPath: thisBid.parentPath,
-        isNew: false,
+        isNew: thisBid.isNew,
+        isApproved : thisBid.isApproved,
+        hasResult : thisBid.hasResult,
+        resultVerified : thisBid.resultVerified,
+        isCancelled : thisBid.isCancelled,
+        declaredWinner: thisBid.declaredWinner,
+        declaredLoser: thisBid.declaredLoser,
       };
 
       this.bidService.update(<string>(<Bid>this.bid).key, bidForSave)
@@ -178,7 +196,7 @@ export class CreateNewBidComponent implements OnInit {
         // Get Updated bid
         this.refreshBid(this.bid);
       })
-      .catch((err) => {
+      .catch((err : any) => {
         this.cancelDetailChanges();
       });
   }
@@ -199,6 +217,12 @@ export class CreateNewBidComponent implements OnInit {
             myBid.parentPath = bid.parentPath;
             myBid.rootBidKey = bid.rootBidKey;
             myBid.title = bid.title;
+            myBid.isApproved = bid.isApproved;
+            myBid.hasResult = bid.hasResult;
+            myBid.resultVerified = bid.resultVerified;
+            myBid.isCancelled = bid.isCancelled;
+            myBid.declaredWinner = bid.declaredWinner,
+            myBid.declaredLoser = bid.declaredLoser,
             this.setFormControlInputs();
             if (bid){
               let bids = this.bidService.getBidsRecursively( bid.bids);
@@ -206,7 +230,7 @@ export class CreateNewBidComponent implements OnInit {
             }
 
           }
-    }).catch((err) => {
+    }).catch((err : any) => {
       this.cancelDetailChanges();
     })
   }

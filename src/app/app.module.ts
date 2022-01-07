@@ -39,6 +39,7 @@ import { MessagePreviewComponent } from './messaging/message-preview/message-pre
 import { NewMessageComponent } from './messaging/new-message/new-message.component';
 import { ChatViewComponent } from './messaging/chat-view/chat-view.component';
 import { AvailableMessageUsersComponent } from './available-message-users/available-message-users.component';
+import { DocManagementModalComponent } from './doc-management-modal/doc-management-modal.component';
 
 
 @NgModule({
@@ -56,7 +57,8 @@ import { AvailableMessageUsersComponent } from './available-message-users/availa
     MessagePreviewComponent,
     NewMessageComponent,
     ChatViewComponent,
-    AvailableMessageUsersComponent
+    AvailableMessageUsersComponent,
+    DocManagementModalComponent
   ],
   imports: [
     CommonModule,

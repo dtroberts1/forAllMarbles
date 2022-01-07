@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList} from '@angular/fire/database';
 import { firstValueFrom, map, Observable, Subscriber, tap } from 'rxjs';
 import { Bid } from '../models/bid';
+import { SupportingDoc } from '../models/supporting-doc';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +39,14 @@ export class BidService {
             title: itm.title,
             rootBidKey: itm.rootBidKey,
             parentPath: itm.parentPath,
+            isApproved : itm.isApproved,
+            hasResult : itm.hasResult,
+            resultVerified : itm.resultVerified,
+            isCancelled : itm.isCancelled,
+            declaredWinner : itm.declaredWinner,
+            declaredLoser : itm.declaredLoser,
+            winnerSupportingDocs : itm.winnerSupportingDocs,
+            loserSupportingDocs : itm.loserSupportingDocs,
         })}
       )
       )
@@ -148,8 +157,47 @@ export class BidService {
             reject(err);
           })
     });
-    
   }
+
+  clearData(path: string): Promise<any>{
+    return new Promise((resolve, reject) => {
+
+      this.db.list(path).remove()
+        .then((res) => {
+            resolve(true);
+          })
+          .catch((err : any) => {
+            reject(err);
+          })
+    });
+  }
+
+  updateSupportingDocs(value: SupportingDoc, path: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+
+      this.db.list(path).push(value)
+        .then((res) => {
+            resolve(true);
+          })
+          .catch((err : any) => {
+            reject(err);
+          })
+    });
+  }
+
+  putSupportingDocs(value: SupportingDoc, path: string, key : string): Promise<any> {
+    return new Promise((resolve, reject) => {
+
+      this.db.list(path).update(key, value)
+        .then((res) => {
+            resolve(true);
+          })
+          .catch((err : any) => {
+            reject(err);
+          })
+    });
+  }
+
   delete(path: string, key: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.db.list(path).remove(key)
