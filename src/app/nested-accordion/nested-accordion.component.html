@@ -43,6 +43,7 @@
             <div *ngIf="bid.resultVerified" style="font-weight: 700;">
                 Status: 
                 <span 
+                *ngIf="user"
                     style="
                     font-weight: bold;
                     color: rgb(255,74,74);
@@ -108,7 +109,9 @@
                     <div>
                         <input  matInput 
                         placeholder="23.55" 
-                        style="border: none; outline: none; height: initial; width: initial; text-align: right; padding-right: 35px;"
+                        style="border: none; outline: none; height: initial; width: initial; text-align: right; padding-right: 35px;
+                            color: forestGreen;
+                        "
                         #bidAmtInput
                         type="number"
                         [readonly]="!bidAmtEditMode"
@@ -176,6 +179,7 @@
                 <app-nested-accordion 
                 [user]="user" 
                 (refreshCallback)="refreshBid(bid)"
+                (accordionBaseCallback)="refreshBase()"
                 [parentBid]="bid"
                 [bid]="childBid">
             </app-nested-accordion>

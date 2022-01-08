@@ -50,6 +50,8 @@ export class BidService {
             declaredLoser : itm.declaredLoser,
             winnerSupportingDocs : itm.winnerSupportingDocs,
             loserSupportingDocs : itm.loserSupportingDocs,
+            verifiedWinner: itm.verifiedWinner,
+            verifiedLoser: itm.verifiedLoser,
         })}
       )
       )

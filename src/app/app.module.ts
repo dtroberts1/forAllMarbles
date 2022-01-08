@@ -41,6 +41,7 @@ import { ChatViewComponent } from './messaging/chat-view/chat-view.component';
 import { AvailableMessageUsersComponent } from './available-message-users/available-message-users.component';
 import { DocManagementModalComponent } from './doc-management-modal/doc-management-modal.component';
 import { ToastrModule } from 'ngx-toastr';
+import { BidConfirmationDialogComponent } from './bid-confirmation-dialog/bid-confirmation-dialog.component';
 //import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
@@ -59,7 +60,8 @@ import { ToastrModule } from 'ngx-toastr';
     NewMessageComponent,
     ChatViewComponent,
     AvailableMessageUsersComponent,
-    DocManagementModalComponent
+    DocManagementModalComponent,
+    BidConfirmationDialogComponent
   ],
   imports: [
     CommonModule,

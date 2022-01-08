@@ -3,6 +3,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChang
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { firstValueFrom } from 'rxjs';
+import { BidConfirmationDialogComponent } from '../bid-confirmation-dialog/bid-confirmation-dialog.component';
 import { DocManagementModalComponent } from '../doc-management-modal/doc-management-modal.component';
 import { Bid } from '../models/bid';
 import { SupportingDoc } from '../models/supporting-doc';
@@ -57,7 +58,7 @@ export class NestedAccordionComponent implements OnInit {
 
   amountPositionX !: number;
   @Output() refreshCallback: EventEmitter<any> = new EventEmitter();
-
+  @Output() accordionBaseCallback: EventEmitter<any> = new EventEmitter();
   
   expandedIndex = 0;
 
@@ -223,24 +224,94 @@ export class NestedAccordionComponent implements OnInit {
   }
 
   declareVictory(bid: Bid){
-    bid.hasResult = true;
-    bid.resultVerified = false;
-    bid.declaredWinner = this.user?.key;
-    bid.declaredLoser = bid.bidCreatorKey != this.user?.key ? bid.bidCreatorKey : bid.bidChallengerKey;
-
-    this.bidService.update(<string>bid.key, bid)
-    .then(() => {
-    })
-    .catch((err) => console.log("error: "+ err))
+    let declaredLoserKey = bid.bidCreatorKey != this.user?.key ? bid.bidCreatorKey : bid.bidChallengerKey;
+    let declaredLoserName : string;
+    firstValueFrom(
+      this.userService.getAll()
+    )
+      .then((res) =>{
+        if (Array.isArray(res)){
+          let declaredLoserUser = res.find(user => user.key === declaredLoserKey);
+          if (declaredLoserUser){
+            declaredLoserName = <string>declaredLoserUser.fullName;
+            const dialogRef = this.dialog.open(BidConfirmationDialogComponent, {
+              width: '550px',
+              height: '240px',
+              position: {top: '200px'},
+              data: {
+               isYesNo: true,
+               isOk: false,
+               dialogText: `Are you sure you would like to declare victory? 
+               Unless ${(declaredLoserName ? declaredLoserName : 'your competitor')} concedes, documented 
+               evidence must be provided in order to verify that you\'re the winner. 
+               If no evidence is provided by either party within 10 day, this bid will be cancelled.`,
+              },
+              panelClass: 'modal-class'
+            });
+            dialogRef.afterClosed().subscribe(result => {
+              if (result){
+                bid.hasResult = true;
+                bid.resultVerified = false;
+                bid.declaredWinner = this.user?.key;
+                bid.declaredLoser = declaredLoserKey;
+            
+                this.bidService.update(<string>bid.key, bid)
+                .then(() => {
+        
+                })
+                .catch((err) => console.log("error: "+ err));
+              }
+            });
+          }
+        }
+      });
   }
   
   concedeDefeat(bid: Bid){
-    bid.hasResult = true;
-    bid.resultVerified = true;
-    bid.declaredWinner = bid.bidCreatorKey != this.user?.key ? bid.bidCreatorKey : bid.bidChallengerKey;
-    bid.declaredLoser = this.user?.key;
-    bid.verifiedLoser = this.user?.key;
-    bid.verifiedWinner = bid.declaredWinner;
+    const dialogRef = this.dialog.open(BidConfirmationDialogComponent, {
+      width: '550px',
+      height: '240px',
+      position: {top: '200px'},
+      data: {
+       isYesNo: true,
+       isOk: false,
+       dialogText: 'Are you sure you would like to concede defeat? This operation cannot be reversed.',
+      },
+      panelClass: 'modal-class'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result){
+        bid.hasResult = true;
+        bid.resultVerified = true;
+        bid.declaredWinner = bid.bidCreatorKey != this.user?.key ? bid.bidCreatorKey : bid.bidChallengerKey;
+        bid.declaredLoser = this.user?.key;
+        bid.verifiedLoser = this.user?.key;
+        bid.verifiedWinner = bid.declaredWinner;
+
+        // Clone bid as base-level bid
+        let newBid = JSON.parse(JSON.stringify(bid)) as Bid;
+        newBid.rootBidKey = 'root';
+        newBid.bids = [];
+        newBid.parentPath = '/bids/';
+        
+        this.bidService.create(newBid)
+          .then(() => {
+            // Then remove orignal root and all of the root's child bilds
+            let promise = null;
+            if (bid.rootBidKey != 'root'){
+              promise = this.bidService.delete('/bids/', <string>bid.rootBidKey);
+            }
+            else{
+              promise = this.bidService.delete('/bids/', <string>bid.key);
+            }
+            promise
+              .then(() => {
+                this.accordionBaseCallback.emit();
+              });
+          });
+      }
+    });
 
     // Update Win/Loss Status -- TODO
     // Distribute Funds -- TODO
@@ -251,25 +322,45 @@ export class NestedAccordionComponent implements OnInit {
     .catch((err) => console.log("error: "+ err))
   }
 
+  refreshBase(){
+    this.accordionBaseCallback.emit();
+  }
+
   challengeResult(bid: Bid){
-    let isWinner = this.user && this.user.key && this.user.key == this.bid.declaredWinner;
-    const dialogRef = this.dialog.open(DocManagementModalComponent, {
+    const initialDialog = this.dialog.open(BidConfirmationDialogComponent, {
       width: '550px',
-      height: '640px',
+      height: '240px',
+      position: {top: '200px'},
       data: {
-        attachedFile: null,
-        isWinner: isWinner,
-        bid: this.bid,
+       isYesNo: false,
+       isOk: true,
+       dialogText: 'Upload files as evidence to challenge result. The evidence will be compared and the winner will be announced within 15 days.',
       },
       panelClass: 'modal-class'
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.bidService.getSingleBid(this.bid)
-      .then((res) => {
-        this.bid = res;
-        this.hasWinnerDocs = this.getHasWinnerDocs();
-      });
+    initialDialog.afterClosed().subscribe(result => {
+      if (result){
+        let isWinner = this.user && this.user.key && this.user.key == this.bid.declaredWinner;
+        const dialogRef = this.dialog.open(DocManagementModalComponent, {
+          width: '550px',
+          height: '640px',
+          data: {
+            attachedFile: null,
+            isWinner: isWinner,
+            bid: this.bid,
+          },
+          panelClass: 'modal-class'
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          this.bidService.getSingleBid(this.bid)
+          .then((res) => {
+            this.bid = res;
+            this.hasWinnerDocs = this.getHasWinnerDocs();
+          });
+        });
+      }
     });
   }
 
@@ -296,46 +387,81 @@ export class NestedAccordionComponent implements OnInit {
   }
 
   attachmentAdded(event: any, bid: Bid){
-    if (event.target.files){
-      this.attachedFile = event.target.files.item(0);
-    }
-
-    if (this.user){
-    }
-    let isWinner = this.user && this.user.key && this.user.key == bid.declaredWinner;
-    const dialogRef = this.dialog.open(DocManagementModalComponent, {
+    const initialDialog = this.dialog.open(BidConfirmationDialogComponent, {
       width: '550px',
-      height: '640px',
+      height: '240px',
+      position: {top: '200px'},
       data: {
-        attachedFile: this.attachedFile,
-        isWinner: isWinner,
-        bid: bid,
+       isYesNo: false,
+       isOk: true,
+       dialogText: `Upload files to prove your victory. If your competitor 
+       does not submit counter-evidence within 10 days, you will be declared as winner; otherwise,
+       the evidence will be compared and the winner will be announced within 15 days.`,
+      },
+      panelClass: 'modal-class'
+    });
+
+    initialDialog.afterClosed().subscribe(result => {
+      if (result){
+
+        if (event.target.files){
+          this.attachedFile = event.target.files.item(0);
+        }
+    
+        if (this.user){
+        }
+        let isWinner = this.user && this.user.key && this.user.key == bid.declaredWinner;
+        const dialogRef = this.dialog.open(DocManagementModalComponent, {
+          width: '550px',
+          height: '640px',
+          data: {
+            attachedFile: this.attachedFile,
+            isWinner: isWinner,
+            bid: bid,
+          },
+          panelClass: 'modal-class'
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          this.bidService.getSingleBid(this.bid)
+          .then((res) => {
+            this.bid = res;
+            this.hasWinnerDocs = this.getHasWinnerDocs();
+          });
+        });
+      }
+    });
+  }
+
+  deleteBid(bid: Bid){
+    const dialogRef = this.dialog.open(BidConfirmationDialogComponent, {
+      width: '550px',
+      height: '240px',
+      position: {top: '200px'},
+      data: {
+       isYesNo: true,
+       isOk: false,
+       dialogText: `Are you sure you would like to delete bids? All counter offers will be removed.`,
       },
       panelClass: 'modal-class'
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.bidService.getSingleBid(this.bid)
-      .then((res) => {
-        this.bid = res;
-        this.hasWinnerDocs = this.getHasWinnerDocs();
-      });
+      if (result){
+        this.bidService.delete(<string>bid.parentPath, <string>bid.key)
+        .then((res) => {
+          // Notify parent to call its refreshBid()
+          if (this.parentBid){
+            this.refreshCallback.emit([this.parentBid]);
+          }
+          else{
+            this.refreshCallback.emit([null]);
+          }
+        })
+        .catch((err) => {
+        });
+      }
     });
-  }
-
-  deleteBid(bid: Bid){
-    this.bidService.delete(<string>bid.parentPath, <string>bid.key)
-      .then((res) => {
-        // Notify parent to call its refreshBid()
-        if (this.parentBid){
-          this.refreshCallback.emit([this.parentBid]);
-        }
-        else{
-          this.refreshCallback.emit([null]);
-        }
-      })
-      .catch((err) => {
-      })
   }
   detailDataChanged(canPendChanges: boolean | null){
     if (canPendChanges){
