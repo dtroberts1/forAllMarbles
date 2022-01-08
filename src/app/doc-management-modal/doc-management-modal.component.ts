@@ -13,7 +13,7 @@ import { BidService } from '../services/bid.service';
 
 
 type ModalInput = {isWinner: boolean; attachedFile: File; bid: Bid} 
-type BidDocument = {file?:any; name ?: string, isLinked : boolean, notes?: string | null, url ?: string | null, fileUpload ?: FileUpload | null, path ?: string | null} 
+type BidDocument = {file?:any; name ?: string, isLoading ?: boolean, isLinked : boolean, notes?: string | null, url ?: string | null, fileUpload ?: FileUpload | null, path ?: string | null} 
 
 @Component({
   selector: 'app-doc-management-modal',
@@ -101,10 +101,12 @@ export class DocManagementModalComponent implements OnInit {
         existingAttachments = this.getAttachmentsToLink(existingAttachments, true);
         this.attachmentsToLink = [...existingAttachments];
         this.selectedNoteAttachment = null;
+        this.selectedNoteAttachment = null;
         break;
       case 1:
         existingAttachments = this.getAttachmentsToLink(existingAttachments, false);
         this.attachmentsToLink = [...existingAttachments];
+        this.selectedNoteAttachment = null;
         this.selectedNoteAttachment = null;
         break; 
     }
@@ -164,11 +166,13 @@ export class DocManagementModalComponent implements OnInit {
   }
   openNotes(attachedDoc: BidDocument){
     this.openedNotesFormControl.setValue(attachedDoc.notes ? attachedDoc.notes : '');
+    console.log({"OpenNotesDoc": attachedDoc})
     this.selectedNoteAttachment = attachedDoc;
   }
 
   cancelAttachmentChange(){
     this.openedNotesFormControl.setValue(null);
+    console.log("setting notes to null")
     this.selectedNoteAttachment = null;
   }
 
@@ -238,6 +242,7 @@ export class DocManagementModalComponent implements OnInit {
     this.removeExistingBidAttachments()
       .then(() => {
         // Upload docs to storage
+        this.attachmentsToLink.forEach(attach => attach.isLoading = true);
         this.attachmentsToLink = this.attachmentsToLink.filter(attach => attach.isLinked == true);
         let promises =  this.upload();
         // Save Reference in database  
@@ -290,6 +295,7 @@ export class DocManagementModalComponent implements OnInit {
                     });
 
                     this.attachmentsToLink = [...existingAttachments as any];
+                    this.attachmentsToLink.forEach(attach => attach.isLoading = false);
 
                   });
                 })

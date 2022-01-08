@@ -2,11 +2,13 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { firstValueFrom } from 'rxjs';
 import { DocManagementModalComponent } from '../doc-management-modal/doc-management-modal.component';
 import { Bid } from '../models/bid';
 import { SupportingDoc } from '../models/supporting-doc';
 import { AuthUser } from '../models/user';
 import { BidService } from '../services/bid.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-nested-accordion',
@@ -51,6 +53,7 @@ export class NestedAccordionComponent implements OnInit {
   titleFormControl = new FormControl('', [Validators.required]);
   attachedFile !: File;
   hasWinnerDocs : boolean = false;
+  creatorName !: string;
 
   amountPositionX !: number;
   @Output() refreshCallback: EventEmitter<any> = new EventEmitter();
@@ -61,12 +64,10 @@ export class NestedAccordionComponent implements OnInit {
   constructor(
     private bidService: BidService,
     public dialog: MatDialog,
-
+    private userService: UserService,
   ) { }
 
   ngOnInit(): void {
-    //this.theBoundCallback = this.refreshBid.bind(this);
-    console.log({"this.bid":this.bid})
     this.hasWinnerDocs = this.getHasWinnerDocs();
 
     this.setFormControlInputs();
@@ -102,17 +103,13 @@ export class NestedAccordionComponent implements OnInit {
     if (this.user && this.user.key != bid.bidCreatorKey){
       bid.bidChallengerKey = this.user.key;
       bid.bidCreatorChallengerKey = `${bid.bidCreatorKey}_${bid.bidChallengerKey}`;
-      console.log("setting bid challenger key to " + this.user.key);
     }
     else{
-      console.log("not setting bid challenger key... :(")
     }
     delete bid.declaredLoser;
     delete bid.declaredWinner;
     delete bid.winnerSupportingDocs;
     delete bid.loserSupportingDocs;
-
-    console.log({"updateBid":bid})
 
     this.bidService.update(<string>bid.key, bid)
     .then(() => {
@@ -129,9 +126,78 @@ export class NestedAccordionComponent implements OnInit {
   }
 
   setFormControlInputs(){
+
     this.bidMessageFormControl.setValue((<Bid>this.bid).bidMessage);
     this.bidAmtFormControl.setValue((<Bid>this.bid).bidAmount);
     this.titleFormControl.setValue((<Bid>this.bid).title);
+
+    firstValueFrom(
+      this.userService.getAll()
+    )
+      .then((res) =>{
+        if (Array.isArray(res)){
+          let creator = res.find(user => user.key === (<Bid>this.bid).bidCreatorKey);
+          if (creator){
+            this.creatorName = <string>creator.fullName;
+          }
+        }
+      })
+  }
+
+  canConcedeDefeat(bid: Bid){
+    return !bid.resultVerified && bid.isApproved && this.user 
+      && this.user.key && 
+      (this.user.key === bid.bidCreatorKey || this.user.key === bid.bidChallengerKey) && 
+      ((this.user.key == bid.declaredLoser && !bid.resultVerified) || (!bid.hasResult));
+  }
+
+  canDeclareVictory(bid: Bid){
+    if (!this.user){
+      return false;
+    }
+
+    if (!bid.isApproved){
+      return false;
+    }
+
+    if (bid.resultVerified){
+      return false;
+    }
+
+    if (bid.hasResult){
+      return false;
+    }
+
+    if (this.user && (this.user.key === bid.bidCreatorKey || this.user.key === bid.bidChallengerKey)){
+      return true;
+    }
+    else{
+      return false;
+    }
+
+  }
+
+  canDisplayCounterOfferOrApprove(bid : Bid){
+    if (!this.user){
+      return false;
+    }
+    if (bid.isApproved){
+      return false;
+    }
+
+    if (this.user && (this.user.key === bid.bidCreatorKey)){
+      return false; // Don't show counter offers for the creator of the bid.
+    }
+
+    if (bid.rootBidKey === 'root'){
+      return true;
+    }
+    else{
+      return bid.bidChallengerKey === <string>this.user.key;
+    }
+
+      // OR, if it's not the root bid, but it's a bid whose challenger key is the users
+
   }
 
   createCounterOffer(){
@@ -161,13 +227,9 @@ export class NestedAccordionComponent implements OnInit {
     bid.resultVerified = false;
     bid.declaredWinner = this.user?.key;
     bid.declaredLoser = bid.bidCreatorKey != this.user?.key ? bid.bidCreatorKey : bid.bidChallengerKey;
-    console.log("declaredWinner is " + bid.declaredWinner);
-    console.log("declaredLoser is " + bid.declaredLoser);
 
     this.bidService.update(<string>bid.key, bid)
     .then(() => {
-      console.log("updated..")
-      console.log({"bid":bid});
     })
     .catch((err) => console.log("error: "+ err))
   }

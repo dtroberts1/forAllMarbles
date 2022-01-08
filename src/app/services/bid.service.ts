@@ -3,6 +3,7 @@ import { AngularFireDatabase, AngularFireList} from '@angular/fire/database';
 import { firstValueFrom, map, Observable, Subscriber, tap } from 'rxjs';
 import { Bid } from '../models/bid';
 import { SupportingDoc } from '../models/supporting-doc';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,9 @@ export class BidService {
   bidsRef !: AngularFireList<Bid>;
 
 
-  constructor(private db: AngularFireDatabase) { 
+  constructor(
+    private db: AngularFireDatabase,
+    private toastr: ToastrService) { 
     this.bidsRef = db.list(this.bidPath);
   }
 
@@ -112,9 +115,11 @@ export class BidService {
       let path = '/bids/'
       this.db.list(path).push(bid)
         .then((res) => {
+          this.toastr.success("Bid Created");
             resolve(true);
           })
           .catch((err : any) => {
+            this.toastr.error("Unable to Process");
             reject(err);
           })
     });
@@ -124,9 +129,11 @@ export class BidService {
     return new Promise((resolve, reject) => {
       this.bidsRef.push(bid)
         .then((res : any) => {
+          this.toastr.success("Bid Created");
           resolve(res);
         })
         .catch((err : any) => {
+          this.toastr.error("Unable to Process");
           reject(err);
         })
     });
@@ -137,9 +144,11 @@ export class BidService {
 
       this.db.list(<string>value.parentPath).update(key, value)
         .then((res) => {
+          this.toastr.success("Bid Saved");
             resolve(true);
           })
           .catch((err : any) => {
+            this.toastr.error("Unable to Process");
             reject(err);
           })
     });
@@ -151,9 +160,11 @@ export class BidService {
 
       this.db.list(<string>value.parentPath).push(value)
         .then((res) => {
+            this.toastr.success("Bid Created");
             resolve(true);
           })
           .catch((err : any) => {
+            this.toastr.error("Unable to Process");
             reject(err);
           })
     });
@@ -167,6 +178,7 @@ export class BidService {
             resolve(true);
           })
           .catch((err : any) => {
+            this.toastr.error("Unable to Process");
             reject(err);
           })
     });
@@ -177,9 +189,11 @@ export class BidService {
 
       this.db.list(path).push(value)
         .then((res) => {
+            this.toastr.success("Documents Saved");
             resolve(true);
           })
           .catch((err : any) => {
+            this.toastr.error("Unable to Process");
             reject(err);
           })
     });
@@ -190,9 +204,11 @@ export class BidService {
 
       this.db.list(path).update(key, value)
         .then((res) => {
+            this.toastr.success("Documents Saved");
             resolve(true);
           })
           .catch((err : any) => {
+            this.toastr.error("Unable to Process");
             reject(err);
           })
     });
@@ -202,9 +218,11 @@ export class BidService {
     return new Promise((resolve, reject) => {
       this.db.list(path).remove(key)
         .then(() => {
+            this.toastr.success("Bid Removed");
             resolve(true);
           })
           .catch((err : any) => {
+            this.toastr.error("Unable to Process");
             reject(err);
           })
     });
@@ -228,9 +246,11 @@ export class BidService {
     return new Promise((resolve, reject) => {
       this.bidsRef.remove()
         .then(() => {
+            this.toastr.success("Bids Removed");
             resolve(true);
           })
           .catch((err : any) => {
+            this.toastr.error("Unable to Process");
             reject(err);
           })
     });

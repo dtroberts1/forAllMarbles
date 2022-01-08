@@ -33,10 +33,13 @@
             </div>
         </div>
         <div style="width: 50%; display: flex; justify-content: flex-end; line-height: 20px; align-items: center;
-        font-weight: 600 !important;
-        font-family: system-ui !important;
-        font-size: 18px !important;
-        color: #666666 !important;" class="example-accordion-item-description">
+            font-weight: 600 !important;
+            font-family: system-ui !important;
+            font-size: 18px !important;
+            color: #666666 !important;" class="example-accordion-item-description">
+            <div style="padding-right:20px;">
+                Created by {{creatorName}}
+            </div>
             <div *ngIf="bid.resultVerified" style="font-weight: 700;">
                 Status: 
                 <span 
@@ -130,9 +133,9 @@
                 <div>
                     <div id="lower-left-btn-container">
                         <!--<button *ngIf="!bid.isEditing" (click)="modifyBid(bid)" mat-raised-button color="accent">View Counter Offers</button>-->
-                        <button style="font-family: system-ui !important;" *ngIf="user && !(user.key === bid.bidCreatorKey) && !bid.isApproved" (click)="createCounterOffer()" mat-raised-button color="accent">Counter Offer</button>
-                        <button *ngIf="bid.isApproved && !bid.hasResult" style="font-family: system-ui !important;" (click)="declareVictory(bid)" mat-raised-button color="accent">Declare Victory</button>
-                        <button *ngIf="!bid.resultVerified && bid.isApproved && user && user.key && ((user.key == bid.declaredLoser && !bid.resultVerified) || (!bid.hasResult))" style="font-family: system-ui !important;" (click)="concedeDefeat(bid)" mat-raised-button color="accent">Concede Defeat</button>
+                        <button style="font-family: system-ui !important;" *ngIf="canDisplayCounterOfferOrApprove(bid)" (click)="createCounterOffer()" mat-raised-button color="accent">Counter Offer</button>
+                        <button *ngIf="canDeclareVictory(bid)" style="font-family: system-ui !important;" (click)="declareVictory(bid)" mat-raised-button color="accent">Declare Victory</button>
+                        <button *ngIf="canConcedeDefeat(bid)" style="font-family: system-ui !important;" (click)="concedeDefeat(bid)" mat-raised-button color="accent">Concede Defeat</button>
                         <button *ngIf="!bid.resultVerified && bid.hasResult && user && bid.declaredWinner != user.key" style="font-family: system-ui !important;" (click)="challengeResult(bid)" mat-raised-button color="accent">Challenge Result</button>
                         <!--Challenge Result button will also prompt for upload of documentation-->
                         <label *ngIf="!bid.resultVerified && bid.hasResult && user && user.key && user.key == bid.declaredWinner && !hasWinnerDocs" style="color: white; width: 48px;" 
@@ -148,7 +151,7 @@
                             />
                         </label>
                         <button *ngIf="hasWinnerDocs" style="font-family: system-ui !important;"  (click)="manageDocumentation()" mat-raised-button color="accent">Manage Documentation</button>
-                        <button style="font-family: system-ui !important;" *ngIf="user && user.key && !(user.key === bid.bidCreatorKey) && !bid.isApproved" (click)="approveBid(bid)" mat-raised-button color="accent">Approve</button>
+                        <button style="font-family: system-ui !important;" *ngIf="canDisplayCounterOfferOrApprove(bid)" (click)="approveBid(bid)" mat-raised-button color="accent">Approve</button>
                     </div>
                 </div>            
             </div>

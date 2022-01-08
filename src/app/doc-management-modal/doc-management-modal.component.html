@@ -23,18 +23,21 @@ style="width: 1000px;"
                 <li *ngFor="let attachedDoc of attachmentsToLink" style="display: flex; align-items: center; gap: 10px;">
                     <span *ngIf="attachedDoc">
                         <mat-checkbox 
-                            style="color: #666666; font-family: system-ui; font-size: 18px; font-weight: 500;"
+                            style="color: #666666; font-family: system-ui; font-size: 18px; font-weight: 500; display: flex;"
                             [checked]="attachedDoc.isLinked"
                             [(ngModel)]="attachedDoc.isLinked"
                             [color]="'accent'">
                           {{attachedDoc.name}}
                         </mat-checkbox>
                       </span>
-                      <div *ngIf="!(attachedDoc?.url?.startsWith('blob'))" tabindex="1" (click)="openNotes(attachedDoc)" id="editor-container">
+                      <div *ngIf="!attachedDoc.isLoading &&!(attachedDoc?.url?.startsWith('blob'))" tabindex="1" (click)="openNotes(attachedDoc)" id="editor-container">
                         <mat-icon  style="padding-top: 4px;">notes</mat-icon>
                       </div>
-                      <div>
+                      <div *ngIf="!attachedDoc.isLoading">
                           <a [href]="getSafeUrl(attachedDoc.url ? attachedDoc.url : null)" target="_blank">View</a>
+                      </div>
+                      <div *ngIf="attachedDoc.isLoading" style="margin-bottom: -10px;">
+                        <mat-spinner [diameter]="20"></mat-spinner>
                       </div>
                 </li>
             </ul>
