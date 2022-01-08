@@ -40,7 +40,7 @@
             <div style="padding-right:20px;">
                 Created by {{creatorName}}
             </div>
-            <div *ngIf="bid.resultVerified" style="font-weight: 700;">
+            <div *ngIf="bid.resultVerified && user && (bid.verifiedWinner == user.key || bid.verifiedLoser == user.key)" style="font-weight: 700;">
                 Status: 
                 <span 
                 *ngIf="user"
@@ -50,7 +50,7 @@
                     padding-left: 8px;
                     padding-right: 10px;" 
                     [ngStyle]="{'color': user && bid.verifiedWinner == user.key ? 'green' : 'red'}">
-                    {{(user && bid.verifiedWinner == user.key ? 'Won' : 'Lost')}}
+                    {{(user && bid.verifiedWinner == user.key ? 'Won' : (bid.verifiedLoser == user.key ? 'Lost' : ''))}}
                 </span>
             </div>
             <div>
