@@ -15,7 +15,7 @@ export class NflFeedService {
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json', 
-    "Authorization": "Basic ODM3NjU3YzMtNzllOS00NTU3LWFmMjAtNzQ5ODBmOk1ZU1BPUlRTRkVFRFM="})
+    "Authorization": "Basic <Test>"})
   };
   constructor(private http: HttpClient, /*private toastr: ToastrService*/) { }
 
