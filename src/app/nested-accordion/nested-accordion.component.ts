@@ -55,7 +55,7 @@ export class NestedAccordionComponent implements OnInit {
   attachedFile !: File;
   hasWinnerDocs : boolean = false;
   creatorName !: string;
-
+  unconfirmedWinnerFullName !: string;
   amountPositionX !: number;
   @Output() refreshCallback: EventEmitter<any> = new EventEmitter();
   @Output() accordionBaseCallback: EventEmitter<any> = new EventEmitter();
@@ -109,6 +109,8 @@ export class NestedAccordionComponent implements OnInit {
     }
     delete bid.declaredLoser;
     delete bid.declaredWinner;
+    delete bid.verifiedWinner;
+    delete bid.verifiedLoser;
     delete bid.winnerSupportingDocs;
     delete bid.loserSupportingDocs;
 
@@ -141,6 +143,24 @@ export class NestedAccordionComponent implements OnInit {
           if (creator){
             this.creatorName = <string>creator.fullName;
           }
+
+          if ((<Bid>this.bid).hasResult && (<Bid>this.bid).declaredWinner){
+            let declaredWinnerKey = (<Bid>this.bid).declaredWinner;
+            let verifiedWinnerKey = (<Bid>this.bid).verifiedWinner;
+
+            let declaredWinner = res.find(user => user.key === declaredWinnerKey);
+            let confirmedWinner = res.find(user => user.key === declaredWinnerKey);
+
+            if (declaredWinner){
+              this.unconfirmedWinnerFullName = <string>declaredWinner.fullName;
+            }
+
+            if (confirmedWinner){
+              this.unconfirmedWinnerFullName = <string>confirmedWinner.fullName;
+            }
+
+          }
+
         }
       })
   }
@@ -257,7 +277,8 @@ export class NestedAccordionComponent implements OnInit {
             
                 this.bidService.update(<string>bid.key, bid)
                 .then(() => {
-        
+                  this.bid = bid;
+                  this.setFormControlInputs();
                 })
                 .catch((err) => console.log("error: "+ err));
               }
