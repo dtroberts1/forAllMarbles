@@ -7,7 +7,7 @@
     display: block;
     /*border: solid 1px #D62929;*/
     max-width: 920px;
-
+    box-shadow: 0 0 3px 0px #da3e3e;
   }
   
   .example-accordion-item + .example-accordion-item {
@@ -114,6 +114,27 @@
         grid-column-end: 3;
         grid-row-start: 1;
         grid-row-end: 1;
+    }
+
+    #unconfirmed-winner{
+      grid-column-start: 3;
+      grid-column-end: 3;
+      grid-row-start: 2;
+      grid-row-end: 2;
+
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+
+      #unconfirmed-winner-value{
+        padding-left: 15px;
+        font-weight: 500;
+        font-size: 19px;
+        display: flex;
+        padding-right: 38px;
+        padding-top: 10px;
+        font-family: 'system ui';
+      }
     }
 
     #bid-amt-container{

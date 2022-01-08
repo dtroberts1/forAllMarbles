@@ -52,6 +52,22 @@ export class FeedComponent implements OnInit {
         });
   }
 
+  public accordionBaseCallback(){
+      this.bidService.getAll()
+        .subscribe( 
+          (
+            (bids: Bid[]) => {
+            if (Array.isArray(bids)){
+              // Only apply updates to the root if the count has changed.
+              this.allBids = this.getCounterableBids(bids);
+            }
+            else{
+              this.allBids = [];
+            }
+          }
+        ));
+  }
+
   getCounterableBidsHelper(bid: Bid, user: AuthUser, flatBidStrs : string[]) :Bid[]{
     let tmpArray : Bid[] = [];
     if (user){

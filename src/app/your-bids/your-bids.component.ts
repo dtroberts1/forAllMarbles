@@ -44,13 +44,28 @@ export class YourBidsComponent implements OnInit {
       })
   }
 
+  public accordionBaseCallback(){
+    this.bidService.getAll()
+      .subscribe( 
+        (
+          (bids: Bid[]) => {
+          if (Array.isArray(bids)){
+            // Only apply updates to the root if the count has changed.
+            this.myBids = this.getBidsFilteredByUser(bids, <string>this.authUser?.key);
+          }
+          else{
+            this.myBids = [];
+          }
+        }
+      ));
+}
+
   modifyBid(bid: Bid){
     let currBid = bid as any;
     currBid.isEditing = true;
   }
 
   ngOnInit(): void {
-    console.log("in init")
     this.authUser = this.authService.getAccount();
 
     firstValueFrom(
@@ -69,7 +84,6 @@ export class YourBidsComponent implements OnInit {
   }
 
   public accordionCallback(){
-    console.log("in accordion callback..")
     firstValueFrom(
       this.bidService.getAll())
         .then((bids: Bid[]) => {
@@ -128,30 +142,6 @@ export class YourBidsComponent implements OnInit {
       if (changes.hasOwnProperty(propName)) {
         let change = changes[propName];
 
-        console.log("prop name" + propName)
-        /*
-        switch (propName) {
-          case 'startDateStr': {
-            this.saleService.getHighLvlSalesData(this.startDateStr, this.endDateStr).toPromise()
-            .then((result : any) => {
-              if (result){
-                this.setMenuItems();
-              }
-            })
-          }
-          break;
-          case 'endDateStr': {
-            this.saleService.getHighLvlSalesData(this.startDateStr, this.endDateStr).toPromise()
-            .then((result : any) => {
-              if (result){
-                this.highLvlSales = result.highLvlSales;
-                this.setMenuItems();
-              }
-            })
-          }
-          break;
-        }
-        */
       }
       else{
       }

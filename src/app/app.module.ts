@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatIconModule} from '@angular/material/icon';
-import { ToastrModule } from 'ngx-toastr';
 import {MatButtonModule} from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -29,6 +28,7 @@ import { BidFeedsComponent } from './bid-feeds/bid-feeds.component';
 import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { LoginComponent } from './login/login.component';
 import { FeedComponent } from './feed/feed.component';
 import {CdkAccordionModule} from '@angular/cdk/accordion';
@@ -39,7 +39,10 @@ import { MessagePreviewComponent } from './messaging/message-preview/message-pre
 import { NewMessageComponent } from './messaging/new-message/new-message.component';
 import { ChatViewComponent } from './messaging/chat-view/chat-view.component';
 import { AvailableMessageUsersComponent } from './available-message-users/available-message-users.component';
-
+import { DocManagementModalComponent } from './doc-management-modal/doc-management-modal.component';
+import { ToastrModule } from 'ngx-toastr';
+import { BidConfirmationDialogComponent } from './bid-confirmation-dialog/bid-confirmation-dialog.component';
+//import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -56,7 +59,9 @@ import { AvailableMessageUsersComponent } from './available-message-users/availa
     MessagePreviewComponent,
     NewMessageComponent,
     ChatViewComponent,
-    AvailableMessageUsersComponent
+    AvailableMessageUsersComponent,
+    DocManagementModalComponent,
+    BidConfirmationDialogComponent
   ],
   imports: [
     CommonModule,
@@ -78,15 +83,17 @@ import { AvailableMessageUsersComponent } from './available-message-users/availa
     MatCheckboxModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    
     MatTooltipModule,
     MatSortModule,
     CdkAccordionModule,
     MatTabsModule,
+    MatProgressSpinnerModule,
     AngularFirestoreModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule, // for firestore
     ToastrModule.forRoot({
-      positionClass: 'toast-bottom-right',
+      positionClass: 'toast-bottom-left',
       preventDuplicates: true,
     }),
   ],

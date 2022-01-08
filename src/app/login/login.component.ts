@@ -76,11 +76,9 @@ export class LoginComponent implements OnInit {
   }
 
   login(){
-
-    /*
-    this.loginTxt = 'mike@mike.com';
-    this.passwordTxt = 'mike1234';
-    */
+    this.loginTxt = "emily@emily.com";
+    this.passwordTxt = "emily1234";
+   
     this.authService.SignIn(this.loginTxt, this.passwordTxt)
       .then(() => {
         this.router.navigate(['/dashboard']);
@@ -110,7 +108,7 @@ export class LoginComponent implements OnInit {
 
     if (this.selectedFile) {
       this.currentFileUpload = new FileUpload(this.selectedFile);
-      taskPromise = this.fileService.pushFileToStorage(`profImage_${new Date().getMilliseconds()}`, this.currentFileUpload);
+      taskPromise = this.fileService.pushFileToStorage('profileImages', `profImage_${new Date().getMilliseconds()}`, this.currentFileUpload, true);
     }
 
     return taskPromise;

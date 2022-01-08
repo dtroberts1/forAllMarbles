@@ -6,6 +6,7 @@ import { AngularFireDatabase, AngularFireList, AngularFireObject} from '@angular
 import { AuthUser, User } from '../models/user';
 import { Bid } from '../models/bid';
 import * as firebase from 'firebase';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 
 @Injectable({
@@ -21,6 +22,7 @@ export class AuthService {
   constructor(
     private angularFireAuth: AngularFireAuth,
     private db: AngularFireDatabase,
+    private toastr: ToastrService,
     private router: Router,
     ) {
     this.userData = angularFireAuth.authState;
@@ -60,9 +62,11 @@ export class AuthService {
             profilePicSrc: picSrc,
           };
           this.db.database.ref('users').child(res.user.uid).set(obj);
+          this.toastr.success("Account Created");
           resolve(res);
         })
         .catch((error: any) => {
+          this.toastr.error("Unable to Process");
           reject(null);
         })
     });

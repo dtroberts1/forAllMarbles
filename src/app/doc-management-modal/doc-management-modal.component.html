@@ -1,0 +1,130 @@
+<div class="modal-title">
+    Manage Documents
+    <div class="modal-close-container">
+        <div (click)="closeModal()" tabindex="1" class="close-icon-background">
+            <mat-icon style="color: white; padding-top: 3px;">close</mat-icon>
+        </div>
+    </div>
+</div>
+
+<mat-tab-group (selectedTabChange)="notifyChild($event)"
+style="width: 1000px;"
+>
+    <mat-tab label="Your Documents">
+        <div *ngIf="bid" style="color: #666666; font-family: system-ui">
+            <div class="bid-title">
+                <span>Bid: </span>
+                <span>{{bid.title}}</span>
+            </div>
+            <div style="color: #666666; font-family: system-ui; font-size: 18px; font-weight: 500; padding: 10px;">
+                Files
+            </div>
+            <ul style="list-style: none; margin-block-start: 0;">
+                <li *ngFor="let attachedDoc of attachmentsToLink" style="display: flex; align-items: center; gap: 10px;">
+                    <span *ngIf="attachedDoc">
+                        <mat-checkbox 
+                            style="color: #666666; font-family: system-ui; font-size: 18px; font-weight: 500; display: flex;"
+                            [checked]="attachedDoc.isLinked"
+                            [(ngModel)]="attachedDoc.isLinked"
+                            [color]="'accent'">
+                          {{attachedDoc.name}}
+                        </mat-checkbox>
+                      </span>
+                      <div *ngIf="!attachedDoc.isLoading &&!(attachedDoc?.url?.startsWith('blob'))" tabindex="1" (click)="openNotes(attachedDoc)" id="editor-container">
+                        <mat-icon  style="padding-top: 4px;">notes</mat-icon>
+                      </div>
+                      <div *ngIf="!attachedDoc.isLoading">
+                          <a [href]="getSafeUrl(attachedDoc.url ? attachedDoc.url : null)" target="_blank">View</a>
+                      </div>
+                      <div *ngIf="attachedDoc.isLoading" style="margin-bottom: -10px;">
+                        <mat-spinner [diameter]="20"></mat-spinner>
+                      </div>
+                </li>
+            </ul>
+            <div style="padding: 10px; display: flex; gap: 10px;">
+                <button style="font-family: system-ui !important;" (click)="saveAttachments()" mat-raised-button color="accent">
+                    Save File{{attachmentsToLink && attachmentsToLink.length > 1 ? 's' :''}}
+                </button>
+                <label *ngIf="!attachmentsToLink || !attachmentsToLink.length || attachmentsToLink && attachmentsToLink.length < 3"  style="color: white; width: 48px;" 
+                class="custom-file-upload mat-raised-button" 
+                style="background-color: #DA3E3E; font-family: system-ui !important; color: white; width: 78px; display: flex; align-items: center;">
+                Browse           
+                <input 
+                    type="file"
+                    accept=".png, .jpg, .jpeg"
+                    class="text-nowrap text-truncate"
+                    style="visibility: hidden;"
+                    (change)="attachmentAdded($event, bid)"
+                />
+                </label>    
+            </div>
+        
+            <div *ngIf="selectedNoteAttachment" style="padding: 10px; color: #666666; font-family: system-ui; font-size: 18px; font-weight: 500;">
+                <div>
+                    Notes for attachment,
+                </div>
+                <div style="text-align: center; padding: 10px;">
+                    <textarea
+                        style="width: 450px; height: 160px; padding: 10px; box-sizing: border-box;"
+                        placeholder="Bid Message" 
+                        [readonly]="false"
+                        [formControl]="openedNotesFormControl"
+                    >
+                    </textarea>
+                </div>
+            </div>
+            <div *ngIf="selectedNoteAttachment" style="padding: 10px; display: flex; gap: 10px;">
+                <button *ngIf="selectedNoteAttachment" style="font-family: system-ui !important;" (click)="saveNotes()" mat-raised-button color="accent">Save Notes</button>
+                <button style="font-family: system-ui !important;" (click)="cancelAttachmentChange()" mat-raised-button color="accent">Cancel</button>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Their Documents">
+        <div *ngIf="bid" style="color: #666666; font-family: system-ui">
+            <div class="bid-title">
+                <span>Bid: </span>
+                <span>{{bid.title}}</span>
+            </div>
+            <div style="color: #666666; font-family: system-ui; font-size: 18px; font-weight: 500; padding: 10px;">
+                Files
+            </div>
+            <ul style="list-style: none; margin-block-start: 0;">
+                <li *ngFor="let attachedDoc of attachmentsToLink" style="display: flex; align-items: center; gap: 10px;">
+                    <span *ngIf="attachedDoc">
+                        <mat-checkbox 
+                            style="color: #666666; font-family: system-ui; font-size: 18px; font-weight: 500;"
+                            [checked]="attachedDoc.isLinked"
+                            [(ngModel)]="attachedDoc.isLinked"
+                            [disabled]="true"
+                            [color]="'accent'">
+                          {{attachedDoc.name}}
+                        </mat-checkbox>
+                      </span>
+                      <div *ngIf="!(attachedDoc?.url?.startsWith('blob'))" tabindex="1" (click)="openNotes(attachedDoc)" id="editor-container">
+                        <mat-icon  style="padding-top: 4px;">notes</mat-icon>
+                      </div>
+                      <div>
+                          <a [href]="getSafeUrl(attachedDoc.url ? attachedDoc.url : null)" target="_blank">View</a>
+                      </div>
+                </li>
+            </ul>
+            <div *ngIf="selectedNoteAttachment" style="padding: 10px; color: #666666; font-family: system-ui; font-size: 18px; font-weight: 500;">
+                <div>
+                    Notes for attachment, {{selectedNoteAttachment.name}}
+                </div>
+                <div style="text-align: center; padding: 10px;">
+                    <textarea
+                        style="width: 450px; height: 160px; padding: 10px; box-sizing: border-box;"
+                        placeholder="Bid Message" 
+                        [readonly]="true"
+                        [formControl]="openedNotesFormControl"
+                    >
+                    </textarea>
+                </div>
+            </div>
+            <div *ngIf="selectedNoteAttachment" style="padding: 10px; display: flex; gap: 10px;">
+                <button style="font-family: system-ui !important;" (click)="cancelAttachmentChange()" mat-raised-button color="accent">Close Notes</button>
+            </div>
+        </div>
+    </mat-tab>
+</mat-tab-group>

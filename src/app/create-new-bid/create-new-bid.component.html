@@ -1,131 +1,133 @@
 <div style="width: 920px; padding-left: 40px; margin: 10px;">
-    
-    <div class="example-accordion-item-header">
-        <div class="bid-item-metric-header" style="display: flex;">
-            <div [ngStyle]="{'visibility': false && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
-            class="cell-data-div-img-edit"  
-            style="display: inline-flex; margin-left: 12px;"
-            >
-                <div tabindex="1" (click)="enableTitleEditMode($event)">
+    <div style="box-shadow: 0 0 3px 0px #da3e3e">
+        <div class="example-accordion-item-header">
+            <div class="bid-item-metric-header" style="display: flex;">
+                <div [ngStyle]="{'visibility': false && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
+                class="cell-data-div-img-edit"  
+                style="display: inline-flex; margin-left: 12px;"
+                >
+                    <div tabindex="1" (click)="enableTitleEditMode($event)">
+                    </div>
+                </div>
+                <div style="display: inline-block;">
+                    <label>Bid Title:</label>
+                    <input matInput 
+                        placeholder="Bid Title" 
+                        style="border: none; outline: none; line-height: 20px;
+                        font-weight: 600 !important;
+                        font-family: system-ui !important;
+                        font-size: 18px !important;
+                        color: #666666 !important;"
+                        #titleInput
+                        (keydown)="detailDataChanged(true)"
+                        [formControl]="titleFormControl"
+                    />
+                </div>
+                <div style="display: inline-flex; align-items: center; margin-left: 8px; vertical-align: middle;" [ngStyle]="{'visibility': true ? 'visible': 'hidden'}">
+                    <mat-icon *ngIf="titleFormControl.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                    <mat-icon *ngIf="titleFormControl.invalid" style="color: red;" matSuffix>{{getInputErrorMessage(titleFormControl)}}</mat-icon>
                 </div>
             </div>
-            <div style="display: inline-block;">
-                <label>Bid Title:</label>
-                <input matInput 
-                    placeholder="Bid Title" 
-                    style="border: none; outline: none; line-height: 20px;
-                    font-weight: 600 !important;
+            <div style="width: 47.99px; display: flex;" class="example-accordion-item-description">
+            </div>
+        
+          </div>
+          <div
+            class="example-accordion-item-body"
+            role="region"
+            [style.display]="''"
+            [attr.id]="'accordion-body-' + 0"
+            [attr.aria-labelledby]="'accordion-header-' + 0">
+            <div class="bid-item-container">
+                <div id="bid-item-message">
+                    <div class="bid-item-metric-header" style="line-height: 20px; display:flex;">
+                        <label>Bid Message:</label>
+    
+                        <div style="display: inline-block; margin-left: 8px; vertical-align: middle;" [ngStyle]="{'visibility': true ? 'visible': 'hidden'}">
+                            <mat-icon *ngIf="bidMessageFormControl.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
+                            <mat-icon *ngIf="bidMessageFormControl.invalid" style="color: red;" matSuffix>{{getInputErrorMessage(bidMessageFormControl)}}</mat-icon>
+                        </div>
+                        <div [ngStyle]="{'visibility': false && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
+                        class="cell-data-div-img-edit" 
+                        style="display: inline-block !important; margin-left: 8px;"
+                        >
+                            <div tabindex="1" (click)="enableBidMessageEditMode($event)" style="margin-top: -5px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: inline-block; font-weight: 600 !important;
                     font-family: system-ui !important;
-                    font-size: 18px !important;
-                    color: #666666 !important;"
-                    #titleInput
-                    (keydown)="detailDataChanged(true)"
-                    [formControl]="titleFormControl"
-                />
-            </div>
-            <div style="display: inline-flex; align-items: center; margin-left: 8px; vertical-align: middle;" [ngStyle]="{'visibility': true ? 'visible': 'hidden'}">
-                <mat-icon *ngIf="titleFormControl.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
-                <mat-icon *ngIf="titleFormControl.invalid" style="color: red;" matSuffix>{{getInputErrorMessage(titleFormControl)}}</mat-icon>
-            </div>
-        </div>
-        <div style="width: 47.99px; display: flex;" class="example-accordion-item-description">
-        </div>
-    
-      </div>
-      <div
-        class="example-accordion-item-body"
-        role="region"
-        [style.display]="''"
-        [attr.id]="'accordion-body-' + 0"
-        [attr.aria-labelledby]="'accordion-header-' + 0">
-        <div class="bid-item-container">
-            <div id="bid-item-message">
-                <div class="bid-item-metric-header" style="line-height: 20px; display:flex;">
-                    <label>Bid Message:</label>
-
-                    <div style="display: inline-block; margin-left: 8px; vertical-align: middle;" [ngStyle]="{'visibility': true ? 'visible': 'hidden'}">
-                        <mat-icon *ngIf="bidMessageFormControl.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
-                        <mat-icon *ngIf="bidMessageFormControl.invalid" style="color: red;" matSuffix>{{getInputErrorMessage(bidMessageFormControl)}}</mat-icon>
+                    font-size: 18px !important;">
+                        <textarea matInput 
+                            placeholder="Bid Message" 
+                            style="border: none; outline: none; "
+                            #bidMessageInput
+                            (keydown)="detailDataChanged(true)"
+                            [formControl]="bidMessageFormControl"
+                        >
+                        </textarea>
                     </div>
-                    <div [ngStyle]="{'visibility': false && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
-                    class="cell-data-div-img-edit" 
-                    style="display: inline-block !important; margin-left: 8px;"
-                    >
-                        <div tabindex="1" (click)="enableBidMessageEditMode($event)" style="margin-top: -5px;">
+                </div>
+                <div id="bid-amt-container">
+                    <div class="bid-item-metric-header" style="display: flex;">
+                        Bid Amount
+                        <div [ngStyle]="{'visibility': false && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
+                        class="cell-data-div-img-edit" 
+                        style="display: inline-flex !important; padding-left: 10px;"
+                        >
+                            <div [ngStyle]="{'visibility':(false && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden')}" tabindex="1" (click)="enableBidAmtEditMode($event)" style="margin-top: -5px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="bid-amt-value">
+                        <div>
+                            <input 
+                            #bidAmtInput
+                            placeholder="20.35" 
+                            style="border: none; outline: none; height: initial; width: initial; text-align: right; padding-right: 35px;
+                            color: forestgreen;"
+                            type="number"
+                            step="0.01"
+                            (click)="detailDataChanged(true)"
+                            (keydown)="detailDataChanged(true)"
+                            [formControl]="bidAmtFormControl"
+                            matInput
+                            />
+                        </div>
+                        <div [ngStyle]="{'visibility': (true ? 'visible' : 'hidden')}" id="amt-up-down">
+                            <div>
+                                <mat-icon tabindex="1" (click)="incrementAmt()">keyboard_arrow_up</mat-icon>
+                            </div>
+                            <div>
+                                <mat-icon tabindex="1" (click)="decrementAmt()">keyboard_arrow_down</mat-icon>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div style="display: inline-block; font-weight: 600 !important;
-                font-family: system-ui !important;
-                font-size: 18px !important;">
-                    <textarea matInput 
-                        placeholder="Bid Message" 
-                        style="border: none; outline: none; "
-                        #bidMessageInput
-                        (keydown)="detailDataChanged(true)"
-                        [formControl]="bidMessageFormControl"
-                    >
-                    </textarea>
+                <div id="bid-description">
                 </div>
-            </div>
-            <div id="bid-amt-container">
-                <div class="bid-item-metric-header" style="display: flex;">
-                    Bid Amount
-                    <div [ngStyle]="{'visibility': false && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
-                    class="cell-data-div-img-edit" 
-                    style="display: inline-flex !important; padding-left: 10px;"
-                    >
-                        <div [ngStyle]="{'visibility':(false && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden')}" tabindex="1" (click)="enableBidAmtEditMode($event)" style="margin-top: -5px;">
-                        </div>
-                    </div>
+                <div id="bid-lower-left-btns">          
                 </div>
-                <div id="bid-amt-value">
+                <div id="bid-lower-right-btns">
                     <div>
-                        <input 
-                        #bidAmtInput
-                        placeholder="20.35" 
-                        style="border: none; outline: none; height: initial; width: initial; text-align: right; padding-right: 35px;"
-                        type="number"
-                        step="0.01"
-                        (click)="detailDataChanged(true)"
-                        (keydown)="detailDataChanged(true)"
-                        [formControl]="bidAmtFormControl"
-                        matInput
-                        />
-                    </div>
-                    <div [ngStyle]="{'visibility': (true ? 'visible' : 'hidden')}" id="amt-up-down">
-                        <div>
-                            <mat-icon tabindex="1" (click)="incrementAmt()">keyboard_arrow_up</mat-icon>
-                        </div>
-                        <div>
-                            <mat-icon tabindex="1" (click)="decrementAmt()">keyboard_arrow_down</mat-icon>
+                        <div id="lower-right-btn-container">
+                            <button
+                            color="accent"
+                            (click)="clearFields()"
+                            style="font-family: system-ui !important;"
+                            mat-raised-button>Clear
+                            </button>
+                            <button
+                                [ngStyle]="{'filter': (!bidMessageFormControl.valid || !titleFormControl.valid || !bidAmtFormControl.valid ? 'brightness(50%)' : 'none')}"
+                                [disabled]="!bidMessageFormControl.valid || !titleFormControl.valid || !bidAmtFormControl.valid" 
+                                style="font-family: system-ui !important; background-color: forestgreen !important; color: white;"
+                                (click)="createBid()" mat-raised-button color="accent">Create
+                            </button>
                         </div>
                     </div>
                 </div>
+        
             </div>
-            <div id="bid-description">
-            </div>
-            <div id="bid-lower-left-btns">          
-            </div>
-            <div id="bid-lower-right-btns">
-                <div>
-                    <div id="lower-right-btn-container">
-                        <button
-                        color="accent"
-                        (click)="clearFields()"
-                        style="font-family: system-ui !important;"
-                        mat-raised-button>Clear
-                        </button>
-                        <button
-                            [ngStyle]="{'filter': (!bidMessageFormControl.valid || !titleFormControl.valid || !bidAmtFormControl.valid ? 'brightness(50%)' : 'none')}"
-                            [disabled]="!bidMessageFormControl.valid || !titleFormControl.valid || !bidAmtFormControl.valid" 
-                            style="font-family: system-ui !important; background-color: forestgreen !important; color: white;"
-                            (click)="createBid()" mat-raised-button color="accent">Create
-                        </button>
-                    </div>
-                </div>
-            </div>
-    
         </div>
-      </div>
+    </div>
 </div>
