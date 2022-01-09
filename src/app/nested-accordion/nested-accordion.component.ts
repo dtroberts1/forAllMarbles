@@ -3,6 +3,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChang
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { firstValueFrom } from 'rxjs';
+import { AdminChooseWinnerComponent } from '../admin-choose-winner/admin-choose-winner.component';
 import { BidConfirmationDialogComponent } from '../bid-confirmation-dialog/bid-confirmation-dialog.component';
 import { DocManagementModalComponent } from '../doc-management-modal/doc-management-modal.component';
 import { Bid } from '../models/bid';
@@ -43,6 +44,7 @@ export class NestedAccordionComponent implements OnInit {
   @Input() user !:AuthUser | null;
   @Input() parentBid !: Bid;
   bidMessageEditMode : boolean = false;
+  isAdmin : boolean = false;
   bidAmtEditMode : boolean = false;
   titleEditMode : boolean = false;
   detailChangesPending : boolean = false;
@@ -70,6 +72,7 @@ export class NestedAccordionComponent implements OnInit {
 
   ngOnInit(): void {
     this.hasWinnerDocs = this.getHasWinnerDocs();
+
 
     this.setFormControlInputs();
 
@@ -148,6 +151,14 @@ export class NestedAccordionComponent implements OnInit {
             let declaredWinnerKey = (<Bid>this.bid).declaredWinner;
             let verifiedWinnerKey = (<Bid>this.bid).verifiedWinner;
 
+            let actualUser = res.find(user => user.key === this.user?.key);
+            if (actualUser && actualUser.isAdmin){
+              this.isAdmin = true;
+            }
+            else{
+              this.isAdmin = false;
+            }
+
             let declaredWinner = res.find(user => user.key === declaredWinnerKey);
             let confirmedWinner = res.find(user => user.key === declaredWinnerKey);
 
@@ -219,6 +230,52 @@ export class NestedAccordionComponent implements OnInit {
 
       // OR, if it's not the root bid, but it's a bid whose challenger key is the users
 
+  }
+
+  adminChooseWinner(){
+    const dialogRef = this.dialog.open(AdminChooseWinnerComponent, {
+      width: '550px',
+      position: {top: '200px'},
+      data: {
+       bid: this.bid,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(selectedUser => {
+
+      if (selectedUser){
+        let declaredLoserKey = this.bid.bidCreatorKey != selectedUser.key ? this.bid.bidCreatorKey : this.bid.bidChallengerKey;
+
+        this.bid.verifiedLoser = declaredLoserKey;
+        this.bid.verifiedWinner = selectedUser.key;
+        this.bid.resultVerified = true;
+        this.bid.hasResult = true;
+        this.bid.declaredWinner = selectedUser.key;
+        this.bid.declaredLoser = declaredLoserKey;
+    
+        // Clone bid as base-level bid
+        let newBid = JSON.parse(JSON.stringify(this.bid)) as Bid;
+        newBid.rootBidKey = 'root';
+        newBid.bids = [];
+        newBid.parentPath = '/bids/';
+        
+        this.bidService.create(newBid)
+          .then(() => {
+            // Then remove orignal root and all of the root's child bilds
+            let promise = null;
+            if (this.bid.rootBidKey != 'root'){
+              promise = this.bidService.delete('/bids/', <string>this.bid.rootBidKey);
+            }
+            else{
+              promise = this.bidService.delete('/bids/', <string>this.bid.key);
+            }
+            promise
+              .then(() => {
+                this.accordionBaseCallback.emit();
+              });
+          });
+      }
+    });
   }
 
   createCounterOffer(){

@@ -52,7 +52,6 @@ export class LoginComponent implements OnInit {
     let zipcodeInput = this.zipcodeInput.value;
     this.upload()
       ?.then((res: any) => {
-        console.log({"this.currentFileUpload":this.currentFileUpload})
         if (this.currentFileUpload && this.currentFileUpload.url){
           this.authService.SignUp(this.loginTxt, this.passwordTxt, fName, lName, stA1, stA2, city, state, zipcodeInput,<string>this.currentFileUpload.url)
             .then((res) =>{
@@ -76,6 +75,7 @@ export class LoginComponent implements OnInit {
   }
 
   login(){
+
     this.loginTxt = "emily@emily.com";
     this.passwordTxt = "emily1234";
    
@@ -115,7 +115,6 @@ export class LoginComponent implements OnInit {
   }
 
   keyDown(event : any){
-    console.log({"event":event})
     if (event.keyCode == 13){
       this.login();
     }

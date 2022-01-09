@@ -4,16 +4,21 @@
 <div style="background-color: #F3F2EF; height: 1200px;">
     <div *ngIf="authUser">
     </div>
-    
-    <mat-tab-group (selectedTabChange)="notifyChild($event)"
+    <div style="width: 50%; height: 100%; float: left;">
+        <mat-tab-group (selectedTabChange)="notifyChild($event)"
         style="width: 1000px;"
-    >
-        <mat-tab label="Feed" #feed><app-feed></app-feed></mat-tab>
-        <mat-tab label="Your Bids" #yourBids><app-your-bids></app-your-bids></mat-tab>
-        <mat-tab label="Create Bid"> <app-create-new-bid>
-            
+        >
+            <mat-tab label="Feed" #feed><app-feed></app-feed></mat-tab>
+            <mat-tab label="Your Bids" #yourBids><app-your-bids></app-your-bids></mat-tab>
+            <mat-tab label="Create Bid"> <app-create-new-bid>
         </app-create-new-bid></mat-tab>
-    </mat-tab-group>
+        </mat-tab-group>
+    </div>
+    <div style="width: 50%; height: 100%; float: right;">
+        <app-earnings-losses>
+
+        </app-earnings-losses>
+    </div>
     <div>
         <app-messaging
         (createNewMsgtCallback)="openCreateNewMsg()"

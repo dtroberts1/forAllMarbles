@@ -175,6 +175,7 @@
                         </label>
                         <button *ngIf="hasWinnerDocs" style="font-family: system-ui !important;"  (click)="manageDocumentation()" mat-raised-button color="accent">Manage Documentation</button>
                         <button style="font-family: system-ui !important;" *ngIf="canDisplayCounterOfferOrApprove(bid)" (click)="approveBid(bid)" mat-raised-button color="accent">Approve</button>
+                        <button style="font-family: system-ui !important;" *ngIf="bid.isApproved && !bid.resultVerified && bid.hasResult && isAdmin" (click)="adminChooseWinner()" mat-raised-button color="accent">Choose Winner</button>
                     </div>
                 </div>            
             </div>

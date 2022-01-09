@@ -42,6 +42,9 @@ import { AvailableMessageUsersComponent } from './available-message-users/availa
 import { DocManagementModalComponent } from './doc-management-modal/doc-management-modal.component';
 import { ToastrModule } from 'ngx-toastr';
 import { BidConfirmationDialogComponent } from './bid-confirmation-dialog/bid-confirmation-dialog.component';
+import { EarningsLossesComponent } from './earnings-losses/earnings-losses.component';
+import { GraphicalChartComponent } from './earnings-losses/graphical-chart/graphical-chart.component';
+import { AdminChooseWinnerComponent } from './admin-choose-winner/admin-choose-winner.component';
 //import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
@@ -61,7 +64,10 @@ import { BidConfirmationDialogComponent } from './bid-confirmation-dialog/bid-co
     ChatViewComponent,
     AvailableMessageUsersComponent,
     DocManagementModalComponent,
-    BidConfirmationDialogComponent
+    BidConfirmationDialogComponent,
+    EarningsLossesComponent,
+    GraphicalChartComponent,
+    AdminChooseWinnerComponent
   ],
   imports: [
     CommonModule,

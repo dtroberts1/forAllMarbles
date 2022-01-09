@@ -12,6 +12,7 @@ export class User {
     profilePicSrc ?: string;
     city ?: string;
     state ?: string;
+    isAdmin ?: boolean;
 }
 
 export class AuthUser{
