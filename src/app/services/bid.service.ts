@@ -169,6 +169,7 @@ export class BidService {
   }
 
   create(bid: Bid): Promise<any> {
+    delete bid.key;
     return new Promise((resolve, reject) => {
       this.bidsRef.push(bid)
         .then((res : any) => {
@@ -263,6 +264,7 @@ export class BidService {
   }
 
   delete(path: string, key: string): Promise<any> {
+    console.log("key is " + key)
     return new Promise((resolve, reject) => {
       this.db.list(path).remove(key)
         .then(() => {

@@ -528,6 +528,8 @@ export class NestedAccordionComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result){
+        console.log("parent path is " + bid.parentPath);
+        
         this.bidService.delete(<string>bid.parentPath, <string>bid.key)
         .then((res) => {
           // Notify parent to call its refreshBid()
