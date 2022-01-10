@@ -52,6 +52,7 @@ export class BidService {
             loserSupportingDocs : itm.loserSupportingDocs,
             verifiedWinner: itm.verifiedWinner,
             verifiedLoser: itm.verifiedLoser,
+            verifiedDate: itm.verifiedDate,
         })}
       )
       )

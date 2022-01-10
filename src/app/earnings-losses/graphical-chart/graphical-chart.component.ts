@@ -1,6 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { BarController, BarElement, CategoryScale, Chart, Legend, LinearScale, Title, TooltipItem, TooltipModel, } from 'chart.js';
-import colorLib from '@kurkle/color';
 import { Bid } from 'src/app/models/bid';
 import { Tooltip } from 'chart.js';
 
@@ -81,7 +80,7 @@ export class GraphicalChartComponent implements AfterViewInit{
           hoverBorderWidth: 5,
           hoverBorderColor: '#42b7ff',
           label: 'Dataset 2',
-          backgroundColor: "#FF4A4A", //BAR_COLORS,
+          backgroundColor: ((itm) => this.data[itm.dataIndex].bidAmount >= 0 ? 'forestgreen' : "#FF4A4A"), //BAR_COLORS,
         },
       ]
       },
@@ -153,11 +152,6 @@ export class GraphicalChartComponent implements AfterViewInit{
 
   getColor(index: number) {
     return COLORS[index % COLORS.length];
-  }
-
-  transparentize(value : any, opacity : any) {
-    var alpha = opacity === undefined ? 0.5 : 1 - opacity;
-    return colorLib(value).alpha(alpha).rgbString();
   }
 
 }

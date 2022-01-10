@@ -173,7 +173,7 @@ export class NestedAccordionComponent implements OnInit {
           }
 
         }
-      })
+      });
   }
 
   canConcedeDefeat(bid: Bid){
@@ -248,6 +248,7 @@ export class NestedAccordionComponent implements OnInit {
 
         this.bid.verifiedLoser = declaredLoserKey;
         this.bid.verifiedWinner = selectedUser.key;
+        this.bid.verifiedDate = new Date();
         this.bid.resultVerified = true;
         this.bid.hasResult = true;
         this.bid.declaredWinner = selectedUser.key;
@@ -366,6 +367,7 @@ export class NestedAccordionComponent implements OnInit {
         bid.declaredLoser = this.user?.key;
         bid.verifiedLoser = this.user?.key;
         bid.verifiedWinner = bid.declaredWinner;
+        bid.verifiedDate = new Date();
 
         // Clone bid as base-level bid
         let newBid = JSON.parse(JSON.stringify(bid)) as Bid;
