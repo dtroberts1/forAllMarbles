@@ -5,33 +5,37 @@
         style="display: flex; height: 3em; width: 70%;" >
         <div class="competitor-shape-parent animation-delayed left-competitor" 
             [ngStyle]="{'width': (history.displayedPercentWon ? history.displayedPercentWon : 0) + '%',
-            'justify-content': (history.percentWon ? history.percentWon : 0) < 10 ? 'end': 'center'}"
+            'justify-content': (history.percentWon ? history.percentWon : 0) < 10 ? 'end': 'center',
+            'transform': 'skew(' + 30 * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1)  + 'deg)'}"
             >
-            <div style="transform: skew(-30deg); font-family: system-ui; padding-right: .1em;">
+            <div style="font-family: system-ui; padding-right: .1em;" [ngStyle]="{'transform': 'skew(' + (-30 * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1))  + 'deg)'}">
                 {{history.percentWon}}%
             </div>
-            <div class="player-chart-image-container" style="left: -3em;">
+            <div class="player-chart-image-container" [ngStyle]="{'transform': 'skew(' + (-30  * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1)) + 'deg)'}" style="left: -3em;">
                 <img _ngcontent-beq-c201="" 
                 src="https://firebasestorage.googleapis.com/v0/b/forallmarbles-1ac03.appspot.com/o/profileImages%2FprofImage_738?alt=media&amp;token=20f81af0-c250-44ec-9828-d5ce9d6e1f8a">
+
+                <div class="player-name-field" >
+                    Jeremy
+                </div>
             </div>
-            <div class="player-name-field">
-                Jeremy
-            </div>
+
         </div>
         <div  class="competitor-shape-parent right-competitor"
             [ngStyle]="{'width': ((100 - (history.displayedPercentWon ? history.displayedPercentWon : 0)) > 11 ? (100 - (history.displayedPercentWon ? history.displayedPercentWon : 0)) : 11)+'%',
-            'justify-content': (history.percentWon ? history.percentWon : 0) >= 88 ? 'start': 'center'}"
+            'justify-content': (history.percentWon ? history.percentWon : 0) >= 88 ? 'start': 'center',
+            'transform': 'skew(' + 30 * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1)  + 'deg)'}"
             style="padding-left: .3em;"
             >
-            <div style="transform: skew(-30deg); font-family: system-ui;">
+            <div [ngStyle]="{'transform': 'skew(' + (-30  * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1)) + 'deg)'}" style=" font-family: system-ui;">
                 {{100 - (history.percentWon ? history.percentWon : 0)}}%
             </div>
-            <div class="player-chart-image-container" style="right: -3em;">
+            <div class="player-chart-image-container" [ngStyle]="{'transform': 'skew(' + (-30  * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1))  + 'deg)'}" style="right: -3em;">
                 <img _ngcontent-beq-c201=""
                 src="https://firebasestorage.googleapis.com/v0/b/forallmarbles-1ac03.appspot.com/o/profileImages%2FprofImage_738?alt=media&amp;token=20f81af0-c250-44ec-9828-d5ce9d6e1f8a">
-            </div>
-            <div class="player-name-field" style="left: initial; right: -1.4em;">
-                Jeremy
+                <div class="player-name-field">
+                    Jeremy
+                </div>
             </div>
         </div>
     </div>

@@ -171,9 +171,6 @@ export class CreateNewBidComponent implements OnInit {
 
   saveUpdate(){
 
-
-    console.log("amount is " + this.bidAmtFormControl.value)
-
     let thisBid = this.bid as Bid;  
       let bidForSave : Bid = {
         title : this.titleFormControl.value,

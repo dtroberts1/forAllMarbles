@@ -28,7 +28,6 @@ export class AdminChooseWinnerComponent implements OnInit {
         .then((res) => {
           if (Array.isArray(res) && res.length){
             this.competingUsers = res.filter(user => user.key === bid.declaredWinner || user.key === bid.declaredLoser);
-            console.log({"competingUsers":this.competingUsers})
           }
         });
     }    
@@ -38,7 +37,6 @@ export class AdminChooseWinnerComponent implements OnInit {
     this.dialogRef.close(null);
   }
   confirm(){
-    console.log({"userSelectedInModal":this.userSelected})
     this.dialogRef.close(this.userSelected);
   }
 

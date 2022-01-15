@@ -264,7 +264,6 @@ export class BidService {
   }
 
   delete(path: string, key: string): Promise<any> {
-    console.log("key is " + key)
     return new Promise((resolve, reject) => {
       this.db.list(path).remove(key)
         .then(() => {

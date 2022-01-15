@@ -21,7 +21,6 @@ export class MessageService {
 
   getMessagesBetweenUsers(fromUserKey: string, toUserKey: string) : Observable<IM[]>
   {
-    console.log("from user key is " + fromUserKey);
     return combineLatest([
     new Observable(
       subscriber => {
@@ -30,7 +29,6 @@ export class MessageService {
           let val = snap.val();
 
           if (val){
-            console.log({"val":val})
             let mappedMessages =  Object.keys(val).map((myKey : any, index: number) => <any>{
               key : myKey,
               ...val[Object.keys(val)[index]]

@@ -27,7 +27,6 @@ export class AuthService {
     ) {
     this.userData = angularFireAuth.authState;
     this.usersRef = db.list(this.userPath);
-    console.log({"usersRef":this.usersRef})
   }
 
   public getAccount(){
@@ -78,7 +77,6 @@ export class AuthService {
 
       this.angularFireAuth.signInWithPopup(provider)
         .then((result) => {
-          console.log({"result":result})
           // This gives you a Google Access Token. You can use it to access the Google API.
           this._isAuthenticated = true;
           this._user = <AuthUser>{

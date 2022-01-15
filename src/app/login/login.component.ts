@@ -65,12 +65,10 @@ export class LoginComponent implements OnInit {
               this.selectedFile = null;
               this.selectedTabIndex = 0;
             }).catch((err) =>{ 
-              console.log({"err":err});
             })
         }
       })
       .catch((err) => {
-        console.log({"err":err})
       })
   }
 

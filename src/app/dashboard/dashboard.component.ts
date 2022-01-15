@@ -47,7 +47,6 @@ export class DashboardComponent implements OnInit {
   }
 
   closeNewMessage(){
-    console.log("callback received")
     this.canDispNewMessageScrn = false;
     this.selectedUser = null;
   }

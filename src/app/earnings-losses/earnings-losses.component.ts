@@ -38,17 +38,10 @@ Handsontable
     if (wtHolder && wtHolder.className === 'wtHolder'){
       wtHolder.style.overflowY = "hidden";
     }
-    console.log({"prop":prop})
-    
-    console.log({"rows": hotInstance.table.rows[0].children});
-    console.log({"children":hotInstance.table.rows[0].children})
 
     hotInstance.table.tHead?.childNodes[0].childNodes.forEach((node) => {
-      console.log({"node":node});
       if (node.firstChild && node.firstChild.parentElement){
-        console.log({"elem":node.firstChild.parentElement})
         node.firstChild.parentElement.style.backgroundColor = "#FF4A4A !important";
-        console.log("setting to red");
       }
     });
     if (row == 2 && col > 1){
@@ -76,12 +69,9 @@ Handsontable
 
     if (value){
       let index = (<string>value).toString()?.indexOf('$');
-      console.log("index is " + index)
       if (index != -1){
         let val = parseInt(value.toString().substring(1, value.toString().length));
-        console.log("parsed val is " + val);
         if (!isNaN(val)){
-          console.log("is a number")
           if (val < 0){
             TD.style.color = '#FF4A4A';
           }
@@ -102,7 +92,6 @@ Handsontable
       TD.style.fontWeight = 'bold';
     }
 
-    console.log({"hotInstance.table.rows":hotInstance.table.rows});
   });
 
 @Component({
@@ -164,15 +153,6 @@ export class EarningsLossesComponent implements OnInit {
                   if (Array.isArray(bids)){
                     // Only apply updates to the root if the count has changed.
                     if (this.authUser){
-                      /*
-                      bids.push({
-                        title: 'Total',
-                        bidAmount: bids.map(itm => itm.bidAmount).reduce((a: any, b: any) => a + b),
-                        bidCreatorChallengerKey: 'Test',
-                      }) as unknown as Bid[];
-                      */
-      
-                      console.log({"b4filter":bids})
                       
                       this.data = bids
                         .filter(bid => bid.title === 'Total' || bid.bidCreatorChallengerKey?.includes(<string>this.authUser?.key) && bid.resultVerified && (bid.verifiedLoser == (<AuthUser>this.authUser)?.key || 
@@ -193,7 +173,6 @@ export class EarningsLossesComponent implements OnInit {
                         });
       
                       this.dataset = this.data;
-                      console.log({"dataset":this.dataset});
                       this.getReducedBidsBetweenUserCompetitor(allUsers);
 
                     }
@@ -213,10 +192,8 @@ export class EarningsLossesComponent implements OnInit {
     this.competitorHistories = [];
 
     if (Array.isArray(this.data) && this.data.length){
-      console.log({"users":users})
       for(let user of users){
         let competitorBids = this.data.filter(data => data.usersCompetitor === user.key);
-        console.log({"competitorBids":competitorBids});
         if (Array.isArray(competitorBids) && competitorBids.length){
           this.competitorHistories.push({
             deficit: competitorBids.map(itm => itm.bidAmount).reduce((a, b) => a+b),
@@ -226,7 +203,6 @@ export class EarningsLossesComponent implements OnInit {
           });
         }
       }
-      console.log({"histories":this.competitorHistories});
     }
   }
 
