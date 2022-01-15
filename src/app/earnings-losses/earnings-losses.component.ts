@@ -1,15 +1,18 @@
 import { Component, OnInit, Type } from '@angular/core';
 import Handsontable from 'handsontable';
 import { TextEditor } from 'handsontable/editors';
-import { map } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
 import { Bid } from '../models/bid';
-import { AuthUser } from '../models/user';
+import { AuthUser, User } from '../models/user';
 import { AuthService } from '../services/auth.service';
 import { BidService } from '../services/bid.service';
 import * as XLSX from 'xlsx';
+import { UserService } from '../services/user.service';
+import { CompetitorHistory } from '../competitor-history';
 
-type BidNameWithDateAndAmt = {bidName: string, bidAmount: number, date: Date};
-type CellData = {bidName: string, bidAmount: number, outcome: string, dateStr: string, competitor: string,};
+type BidNameWithDateAndAmt = {bidName: string, bidAmount: number, date: Date, usersCompetitor : string};
+type CellData = {bidName: string, bidAmount: number, outcome: string, dateStr: string, competitor: string, usersCompetitor : string};
+
 /*
 <hot-column data="bidName" [readOnly]="true" title="Bid Name"></hot-column>
 <hot-column data="dateStr" [readOnly]="true" title="Date Completed"></hot-column>
@@ -110,6 +113,7 @@ Handsontable
 export class EarningsLossesComponent implements OnInit {
   data !:CellData[];
   authUser !:AuthUser | null;
+  competitorHistories !: CompetitorHistory[];
   dataset!: any[];
     hotSettings: Handsontable.GridSettings = {
     startRows: 5,
@@ -140,6 +144,7 @@ export class EarningsLossesComponent implements OnInit {
   constructor(
     private bidService: BidService,
     private authService: AuthService,
+    private userService: UserService,
   ) { }
 
   ngOnInit(): void {
@@ -147,58 +152,81 @@ export class EarningsLossesComponent implements OnInit {
 
     this.authUser = this.authService.getAccount();
     if (this.authUser){
+      firstValueFrom(this.userService.getAll())
+        .then((allUsers) => {
+          if (Array.isArray(allUsers)){
+            this.bidService.getAll()
+            .subscribe( 
+              (
+                (bids: Bid[]) => {
+                  this.data = [];
       
-      this.bidService.getAll()
-      .subscribe( 
-        (
-          (bids: Bid[]) => {
-            this.data = [];
+                  if (Array.isArray(bids)){
+                    // Only apply updates to the root if the count has changed.
+                    if (this.authUser){
+                      /*
+                      bids.push({
+                        title: 'Total',
+                        bidAmount: bids.map(itm => itm.bidAmount).reduce((a: any, b: any) => a + b),
+                        bidCreatorChallengerKey: 'Test',
+                      }) as unknown as Bid[];
+                      */
+      
+                      console.log({"b4filter":bids})
+                      
+                      this.data = bids
+                        .filter(bid => bid.title === 'Total' || bid.bidCreatorChallengerKey?.includes(<string>this.authUser?.key) && bid.resultVerified && (bid.verifiedLoser == (<AuthUser>this.authUser)?.key || 
+                          bid.verifiedWinner == (<AuthUser>this.authUser)?.key)).slice(0, 10)
+                        .map((bid) => <BidNameWithDateAndAmt>{
+                          bidName: bid.title,
+                          bidAmount: bid.verifiedLoser == ((<AuthUser>this.authUser)?.key) ? 
+                            -1 * <number>bid.bidAmount :
+                            <number>bid.bidAmount,
+                          date: bid.verifiedDate,
+                          usersCompetitor: bid.verifiedWinner === ((<AuthUser>this.authUser)?.key) ? bid.verifiedLoser : bid.verifiedWinner,
+                        })
+                        .map((bid : BidNameWithDateAndAmt) => <CellData>{
+                          outcome: bid.bidAmount > 0? 'Won' : 'Lost',
+                          dateStr:bid.date ? bid.date.toString().slice(0, bid.date.toString().indexOf('T')) : '',
+                          competitor: bid.usersCompetitor,
+                          ...bid,
+                        });
+      
+                      this.dataset = this.data;
+                      console.log({"dataset":this.dataset});
+                      this.getReducedBidsBetweenUserCompetitor(allUsers);
 
-          if (Array.isArray(bids)){
-            // Only apply updates to the root if the count has changed.
-            if (this.authUser){
-              /*
-              bids.push({
-                title: 'Total',
-                bidAmount: bids.map(itm => itm.bidAmount).reduce((a: any, b: any) => a + b),
-                bidCreatorChallengerKey: 'Test',
-              }) as unknown as Bid[];
-              */
-
-              console.log({"b4filter":bids})
-              
-              this.data = bids
-                .filter(bid => bid.title === 'Total' || bid.bidCreatorChallengerKey?.includes(<string>this.authUser?.key) && bid.resultVerified && (bid.verifiedLoser == (<AuthUser>this.authUser)?.key || 
-                  bid.verifiedWinner == (<AuthUser>this.authUser)?.key)).slice(0, 10)
-                .map((bid) => <BidNameWithDateAndAmt>{
-                  bidName: bid.title,
-                  bidAmount: bid.verifiedLoser == ((<AuthUser>this.authUser)?.key) ? 
-                    -1 * <number>bid.bidAmount :
-                    <number>bid.bidAmount,
-                  date: bid.verifiedDate,
-                })
-                .map((bid : BidNameWithDateAndAmt) => <CellData>{
-                  outcome: bid.bidAmount > 0? 'Won' : 'Lost',
-                  dateStr:bid.date ? bid.date.toString().slice(0, bid.date.toString().indexOf('T')) : '',
-                  competitor: 'Stacy Jenkins',
-                  ...bid,
-                });
-
-              this.dataset = this.data;
-              console.log({"dataset":this.dataset})
-              /*
-              this.dataset.push({
-                bidName: 'Total',
-                bidAmount: this.data.map(itm => itm.bidAmount).reduce((a, b) => a + b)//`$${this.data.map(itm => itm.bidAmount).reduce((a, b) => a + b)}`,
-              })
-              */
-            }
+                    }
+                  }
+                  else{
+                    this.data = [];
+                  }
+              }
+            ));
           }
-          else{
-            this.data = [];
-          }
+      });
+      
+    }
+  }
+
+  getReducedBidsBetweenUserCompetitor(users: User[]){
+    this.competitorHistories = [];
+
+    if (Array.isArray(this.data) && this.data.length){
+      console.log({"users":users})
+      for(let user of users){
+        let competitorBids = this.data.filter(data => data.usersCompetitor === user.key);
+        console.log({"competitorBids":competitorBids});
+        if (Array.isArray(competitorBids) && competitorBids.length){
+          this.competitorHistories.push({
+            deficit: competitorBids.map(itm => itm.bidAmount).reduce((a, b) => a+b),
+            nbrWonAgainst: competitorBids.filter(itm => itm.outcome === "Won").length,
+            nbrLostAgainst: competitorBids.filter(itm => itm.outcome === "Lost").length, 
+            competitorName: user.fullName ? user.fullName : '',
+          });
         }
-      ));
+      }
+      console.log({"histories":this.competitorHistories});
     }
   }
 

@@ -5,7 +5,9 @@
         >
             <mat-tab label="Competitors">
                 <div wmAnimate="landing"  speed="slow">
-                    <app-player-comparison-chart>
+                    <app-player-comparison-chart
+                        [histories]="competitorHistories"
+                    >
 
                     </app-player-comparison-chart>
                 </div>

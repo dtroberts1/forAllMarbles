@@ -1,10 +1,14 @@
-<div style="display: flex; justify-content: center; height: 9.2em; align-items: center; overflow: hidden;">
-    <div style="display: flex; height: 3em; width: 70%;" >
+<div 
+    *ngFor="let history of histories" style="display: flex; justify-content: center; height: 9.2em; 
+        align-items: center; overflow: hidden;">
+    <div *ngIf="history.hasOwnProperty('percentWon') && history.hasOwnProperty('displayedPercentWon')" 
+        style="display: flex; height: 3em; width: 70%;" >
         <div class="competitor-shape-parent animation-delayed left-competitor" 
-            
-            style="width: 39%;">
-            <div style="transform: skew(-30deg); font-family: system-ui; ">
-                40%
+            [ngStyle]="{'width': (history.displayedPercentWon ? history.displayedPercentWon : 0) + '%',
+            'justify-content': (history.percentWon ? history.percentWon : 0) < 10 ? 'end': 'center'}"
+            >
+            <div style="transform: skew(-30deg); font-family: system-ui; padding-right: .1em;">
+                {{history.percentWon}}%
             </div>
             <div class="player-chart-image-container" style="left: -3em;">
                 <img _ngcontent-beq-c201="" 
@@ -14,9 +18,13 @@
                 Jeremy
             </div>
         </div>
-        <div class="competitor-shape-parent right-competitor" style=" width: 59%;">
-            <div style="transform: skew(-30deg); font-family: system-ui; ">
-                60%
+        <div  class="competitor-shape-parent right-competitor"
+            [ngStyle]="{'width': ((100 - (history.displayedPercentWon ? history.displayedPercentWon : 0)) > 11 ? (100 - (history.displayedPercentWon ? history.displayedPercentWon : 0)) : 11)+'%',
+            'justify-content': (history.percentWon ? history.percentWon : 0) >= 88 ? 'start': 'center'}"
+            style="padding-left: .3em;"
+            >
+            <div style="transform: skew(-30deg); font-family: system-ui;">
+                {{100 - (history.percentWon ? history.percentWon : 0)}}%
             </div>
             <div class="player-chart-image-container" style="right: -3em;">
                 <img _ngcontent-beq-c201=""
