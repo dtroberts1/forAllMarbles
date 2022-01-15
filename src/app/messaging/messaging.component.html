@@ -1,7 +1,9 @@
-<div class="messages" [ngClass]="{'expanded': convoListExpanded}" (click)="expandCollapseConvoList()">
-    <div id="recent-msg-header">
+<div class="messages" [ngClass]="{'expanded': convoListExpanded}" (click)="expandCollapseConvoList()"
+wmAnimate="fadeInLeft"  speed="slow"
+>
+    <div id="recent-msg-header"  >
         <div id="messaging-icons-left">
-            <mat-icon tabindex="1" >person</mat-icon>
+            <mat-icon tabindex="1" *ngIf="false">person</mat-icon>
             <h3 class="messaging-label">
                 Messaging
             </h3>
@@ -27,8 +29,8 @@
     >
         <div style="display: flex; justify-content: center; width: 100%;">
             <input style="width: 90%; height: 30px; margin-top: 8px; background: #EEF3F8; border-radius: 3px;
-                font-size: 17px; font-family: 'system ui' !important; padding: 8px;
-            " placeholder="Search Messages"
+            border: none; font-size: 17px; font-family: 'system ui' !important; padding: 8px;" 
+            placeholder="Search Messages"
             (click)="stopPropagation($event)"
 
             />

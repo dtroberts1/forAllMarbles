@@ -51,6 +51,8 @@ import Handsontable from 'handsontable/base';
 import { NumericCellType, registerCellType } from 'handsontable/cellTypes';
 import { registerPlugin, UndoRedo } from 'handsontable/plugins';
 import { PlayerComparisonChartComponent } from './player-comparison-chart/player-comparison-chart.component';
+import { AnimateDirective } from './animate.directive';
+import { AnimateComponent } from './animate/animate.component';
 
 registerAllModules();
 
@@ -81,7 +83,9 @@ registerPlugin(UndoRedo);
     EarningsLossesComponent,
     GraphicalChartComponent,
     AdminChooseWinnerComponent,
-    PlayerComparisonChartComponent
+    PlayerComparisonChartComponent,
+    AnimateDirective,
+    AnimateComponent
   ],
   imports: [
     CommonModule,

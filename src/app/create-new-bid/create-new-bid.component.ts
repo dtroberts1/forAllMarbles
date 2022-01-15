@@ -26,6 +26,7 @@ export class CreateNewBidComponent implements OnInit {
   bidMessageFormControl = new FormControl('', [Validators.required]);
   bidAmtFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\d+(?:\.\d{0,2})$/)]);
   titleFormControl = new FormControl('', [Validators.required]);
+  authUser !: AuthUser | null;
 
   amountPositionX !: number;
   @Output() refreshCallback: EventEmitter<any> = new EventEmitter();
@@ -92,6 +93,8 @@ export class CreateNewBidComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authUser = this.authService.getAccount();
+
     this.setFormControlInputs();
 
   }
