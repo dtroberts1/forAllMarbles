@@ -5,9 +5,9 @@
       role="button"
       tabindex="0"
       [attr.id]="'accordion-header-' + 0"
-      [attr.aria-expanded]="accordionItem.expanded"
+      [@detailExpand]="accordionItem.expanded ? 'expanded' : 'collapsed'"
       [attr.aria-controls]="'accordion-body-' + 0">
-      <div class="example-accordion-item-header" (click)="accordionItem.toggle()">
+      <div class="example-accordion-item-header"  (click)="accordionItem.toggle()">
         <div class="bid-item-metric-header" style="display: flex;">
             <div [ngStyle]="{'visibility': !titleEditMode && user && user.key === bid.bidCreatorKey && !bid.hasResult ? 'visible' : 'hidden'}"
             class="cell-data-div-img-edit"  
@@ -114,7 +114,7 @@
                     {{unconfirmedWinnerFullName}}
                 </div>
             </div>
-            <div id="bid-amt-container">
+            <div  id="bid-amt-container">
                 <div class="bid-item-metric-header" style="display: flex;">
                     Bid Amount
                     <div [ngStyle]="{'visibility': !bidAmtEditMode && user && user.key === bid.bidCreatorKey && !bid.hasResult ? 'visible' : 'hidden'}"

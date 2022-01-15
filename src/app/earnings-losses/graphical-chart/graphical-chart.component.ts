@@ -99,7 +99,10 @@ export class GraphicalChartComponent implements AfterViewInit{
             ticks: {
               font :{
                 size: 20,
-              }
+              },
+              autoSkip: false,
+              minRotation: 0,
+              maxRotation: 0,
             }
           },
         },        

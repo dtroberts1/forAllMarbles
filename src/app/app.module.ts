@@ -50,6 +50,7 @@ import { registerAllModules } from 'handsontable/registry';
 import Handsontable from 'handsontable/base';
 import { NumericCellType, registerCellType } from 'handsontable/cellTypes';
 import { registerPlugin, UndoRedo } from 'handsontable/plugins';
+import { PlayerComparisonChartComponent } from './player-comparison-chart/player-comparison-chart.component';
 
 registerAllModules();
 
@@ -79,7 +80,8 @@ registerPlugin(UndoRedo);
     BidConfirmationDialogComponent,
     EarningsLossesComponent,
     GraphicalChartComponent,
-    AdminChooseWinnerComponent
+    AdminChooseWinnerComponent,
+    PlayerComparisonChartComponent
   ],
   imports: [
     CommonModule,

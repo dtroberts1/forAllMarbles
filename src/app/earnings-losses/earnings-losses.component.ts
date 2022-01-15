@@ -6,9 +6,20 @@ import { Bid } from '../models/bid';
 import { AuthUser } from '../models/user';
 import { AuthService } from '../services/auth.service';
 import { BidService } from '../services/bid.service';
+import * as XLSX from 'xlsx';
 
 type BidNameWithDateAndAmt = {bidName: string, bidAmount: number, date: Date};
 type CellData = {bidName: string, bidAmount: number, outcome: string, dateStr: string, competitor: string,};
+/*
+<hot-column data="bidName" [readOnly]="true" title="Bid Name"></hot-column>
+<hot-column data="dateStr" [readOnly]="true" title="Date Completed"></hot-column>
+<hot-column data="competitor" [readOnly]="true" title="Competitor"></hot-column>
+<hot-column data="outcome" [readOnly]="true" title="Outcome"></hot-column>
+<hot-column data="bidAmount" [readOnly]="true" title="Bid Amount"></hot-column>
+*/
+const HEADERS: string[] = [
+  'Bid Name', 'Date Completed', 'Competitor', 'Outcome', 'Bid Amount',
+]
 
 Handsontable
     .renderers
@@ -24,6 +35,23 @@ Handsontable
     if (wtHolder && wtHolder.className === 'wtHolder'){
       wtHolder.style.overflowY = "hidden";
     }
+    console.log({"prop":prop})
+    
+    console.log({"rows": hotInstance.table.rows[0].children});
+    console.log({"children":hotInstance.table.rows[0].children})
+
+    hotInstance.table.tHead?.childNodes[0].childNodes.forEach((node) => {
+      console.log({"node":node});
+      if (node.firstChild && node.firstChild.parentElement){
+        console.log({"elem":node.firstChild.parentElement})
+        node.firstChild.parentElement.style.backgroundColor = "#FF4A4A !important";
+        console.log("setting to red");
+      }
+    });
+    if (row == 2 && col > 1){
+      TD.style.backgroundColor = "blue";
+    }
+
 
     TD.style.background = '#ffffff';
     TD.style.fontSize = '19px'; 
@@ -61,7 +89,6 @@ Handsontable
         }
       }
     }
-
 
     if (value === 'Lost'){
       TD.style.color = '#FF4A4A';
@@ -104,7 +131,6 @@ export class EarningsLossesComponent implements OnInit {
     
     
     columns: [
-
     ],
     colWidths: [270, 150, 270, 80, 130],
     
@@ -117,6 +143,8 @@ export class EarningsLossesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+
     this.authUser = this.authService.getAccount();
     if (this.authUser){
       
@@ -157,6 +185,7 @@ export class EarningsLossesComponent implements OnInit {
                 });
 
               this.dataset = this.data;
+              console.log({"dataset":this.dataset})
               /*
               this.dataset.push({
                 bidName: 'Total',

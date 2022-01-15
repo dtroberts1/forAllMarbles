@@ -18,9 +18,9 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./nested-accordion.component.less'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('collapsed', style({height: '0px', minHeight: '65px'})),
       state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      transition('expanded <=> collapsed', animate('325ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
     trigger('openClose', [
       // ...
@@ -31,10 +31,10 @@ import { UserService } from '../services/user.service';
         transform: 'rotate(-180deg)'
       })),
       transition('open => closed', [
-        animate('1s')
+        animate('2s')
       ]),
       transition('closed => open', [
-        animate('1s')
+        animate('2s')
       ]),
     ]),
   ],
@@ -541,6 +541,7 @@ export class NestedAccordionComponent implements OnInit {
           }
         })
         .catch((err) => {
+          
         });
       }
     });
