@@ -1,42 +1,99 @@
-<div 
-    *ngFor="let history of histories" style="display: flex; justify-content: center; height: 9.2em; 
-        align-items: center; overflow: hidden;">
-    <div *ngIf="history.hasOwnProperty('percentWon') && history.hasOwnProperty('displayedPercentWon')" 
-        style="display: flex; height: 3em; width: 70%;" >
-        <div class="competitor-shape-parent animation-delayed left-competitor" 
-            [ngStyle]="{'width': (history.displayedPercentWon ? history.displayedPercentWon : 0) + '%',
-            'min-width': '3.2em',
-            'justify-content': (history.percentWon ? history.percentWon : 0) < 10 ? 'end': 'center',
-            'transform': 'skew(' + 30 * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1)  + 'deg)'}"
+<div style="
+    padding-top: 1em;
+    padding-bottom: .3em;
+    text-align: center;
+    font-weight: 600 !important;
+    font-family: system-ui !important;
+    color: #666666 !important;
+    font-size: 1.3rem;
+    
+    "
+>
+    Competitor History
+</div>
+<div class="hist-container">
+    <div 
+        *ngFor="let history of histories" 
+        style="display: flex; justify-content: center; height: 5.9em; 
+        padding-top: 3em;
+        transform: scale(.8);
+        align-items: start; overflow: hidden;
+        "
+        [matTooltipClass]="{ 'mat-tooltip': true }" 
+                    [matTooltip]="'Won ' + history.nbrWonAgainst + ' out of ' + 
+                    (history.nbrWonAgainst + history.nbrLostAgainst) + 
+                    ' Deficit: ' + (history.deficit < 0 ? ('-$' + history.deficit * -1) : '$' + history.deficit)"
+        >
+        <div *ngIf="history.hasOwnProperty('percentWon') && history.hasOwnProperty('displayedPercentWon')" 
+            style="display: flex; height: 3em; width: 70%;"
+            
             >
-            <div style="font-family: system-ui; padding-right: .1em;" [ngStyle]="{'transform': 'skew(' + (-30 * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1))  + 'deg)'}">
+            <div class="competitor-shape-parent animation-delayed left-competitor" 
+                [ngStyle]="{'width': (history.displayedPercentWon ? history.displayedPercentWon : 0) + '%',
+                'min-width': '3.5em',
+                'justify-content': (history.percentWon ? history.percentWon : 0) < 10 ? 'end': 'center',
+                'transform': 'skew(' + 30 * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1)  + 'deg)'}"
+                
+                >
+                <div style="font-family: system-ui; padding-right: .1em; height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;" 
+                [ngStyle]="{'transform': 'skew(' + (-30 * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1))  + 'deg)',
+                    'width': (history.percentWon ? history.percentWon : 0) < 10 ? 'intial': '100%'
+                }">
+                <a 
+                [ngStyle]="{'justify-content': (history.percentWon ? history.percentWon : 0) < 10 ? 'end': 'center'}"
+                style="display: block;     
+                width: 100% !important;
+                height: 100%;
+                display: flex;
+                align-items: center;" > 
                 {{history.percentWon}}%
-            </div>
-            <div class="player-chart-image-container" [ngStyle]="{'transform': 'skew(' + (-30  * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1)) + 'deg)'}" style="left: -3em;">
-                <img _ngcontent-beq-c201="" 
-                [src]="user?.profilePicSrc">
-
-                <div class="player-name-field" >
-                    {{this.user?.firstName}}
+                </a>
                 </div>
-            </div>
+                <div class="player-chart-image-container" [ngStyle]="{'transform': 'skew(' + (-30  * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1)) + 'deg)'}" style="left: -3em;">
+                    <img _ngcontent-beq-c201="" 
+                    [src]="user?.profilePicSrc">
 
-        </div>
-        <div  class="competitor-shape-parent right-competitor"
-            [ngStyle]="{'width': ((100 - (history.displayedPercentWon ? history.displayedPercentWon : 0)) > 11 ? (100 - (history.displayedPercentWon ? history.displayedPercentWon : 0)) : 11)+'%',
-            'min-width': '3.2em',
-            'justify-content': (history.percentWon ? history.percentWon : 0) >= 88 ? 'start': 'center',
-            'transform': 'skew(' + 30 * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1)  + 'deg)'}"
-            style="padding-left: .3em;"
-            >
-            <div [ngStyle]="{'transform': 'skew(' + (-30  * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1)) + 'deg)'}" style=" font-family: system-ui;">
-                {{100 - (history.percentWon ? history.percentWon : 0)}}%
+                    <div class="player-name-field" >
+                        {{this.user?.firstName}}
+                    </div>
+                </div>
+
             </div>
-            <div class="player-chart-image-container" [ngStyle]="{'transform': 'skew(' + (-30  * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1))  + 'deg)'}" style="right: -3em;">
-                <img _ngcontent-beq-c201=""
-                [src]="history.competitorImgSrc">
-                <div class="player-name-field">
-                    {{history.competitorName}}
+            <div  class="competitor-shape-parent right-competitor"
+                [ngStyle]="{'width': ((100 - (history.displayedPercentWon ? history.displayedPercentWon : 0)) > 11 ? (100 - (history.displayedPercentWon ? history.displayedPercentWon : 0)) : 11)+'%',
+                'min-width': '3.5em',
+                'justify-content': (history.percentWon ? history.percentWon : 0) >= 88 ? 'start': 'center',
+                'transform': 'skew(' + 30 * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1)  + 'deg)'}"
+                style="padding-left: .3em;"
+                >
+                <div
+                
+                [ngStyle]="{'transform': 'skew(' + (-30  * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1)) + 'deg)',
+                'width': (history.percentWon ? history.percentWon : 0) > 90 ? 'intial': '100%'
+                }" 
+                style=" font-family: system-ui; height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;">
+                    <a 
+                    [ngStyle]="{'justify-content': (history.percentWon ? history.percentWon : 0) >= 88 ? 'start': 'center'}"
+                    style="display: block;     
+                    width: 100% !important;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;"> 
+                {{100 - (history.percentWon ? history.percentWon : 0)}}%
+                </a>
+                </div>
+                <div class="player-chart-image-container" [ngStyle]="{'transform': 'skew(' + (-30  * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1))  + 'deg)'}" style="right: -3em;">
+                    <img _ngcontent-beq-c201=""
+                    [src]="history.competitorImgSrc">
+                    <div class="player-name-field">
+                        {{history.competitorName}}
+                    </div>
                 </div>
             </div>
         </div>

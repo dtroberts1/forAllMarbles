@@ -24,7 +24,6 @@ export class ToolbarComponent implements OnInit {
 
   openProfileContext(){
     this.selectedFooterItem = 'profile';
-    console.log("thisprofcard is " + this.profileCard)
     setTimeout(() => {
       if (this.profileCard){
         this.profileCard.nativeElement.focus();
@@ -38,13 +37,15 @@ export class ToolbarComponent implements OnInit {
 
   blurCard(event : any){
 
-    console.log("blurring card...")
-    this.selectedFooterItem = null as any;
-    this.profCardLocked = false;
-
+    setTimeout(() => {
+      this.selectedFooterItem = null as any;
+      this.profCardLocked = false;
+  
+    }, 150)
   }
 
   logout(event: any){
+    event.stopPropagation();
     this.authService.SignOut()
       .then((res) => {
         this.router.navigate(['/login']);

@@ -201,7 +201,7 @@ export class EarningsLossesComponent implements OnInit {
             deficit: competitorBids.map(itm => itm.bidAmount).reduce((a, b) => a+b),
             nbrWonAgainst: competitorBids.filter(itm => itm.outcome === "Won").length,
             nbrLostAgainst: competitorBids.filter(itm => itm.outcome === "Lost").length, 
-            competitorName: user.fullName ? user.fullName : '',
+            competitorName: user.firstName ? user.firstName : '',
             competitorImgSrc: user.profilePicSrc ? user.profilePicSrc : '',
           });
         }
