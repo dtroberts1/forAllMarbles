@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { CompetitorHistory } from '../competitor-history';
+import { User } from '../models/user';
 
 @Component({
   selector: 'app-player-comparison-chart',
@@ -8,6 +9,7 @@ import { CompetitorHistory } from '../competitor-history';
 })
 export class PlayerComparisonChartComponent implements OnInit {
   @Input() histories !: CompetitorHistory[]
+  @Input() user !: User | undefined;
   constructor() { }
 
   ngOnInit(): void {
@@ -21,7 +23,7 @@ export class PlayerComparisonChartComponent implements OnInit {
           case 'histories': {
             if (Array.isArray(change.currentValue) && change.currentValue.length){
               change.currentValue.forEach((history : CompetitorHistory) => {
-                history.percentWon = 100 /*history.nbrWonAgainst / (history.nbrWonAgainst  + history.nbrLostAgainst) * 100;*/
+                history.percentWon = history.nbrWonAgainst / (history.nbrWonAgainst  + history.nbrLostAgainst) * 100;
                 history.displayedPercentWon = history.percentWon < 10 ? 10 : history.percentWon;
               });
             }

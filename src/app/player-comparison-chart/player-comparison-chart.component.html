@@ -5,6 +5,7 @@
         style="display: flex; height: 3em; width: 70%;" >
         <div class="competitor-shape-parent animation-delayed left-competitor" 
             [ngStyle]="{'width': (history.displayedPercentWon ? history.displayedPercentWon : 0) + '%',
+            'min-width': '3.2em',
             'justify-content': (history.percentWon ? history.percentWon : 0) < 10 ? 'end': 'center',
             'transform': 'skew(' + 30 * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1)  + 'deg)'}"
             >
@@ -13,16 +14,17 @@
             </div>
             <div class="player-chart-image-container" [ngStyle]="{'transform': 'skew(' + (-30  * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1)) + 'deg)'}" style="left: -3em;">
                 <img _ngcontent-beq-c201="" 
-                src="https://firebasestorage.googleapis.com/v0/b/forallmarbles-1ac03.appspot.com/o/profileImages%2FprofImage_738?alt=media&amp;token=20f81af0-c250-44ec-9828-d5ce9d6e1f8a">
+                [src]="user?.profilePicSrc">
 
                 <div class="player-name-field" >
-                    Jeremy
+                    {{this.user?.firstName}}
                 </div>
             </div>
 
         </div>
         <div  class="competitor-shape-parent right-competitor"
             [ngStyle]="{'width': ((100 - (history.displayedPercentWon ? history.displayedPercentWon : 0)) > 11 ? (100 - (history.displayedPercentWon ? history.displayedPercentWon : 0)) : 11)+'%',
+            'min-width': '3.2em',
             'justify-content': (history.percentWon ? history.percentWon : 0) >= 88 ? 'start': 'center',
             'transform': 'skew(' + 30 * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1)  + 'deg)'}"
             style="padding-left: .3em;"
@@ -32,9 +34,9 @@
             </div>
             <div class="player-chart-image-container" [ngStyle]="{'transform': 'skew(' + (-30  * ((history.percentWon ? history.percentWon : 0) < 50 ? 1 : -1))  + 'deg)'}" style="right: -3em;">
                 <img _ngcontent-beq-c201=""
-                src="https://firebasestorage.googleapis.com/v0/b/forallmarbles-1ac03.appspot.com/o/profileImages%2FprofImage_738?alt=media&amp;token=20f81af0-c250-44ec-9828-d5ce9d6e1f8a">
+                [src]="history.competitorImgSrc">
                 <div class="player-name-field">
-                    Jeremy
+                    {{history.competitorName}}
                 </div>
             </div>
         </div>

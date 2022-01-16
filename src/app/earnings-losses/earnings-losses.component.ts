@@ -102,6 +102,7 @@ Handsontable
 export class EarningsLossesComponent implements OnInit {
   data !:CellData[];
   authUser !:AuthUser | null;
+  user !: User | undefined;
   competitorHistories !: CompetitorHistory[];
   dataset!: any[];
     hotSettings: Handsontable.GridSettings = {
@@ -173,6 +174,7 @@ export class EarningsLossesComponent implements OnInit {
                         });
       
                       this.dataset = this.data;
+                      this.user = allUsers.find(user => user.key == this.authUser?.key);
                       this.getReducedBidsBetweenUserCompetitor(allUsers);
 
                     }
@@ -200,6 +202,7 @@ export class EarningsLossesComponent implements OnInit {
             nbrWonAgainst: competitorBids.filter(itm => itm.outcome === "Won").length,
             nbrLostAgainst: competitorBids.filter(itm => itm.outcome === "Lost").length, 
             competitorName: user.fullName ? user.fullName : '',
+            competitorImgSrc: user.profilePicSrc ? user.profilePicSrc : '',
           });
         }
       }
