@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthUser } from '../models/user';
 import { AuthService } from '../services/auth.service';
@@ -12,6 +12,7 @@ export class ToolbarComponent implements OnInit {
   selectedFooterItem = '';
   profCardLocked :boolean = false;
   @Input() authUser!: AuthUser | null;
+  @ViewChild('profileCard') profileCard !: ElementRef;
 
   constructor(
     private authService: AuthService,
@@ -23,6 +24,12 @@ export class ToolbarComponent implements OnInit {
 
   openProfileContext(){
     this.selectedFooterItem = 'profile';
+    console.log("thisprofcard is " + this.profileCard)
+    setTimeout(() => {
+      if (this.profileCard){
+        this.profileCard.nativeElement.focus();
+      }
+    }, 0);
   }
   lockProfileCard(event : any){
 
@@ -31,6 +38,7 @@ export class ToolbarComponent implements OnInit {
 
   blurCard(event : any){
 
+    console.log("blurring card...")
     this.selectedFooterItem = null as any;
     this.profCardLocked = false;
 

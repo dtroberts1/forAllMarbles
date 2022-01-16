@@ -9,7 +9,8 @@
     </div>
 </div>
 
-<div id="prof-card" *ngIf="selectedFooterItem == 'profile'" class="profile-menu-card" tabindex="1"
+<div *ngIf="selectedFooterItem === 'profile'" class="profile-menu-card" tabindex="1"
+#profileCard
 (mousedown)="lockProfileCard($event)"
 (blur)="blurCard($event)"
   >
