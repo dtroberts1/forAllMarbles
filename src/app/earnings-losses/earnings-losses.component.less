@@ -45,3 +45,37 @@ wtHolder{
     
     }
 }
+
+.stats{
+    height: 22em;
+    padding: 1.3em;
+    display: grid;
+    grid-template-rows: 50% 50%;
+    grid-template-columns: 33% 33% 33%;
+    box-sizing: border-box;
+    color: #da3e3e;
+    font-family: system-ui;
+    font-size: 1.26rem;
+    font-weight: 400;
+
+    .stat-cell{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .stat-val{
+            font-weight: bold;
+            position: relative;
+            display: flex;
+        }
+
+        .stat-val,.stat-money{
+            padding-top: 0.2em;
+            ::ng-deep mat-icon{
+                margin-right: -0.2em;
+                margin-left: 0.2em;
+                padding-top: 0.1em;
+            }
+        }
+    }
+}

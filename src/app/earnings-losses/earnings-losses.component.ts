@@ -1,25 +1,17 @@
-import { Component, OnInit, Type } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import Handsontable from 'handsontable';
-import { TextEditor } from 'handsontable/editors';
-import { firstValueFrom, map } from 'rxjs';
+import { filter, firstValueFrom, map } from 'rxjs';
 import { Bid } from '../models/bid';
 import { AuthUser, User } from '../models/user';
 import { AuthService } from '../services/auth.service';
 import { BidService } from '../services/bid.service';
-import * as XLSX from 'xlsx';
 import { UserService } from '../services/user.service';
 import { CompetitorHistory } from '../competitor-history';
+import { BidStats } from '../bid-stats';
 
 type BidNameWithDateAndAmt = {bidName: string, bidAmount: number, date: Date, usersCompetitor : string};
 type CellData = {bidName: string, bidAmount: number, outcome: string, dateStr: string, competitor: string, usersCompetitor : string};
 
-/*
-<hot-column data="bidName" [readOnly]="true" title="Bid Name"></hot-column>
-<hot-column data="dateStr" [readOnly]="true" title="Date Completed"></hot-column>
-<hot-column data="competitor" [readOnly]="true" title="Competitor"></hot-column>
-<hot-column data="outcome" [readOnly]="true" title="Outcome"></hot-column>
-<hot-column data="bidAmount" [readOnly]="true" title="Bid Amount"></hot-column>
-*/
 const HEADERS: string[] = [
   'Bid Name', 'Date Completed', 'Competitor', 'Outcome', 'Bid Amount',
 ]
@@ -103,6 +95,10 @@ export class EarningsLossesComponent implements OnInit {
   data !:CellData[];
   authUser !:AuthUser | null;
   user !: User | undefined;
+  todaysBidStats !: BidStats;
+  yesterdaysBidStats !: BidStats;
+  trend !: BidStats;
+
   competitorHistories !: CompetitorHistory[];
   dataset!: any[];
     hotSettings: Handsontable.GridSettings = {
@@ -110,7 +106,6 @@ export class EarningsLossesComponent implements OnInit {
     
     rowHeaders: true,
     colHeaders: true,
-    /*stretchH: 'last', // TODO*/
     className: 'custom-table',
     renderer: 'customContainerRenderer',
     cells: ((row :number, column :number, prop:string | number ) => {
@@ -156,7 +151,8 @@ export class EarningsLossesComponent implements OnInit {
                     if (this.authUser){
                       
                       this.data = bids
-                        .filter(bid => bid.title === 'Total' || bid.bidCreatorChallengerKey?.includes(<string>this.authUser?.key) && bid.resultVerified && (bid.verifiedLoser == (<AuthUser>this.authUser)?.key || 
+                        .filter(bid => bid.title === 'Total' || bid.bidCreatorChallengerKey?.includes(<string>this.authUser?.key) && 
+                          bid.resultVerified && (bid.verifiedLoser == (<AuthUser>this.authUser)?.key || 
                           bid.verifiedWinner == (<AuthUser>this.authUser)?.key)).slice(0, 10)
                         .map((bid) => <BidNameWithDateAndAmt>{
                           bidName: bid.title,
@@ -174,9 +170,16 @@ export class EarningsLossesComponent implements OnInit {
                         });
       
                       this.dataset = this.data;
+                      console.log({"data":this.data})
                       this.user = allUsers.find(user => user.key == this.authUser?.key);
                       this.getReducedBidsBetweenUserCompetitor(allUsers);
+                      this.todaysBidStats = this.getBidStats(new Date(), this.data);                      
 
+                      console.log({"todayBidStats":this.todaysBidStats});
+                      let yesterdaysDate = new Date(new Date().setDate(new Date().getDate()-1));
+                      this.yesterdaysBidStats = this.getBidStats(yesterdaysDate, this.data);
+                      console.log({"yesterdaysstats":this.yesterdaysBidStats})
+                      this.setTrendData(this.yesterdaysBidStats, this.todaysBidStats);
                     }
                   }
                   else{
@@ -189,6 +192,7 @@ export class EarningsLossesComponent implements OnInit {
       
     }
   }
+  
 
   getReducedBidsBetweenUserCompetitor(users: User[]){
     this.competitorHistories = [];
@@ -209,4 +213,104 @@ export class EarningsLossesComponent implements OnInit {
     }
   }
 
+  setTrendData(yesterdayStats: BidStats, todayStats: BidStats){
+
+    this.trend = {
+      wLRatio: todayStats.wLRatio - yesterdayStats.wLRatio,
+      totalEarnings: todayStats.totalEarnings - yesterdayStats.totalEarnings,
+      greatestWinYet : todayStats.greatestWinYet - yesterdayStats.greatestWinYet,
+      worstLossYet : todayStats.worstLossYet - yesterdayStats.worstLossYet,
+      averageEarnings : todayStats.averageEarnings - yesterdayStats.averageEarnings,
+      totalBidCount : todayStats.totalBidCount - yesterdayStats.totalBidCount,
+    }
+    console.log({"this.trend":this.trend})
+
+  }
+
+  getBidStats(date: Date, data: CellData[]){
+
+    date.setHours(0,0,0,0);
+
+    let stats : BidStats = {
+      wLRatio: 0,
+      totalEarnings: 0,
+      greatestWinYet: 0,
+      greatestWinBidName: '',
+      worstLossYet: 0,
+      worstLossBidName: '',
+      averageEarnings: 0,
+      totalBidCount: 0,
+    }
+
+    let myDate = new Date(data[0].dateStr.replace(/-/g, '\/'));
+    myDate.setHours(0,0,0,0);
+
+    let filteredByDate = data.filter(itm => new Date(itm.dateStr.replace(/-/g, '\/')).setHours(0,0,0,0) <= date.setHours(0,0,0,0));
+    if (Array.isArray(filteredByDate) && filteredByDate.length){
+      stats.wLRatio = this.getWLRatioThroughDate(filteredByDate);
+      stats.totalEarnings = this.getTotalEarnings(filteredByDate);
+      let greatestWinBid: CellData | null = this.greatestWin(filteredByDate);
+      if (greatestWinBid){
+        stats.greatestWinYet = <number>greatestWinBid.bidAmount;
+        stats.greatestWinBidName = <string>greatestWinBid.bidName;
+      }
+      let worstLossBid: CellData | null = this.greatestLoss(filteredByDate);
+      console.log({"worstLossBid":worstLossBid})
+      if (worstLossBid){
+        stats.worstLossYet = <number>worstLossBid.bidAmount;
+        stats.worstLossBidName = <string>worstLossBid.bidName;
+      }
+      stats.averageEarnings = this.getAverageEarnings(filteredByDate);
+      stats.totalBidCount = filteredByDate.length;
+    }
+    else{
+
+    }
+    return stats;
+
+  }
+
+  getWLRatioThroughDate(data: CellData[]) : number{
+    if (Array.isArray(data) && data.length){
+      let wins = data.filter(itm => itm.outcome === "Won").length;
+      let losses = data.filter(itm => itm.outcome === "Lost").length;
+      return wins / (wins + losses);
+    }
+    else{
+      return 0;
+    }
+  }
+
+  getTotalEarnings(data: CellData[]) : number{
+    if (Array.isArray(data) && data.length){
+      return parseInt(data.map(itm => itm.bidAmount).reduce((a,b) => a+b).toFixed(2));
+    }
+    else{
+      return 0;
+    }
+  }
+  getAverageEarnings(data: CellData[]) : number{
+    if (Array.isArray(data) && data.length){
+      return parseInt((this.getTotalEarnings(data) / data.length).toFixed(2));
+    }
+    else{
+      return 0;
+    }
+  }
+  greatestWin(data: CellData[]): CellData | null{
+    if (Array.isArray(data) && data.length){
+      return data.reduce((a, b) => Math.max(a.bidAmount, b.bidAmount) === a.bidAmount ? a : b);
+    }
+    else{
+      return null;
+    }
+  }
+  greatestLoss(data: CellData[]): CellData | null{
+    if (Array.isArray(data) && data.length){
+      return data.reduce((a, b) => Math.min(a.bidAmount, b.bidAmount) === a.bidAmount ? a : b);
+    }
+    else{
+      return null;
+    }
+  }
 }

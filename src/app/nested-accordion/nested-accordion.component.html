@@ -88,11 +88,12 @@
                 <div style="display: inline-block;">
                     <textarea matInput 
                         placeholder="Bid Message" 
-                        style="border: none; outline: none;"
+                        style="border: none; outline: none; color: #666666;"
                         #bidMessageInput
                         [readonly]="!bidMessageEditMode"
                         (keydown)="detailDataChanged(bidMessageEditMode)"
                         [formControl]="bidMessageFormControl"
+                        
                     >
                     </textarea>
                 </div>
