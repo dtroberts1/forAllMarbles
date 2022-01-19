@@ -22,5 +22,6 @@ export class Bid {
     loserSupportingDocs ?: SupportingDoc[] | null; 
     verifiedWinner?: string | null;
     verifiedLoser?: string | null;
+    verifiedDate ?: Date;
 }
 

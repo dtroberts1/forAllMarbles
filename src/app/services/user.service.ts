@@ -22,7 +22,6 @@ export class UserService {
       .pipe(
         tap(
           (list: any[]) => {
-            console.log({"list":list})
           }
         ),
         map((list : any[]) => {

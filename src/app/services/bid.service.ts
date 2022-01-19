@@ -52,9 +52,50 @@ export class BidService {
             loserSupportingDocs : itm.loserSupportingDocs,
             verifiedWinner: itm.verifiedWinner,
             verifiedLoser: itm.verifiedLoser,
+            verifiedDate: itm.verifiedDate,
         })}
       )
       )
+  }
+
+  getBidsFilteredByUserHelper(bid: Bid, userKey: string){
+    let bids : Bid[] = [];
+    if (bid == null){
+      return []
+    }
+    if (bid.bidCreatorKey == userKey){
+      bids.push(bid);
+      return bids;
+    }
+    else if(Array.isArray(bid.bids) && bid.bids.length){
+      bid.bids.forEach((currBid) => {
+        let filteredBids = this.getBidsFilteredByUserHelper(currBid, userKey);
+        if(Array.isArray(filteredBids) && filteredBids.length){
+          bids = [...bids, ...filteredBids];
+        }
+      });
+    }
+    return bids;
+  }
+
+  getBidsFilteredByUser(bids: Bid[], userKey: string): Bid[]{
+    let filteredBids : Bid[] = [];
+    if (Array.isArray(bids) && bids.length){
+      bids.forEach((bid) => {
+        if (bid.bidCreatorKey == userKey){
+          filteredBids.push(bid);
+        }
+        else{
+          let tmpBids = this.getBidsFilteredByUserHelper(bid, userKey);
+          if (Array.isArray(tmpBids) && tmpBids.length){
+            filteredBids = [...filteredBids, ...tmpBids];
+          }
+        }
+      });
+    }
+
+    return filteredBids;
+
   }
 
   
@@ -128,6 +169,7 @@ export class BidService {
   }
 
   create(bid: Bid): Promise<any> {
+    delete bid.key;
     return new Promise((resolve, reject) => {
       this.bidsRef.push(bid)
         .then((res : any) => {
@@ -142,6 +184,11 @@ export class BidService {
   }
 
   update(key: string, value: Bid): Promise<any> {
+
+    // Delete properties that have null
+    value = Object.fromEntries(Object.entries(value).filter(([_, v]) => v != null));
+
+
     return new Promise((resolve, reject) => {
 
       this.db.list(<string>value.parentPath).update(key, value)

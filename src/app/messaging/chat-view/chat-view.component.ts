@@ -37,7 +37,6 @@ export class ChatViewComponent implements OnInit {
           if(im.msgDateStr){
             let parsedDate = Date.parse(im.msgDateStr);
             let date = new Date(parsedDate);
-            console.log("day is " + date.getDate())
             let monthAndDay = `${date.toLocaleString('default', { month: 'short' })} ${date.getDate()}`;
             im.msgDateStrFormatted = monthAndDay;
   
@@ -46,7 +45,6 @@ export class ChatViewComponent implements OnInit {
         });
       }
     });
-    console.log({"messageListGroup":messageListGroup})
   }
 
   getCountChanged(origGroup : UniqueDay[], newGroup : UniqueDay[] ){
@@ -65,20 +63,15 @@ export class ChatViewComponent implements OnInit {
   }
 
   onScroll(event: any){
-    //console.log({"event":event})
     if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
       // you're at the bottom of the page
-      console.log("Bottom of page");
 
     }
-
-    console.log({"this.scrollMe":this.scrollMe})
 
     if (this.scrollMe && this.scrollMe.nativeElement){
       this.scrollTop = this.scrollMe.nativeElement.scrollTop;
   
       if ((this.scrollMe.nativeElement.scrollTop  + this.scrollMe.nativeElement.clientHeight) >= (this.scrollMe.nativeElement.scrollHeight - 2)){
-        console.log("scrolled to bottom!!");
         this.hasUnreadMessages = false;
       }
       

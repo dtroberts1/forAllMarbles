@@ -43,7 +43,6 @@ export class DocManagementModalComponent implements OnInit {
 
   ngOnInit(): void {
     let existingAttachments : SupportingDoc[] = [];
-    console.log("in init, is winner is " + this.data.isWinner);
     this.bid = this.data.bid;
     existingAttachments = this.getAttachmentsToLink(existingAttachments, true);
 
@@ -60,18 +59,15 @@ export class DocManagementModalComponent implements OnInit {
 
     this.currAuthUser = this.authService.getAccount();
 
-    console.log({"this.attachmentsToLink":this.attachmentsToLink});
   }
 
   getAttachmentsToLink(existingAttachments : SupportingDoc[], forThisUser: boolean){
     if (this.bid.winnerSupportingDocs && ((!forThisUser && !this.data.isWinner) || (this.data.isWinner && forThisUser))){
-      console.log("in A")
       existingAttachments = Object.values(this.bid.winnerSupportingDocs).map(doc => <SupportingDoc>{
         name: doc.name, isLinked: doc.isLinked, url: doc.url, notes: doc.notes, path : doc.path,
       });
     }
     else if (this.bid.loserSupportingDocs && ((!forThisUser &&  this.data.isWinner ) || (!this.data.isWinner && forThisUser))){
-      console.log("in B")
       existingAttachments = Object.values(this.bid.loserSupportingDocs).map(doc => <SupportingDoc>{
         name: doc.name, isLinked: doc.isLinked, url: doc.url, notes: doc.notes, path : doc.path,
       });
@@ -87,7 +83,6 @@ export class DocManagementModalComponent implements OnInit {
             }
         });
     });
-    console.log({"existingAttacahments_AfterA":existingAttachments});
     return existingAttachments;
   }
 
@@ -95,7 +90,6 @@ export class DocManagementModalComponent implements OnInit {
   notifyChild(event: any){
     let index = event.index;
     let existingAttachments : SupportingDoc[] = [];
-    console.log("index is " + index);
     switch(index){
       case 0:
         existingAttachments = this.getAttachmentsToLink(existingAttachments, true);
@@ -166,13 +160,11 @@ export class DocManagementModalComponent implements OnInit {
   }
   openNotes(attachedDoc: BidDocument){
     this.openedNotesFormControl.setValue(attachedDoc.notes ? attachedDoc.notes : '');
-    console.log({"OpenNotesDoc": attachedDoc})
     this.selectedNoteAttachment = attachedDoc;
   }
 
   cancelAttachmentChange(){
     this.openedNotesFormControl.setValue(null);
-    console.log("setting notes to null")
     this.selectedNoteAttachment = null;
   }
 

@@ -3,6 +3,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChang
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { firstValueFrom } from 'rxjs';
+import { AdminChooseWinnerComponent } from '../admin-choose-winner/admin-choose-winner.component';
 import { BidConfirmationDialogComponent } from '../bid-confirmation-dialog/bid-confirmation-dialog.component';
 import { DocManagementModalComponent } from '../doc-management-modal/doc-management-modal.component';
 import { Bid } from '../models/bid';
@@ -17,9 +18,9 @@ import { UserService } from '../services/user.service';
   styleUrls: ['./nested-accordion.component.less'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('collapsed', style({height: '0px', minHeight: '65px'})),
       state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      transition('expanded <=> collapsed', animate('325ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
     trigger('openClose', [
       // ...
@@ -30,10 +31,10 @@ import { UserService } from '../services/user.service';
         transform: 'rotate(-180deg)'
       })),
       transition('open => closed', [
-        animate('1s')
+        animate('2s')
       ]),
       transition('closed => open', [
-        animate('1s')
+        animate('2s')
       ]),
     ]),
   ],
@@ -43,6 +44,7 @@ export class NestedAccordionComponent implements OnInit {
   @Input() user !:AuthUser | null;
   @Input() parentBid !: Bid;
   bidMessageEditMode : boolean = false;
+  isAdmin : boolean = false;
   bidAmtEditMode : boolean = false;
   titleEditMode : boolean = false;
   detailChangesPending : boolean = false;
@@ -70,6 +72,7 @@ export class NestedAccordionComponent implements OnInit {
 
   ngOnInit(): void {
     this.hasWinnerDocs = this.getHasWinnerDocs();
+
 
     this.setFormControlInputs();
 
@@ -148,6 +151,14 @@ export class NestedAccordionComponent implements OnInit {
             let declaredWinnerKey = (<Bid>this.bid).declaredWinner;
             let verifiedWinnerKey = (<Bid>this.bid).verifiedWinner;
 
+            let actualUser = res.find(user => user.key === this.user?.key);
+            if (actualUser && actualUser.isAdmin){
+              this.isAdmin = true;
+            }
+            else{
+              this.isAdmin = false;
+            }
+
             let declaredWinner = res.find(user => user.key === declaredWinnerKey);
             let confirmedWinner = res.find(user => user.key === declaredWinnerKey);
 
@@ -162,7 +173,7 @@ export class NestedAccordionComponent implements OnInit {
           }
 
         }
-      })
+      });
   }
 
   canConcedeDefeat(bid: Bid){
@@ -219,6 +230,53 @@ export class NestedAccordionComponent implements OnInit {
 
       // OR, if it's not the root bid, but it's a bid whose challenger key is the users
 
+  }
+
+  adminChooseWinner(){
+    const dialogRef = this.dialog.open(AdminChooseWinnerComponent, {
+      width: '550px',
+      position: {top: '200px'},
+      data: {
+       bid: this.bid,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(selectedUser => {
+
+      if (selectedUser){
+        let declaredLoserKey = this.bid.bidCreatorKey != selectedUser.key ? this.bid.bidCreatorKey : this.bid.bidChallengerKey;
+
+        this.bid.verifiedLoser = declaredLoserKey;
+        this.bid.verifiedWinner = selectedUser.key;
+        this.bid.verifiedDate = new Date();
+        this.bid.resultVerified = true;
+        this.bid.hasResult = true;
+        this.bid.declaredWinner = selectedUser.key;
+        this.bid.declaredLoser = declaredLoserKey;
+    
+        // Clone bid as base-level bid
+        let newBid = JSON.parse(JSON.stringify(this.bid)) as Bid;
+        newBid.rootBidKey = 'root';
+        newBid.bids = [];
+        newBid.parentPath = '/bids/';
+        
+        this.bidService.create(newBid)
+          .then(() => {
+            // Then remove orignal root and all of the root's child bilds
+            let promise = null;
+            if (this.bid.rootBidKey != 'root'){
+              promise = this.bidService.delete('/bids/', <string>this.bid.rootBidKey);
+            }
+            else{
+              promise = this.bidService.delete('/bids/', <string>this.bid.key);
+            }
+            promise
+              .then(() => {
+                this.accordionBaseCallback.emit();
+              });
+          });
+      }
+    });
   }
 
   createCounterOffer(){
@@ -309,6 +367,7 @@ export class NestedAccordionComponent implements OnInit {
         bid.declaredLoser = this.user?.key;
         bid.verifiedLoser = this.user?.key;
         bid.verifiedWinner = bid.declaredWinner;
+        bid.verifiedDate = new Date();
 
         // Clone bid as base-level bid
         let newBid = JSON.parse(JSON.stringify(bid)) as Bid;
@@ -469,6 +528,7 @@ export class NestedAccordionComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result){
+        
         this.bidService.delete(<string>bid.parentPath, <string>bid.key)
         .then((res) => {
           // Notify parent to call its refreshBid()
@@ -480,6 +540,7 @@ export class NestedAccordionComponent implements OnInit {
           }
         })
         .catch((err) => {
+          
         });
       }
     });

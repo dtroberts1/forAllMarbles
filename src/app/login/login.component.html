@@ -1,6 +1,6 @@
 <div id="container-background">
     <div id="login-container" [ngStyle]="{'height': selectedTabIndex == 0 ? '460px': '700px'}">
-        <div id="sign-in-label">
+        <div id="sign-in-label" >
             {{(selectedTabIndex == 0 ? 'SIGN IN' : 'SIGN UP')}}
         </div>
         <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="tabChanged($event)">

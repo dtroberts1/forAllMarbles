@@ -27,8 +27,7 @@ export class FileService {
 
   getFileFromStorageViaUrl(url: string, name: string) : Promise<File>{
     let ext = name.slice(name.lastIndexOf('.') + 1, name.length).toLowerCase();
-    console.log("ext is " + ext);
-    console.log("name********************** is "  + name)
+
     return new Promise((resolve, reject) => {
 
             // This can be downloaded directly:
@@ -52,8 +51,6 @@ export class FileService {
   pushFileToStorage(baseFolder: string, storageFileName: string, fileUpload: FileUpload, saveToBaseImages : boolean): Promise<any>  {
 
     return new Promise((resolve, reject) => {
-      //const filePath = `C:\\Users\\drobe\\Desktop\\chessgame.PNG`;
-      console.log({"fileUpload":fileUpload});
       const storageRef = this.storage.ref(`${baseFolder}/${(storageFileName)}`);
       if (fileUpload){
         this.storage.upload(`${baseFolder}/${(storageFileName)}`, fileUpload.file)

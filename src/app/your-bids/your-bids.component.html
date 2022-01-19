@@ -1,12 +1,14 @@
 <ul class="my-bid-list">
     <li *ngFor="let bid of myBids" class="bid-list-item">
-        <app-nested-accordion
-            *ngIf="authUser"
-            [bid]="bid"
-            [user]="authUser"
-            (refreshCallback)="accordionCallback()"
-            (accordionBaseCallback)="accordionBaseCallback()"
-        >
-        </app-nested-accordion>
+        <div *ngIf="authUser" wmAnimate="fadeInRight" speed="normal">
+            <app-nested-accordion
+                *ngIf="authUser"
+                [bid]="bid"
+                [user]="authUser"
+                (refreshCallback)="accordionCallback()"
+                (accordionBaseCallback)="accordionBaseCallback()"
+            >
+            </app-nested-accordion>
+        </div>
     </li>
 </ul>

@@ -3,11 +3,12 @@
       #accordionItem="cdkAccordionItem"
       class="example-accordion-item"
       role="button"
+      style="overflow-y: hidden;"
       tabindex="0"
       [attr.id]="'accordion-header-' + 0"
-      [attr.aria-expanded]="accordionItem.expanded"
+      [@detailExpand]="accordionItem.expanded ? 'expanded' : 'collapsed'"
       [attr.aria-controls]="'accordion-body-' + 0">
-      <div class="example-accordion-item-header" (click)="accordionItem.toggle()">
+      <div class="example-accordion-item-header"  (click)="accordionItem.toggle()">
         <div class="bid-item-metric-header" style="display: flex;">
             <div [ngStyle]="{'visibility': !titleEditMode && user && user.key === bid.bidCreatorKey && !bid.hasResult ? 'visible' : 'hidden'}"
             class="cell-data-div-img-edit"  
@@ -37,10 +38,11 @@
             font-family: system-ui !important;
             font-size: 18px !important;
             color: #666666 !important;" class="example-accordion-item-description">
-            <div style="padding-right:20px;">
+            <div style="padding-right:20px; white-space: nowrap;">
                 Created by {{creatorName}}
             </div>
-            <div *ngIf="bid.resultVerified && user && (bid.verifiedWinner == user.key || bid.verifiedLoser == user.key)" style="font-weight: 700;">
+            <div *ngIf="bid.resultVerified && user && (bid.verifiedWinner == user.key || bid.verifiedLoser == user.key)" 
+            style="font-weight: 700; white-space: nowrap;">
                 Status: 
                 <span 
                 *ngIf="user"
@@ -55,7 +57,8 @@
             </div>
             <div>
                 <mat-icon style="float:right;" class="expand-icon"  [@openClose]="!accordionItem.expanded ? 'open' : 'closed'">keyboard_arrow_up</mat-icon>
-                <mat-icon *ngIf="user && user.key === bid.bidCreatorKey" tabindex="1" (click)="deleteBid(bid)" id="trash-icon" style="float:right; color: red;">delete</mat-icon>
+                <mat-icon [ngStyle]="{'transform': (user && user.key === bid.bidCreatorKey ? 'scale(1)' : 'scale(0')}" 
+                tabindex="1" (click)="deleteBid(bid)" id="trash-icon" style="float:right; color: red;">delete</mat-icon>
             </div>
         </div>
 
@@ -85,11 +88,12 @@
                 <div style="display: inline-block;">
                     <textarea matInput 
                         placeholder="Bid Message" 
-                        style="border: none; outline: none;"
+                        style="border: none; outline: none; color: #666666;"
                         #bidMessageInput
                         [readonly]="!bidMessageEditMode"
                         (keydown)="detailDataChanged(bidMessageEditMode)"
                         [formControl]="bidMessageFormControl"
+                        
                     >
                     </textarea>
                 </div>
@@ -114,7 +118,7 @@
                     {{unconfirmedWinnerFullName}}
                 </div>
             </div>
-            <div id="bid-amt-container">
+            <div  id="bid-amt-container">
                 <div class="bid-item-metric-header" style="display: flex;">
                     Bid Amount
                     <div [ngStyle]="{'visibility': !bidAmtEditMode && user && user.key === bid.bidCreatorKey && !bid.hasResult ? 'visible' : 'hidden'}"
@@ -175,6 +179,7 @@
                         </label>
                         <button *ngIf="hasWinnerDocs" style="font-family: system-ui !important;"  (click)="manageDocumentation()" mat-raised-button color="accent">Manage Documentation</button>
                         <button style="font-family: system-ui !important;" *ngIf="canDisplayCounterOfferOrApprove(bid)" (click)="approveBid(bid)" mat-raised-button color="accent">Approve</button>
+                        <button style="font-family: system-ui !important;" *ngIf="bid.isApproved && !bid.resultVerified && bid.hasResult && isAdmin" (click)="adminChooseWinner()" mat-raised-button color="accent">Choose Winner</button>
                     </div>
                 </div>            
             </div>

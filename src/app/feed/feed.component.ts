@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { Bid } from '../models/bid';
 import { AuthUser } from '../models/user';
@@ -15,6 +16,8 @@ export class FeedComponent implements OnInit {
   authUser !:AuthUser | null;
   bidCount : number = 0;
   initialLoad :boolean = true;
+  searchedBids !: (Bid | any)[];
+  @Input() searchText !: string;
 
   constructor(
     private bidService: BidService,
@@ -35,6 +38,8 @@ export class FeedComponent implements OnInit {
           else{
             this.allBids = [];
           }
+          this.searchedBids = this.allBids;
+
         });
   }
 
@@ -48,6 +53,14 @@ export class FeedComponent implements OnInit {
           }
           else{
             this.allBids = [];
+          }
+
+          if (this.searchText && this.searchText.length){
+            this.searchedBids = this.allBids.filter(bid => (<Bid>bid).title?.toLowerCase()
+            .includes((<string>this.searchText).toLowerCase()));  
+          }
+          else{
+            this.searchedBids = this.allBids;
           }
         });
   }
@@ -64,7 +77,16 @@ export class FeedComponent implements OnInit {
             else{
               this.allBids = [];
             }
+            if (this.searchText && this.searchText.length){
+              this.searchedBids = this.allBids.filter(bid => (<Bid>bid).title?.toLowerCase()
+              .includes((<string>this.searchText).toLowerCase()));  
+            }
+            else{
+              this.searchedBids = this.allBids;
+            }
+
           }
+          
         ));
   }
 
@@ -85,6 +107,26 @@ export class FeedComponent implements OnInit {
     }
 
     return tmpArray;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        let change = changes[propName];
+
+        switch (propName) {
+          case 'searchText': {
+            if (change.currentValue && change.currentValue.length){
+              this.searchedBids = this.allBids.filter(bid => (<Bid>bid).title?.toLowerCase()
+              .includes((<string>change.currentValue).toLowerCase()));
+            }
+            else{
+              this.searchedBids = this.allBids;
+            }
+          }
+        }
+      }
+    }
   }
 
   getCounterableBids(allBids: Bid[]) : Bid[]{

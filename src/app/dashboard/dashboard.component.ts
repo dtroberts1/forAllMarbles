@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FeedComponent } from '../feed/feed.component';
 import { IM } from '../models/im';
@@ -15,10 +16,13 @@ export class DashboardComponent implements OnInit {
   authUser !:AuthUser | null;
   @ViewChild(FeedComponent) feed !: FeedComponent;
   @ViewChild(YourBidsComponent) yourBids !: YourBidsComponent;
+  @ViewChild('searchinput') searchInput !: ElementRef;
+
   canDispNewMessageScrn :boolean = false;
   existingMessage !: IM;
   selectedUser !: User | null;
-
+  searchText !: string;
+  canDispVis !: boolean;
 
   constructor(
     private authService: AuthService,
@@ -47,7 +51,6 @@ export class DashboardComponent implements OnInit {
   }
 
   closeNewMessage(){
-    console.log("callback received")
     this.canDispNewMessageScrn = false;
     this.selectedUser = null;
   }
@@ -58,6 +61,13 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(['/login']);
     }
    
+  }
+
+  toggleSearchVis(){
+    this.canDispVis = !this.canDispVis;
+    if (this.canDispVis){
+      this.searchInput.nativeElement.focus();
+    }
   }
 
   logout(){
