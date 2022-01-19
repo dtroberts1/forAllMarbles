@@ -29,7 +29,8 @@
                 <mat-form-field 
                 style="width: 224px; font-size: .7rem; color: #666666; margin-top: 1em;" appearance="fill">
                 <mat-label>Search</mat-label>                                                   
-                <input #searchinput type="search" style="font-size: 1rem; font-family: system-ui !important;" matInput [ngModel]="searchText"
+                <input #searchinput type="search" style="font-size: 1rem; font-family: system-ui !important;" matInput 
+                [(ngModel)]="searchText"
                 >
             </mat-form-field>
             </div>

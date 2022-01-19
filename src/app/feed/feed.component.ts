@@ -16,6 +16,7 @@ export class FeedComponent implements OnInit {
   authUser !:AuthUser | null;
   bidCount : number = 0;
   initialLoad :boolean = true;
+  searchedBids !: (Bid | any)[];
   @Input() searchText !: string;
 
   constructor(
@@ -37,6 +38,8 @@ export class FeedComponent implements OnInit {
           else{
             this.allBids = [];
           }
+          this.searchedBids = this.allBids;
+
         });
   }
 
@@ -50,6 +53,14 @@ export class FeedComponent implements OnInit {
           }
           else{
             this.allBids = [];
+          }
+
+          if (this.searchText && this.searchText.length){
+            this.searchedBids = this.allBids.filter(bid => (<Bid>bid).title?.toLowerCase()
+            .includes((<string>this.searchText).toLowerCase()));  
+          }
+          else{
+            this.searchedBids = this.allBids;
           }
         });
   }
@@ -66,7 +77,16 @@ export class FeedComponent implements OnInit {
             else{
               this.allBids = [];
             }
+            if (this.searchText && this.searchText.length){
+              this.searchedBids = this.allBids.filter(bid => (<Bid>bid).title?.toLowerCase()
+              .includes((<string>this.searchText).toLowerCase()));  
+            }
+            else{
+              this.searchedBids = this.allBids;
+            }
+
           }
+          
         ));
   }
 
@@ -93,11 +113,16 @@ export class FeedComponent implements OnInit {
     for (const propName in changes) {
       if (changes.hasOwnProperty(propName)) {
         let change = changes[propName];
-        console.log("propname is " + propName)
 
         switch (propName) {
           case 'searchText': {
-            console.log("change: " + change.currentValue)
+            if (change.currentValue && change.currentValue.length){
+              this.searchedBids = this.allBids.filter(bid => (<Bid>bid).title?.toLowerCase()
+              .includes((<string>change.currentValue).toLowerCase()));
+            }
+            else{
+              this.searchedBids = this.allBids;
+            }
           }
         }
       }
