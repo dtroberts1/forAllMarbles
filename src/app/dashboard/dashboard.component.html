@@ -8,7 +8,13 @@
     <div style="width: 50%; height: 100%; float: left;">
         <mat-tab-group (selectedTabChange)="notifyChild($event)"
         >
-            <mat-tab label="Feed" #feed><app-feed></app-feed></mat-tab>
+            <mat-tab label="Feed" #feed>
+                <app-feed
+                [searchText]="searchText"
+                >
+
+                </app-feed>
+            </mat-tab>
             <mat-tab label="Your Bids" #yourBids><app-your-bids></app-your-bids></mat-tab>
             <mat-tab label="Create Bid" #createBid> 
                 <div>
@@ -17,6 +23,17 @@
                 </div>
             </mat-tab>
         </mat-tab-group>
+        <div style="position: absolute; top: 3.5em; left: 32em; width: 15em; height: 2.6em; display: flex; align-items: center;                                                                                                     ">
+            <mat-icon *ngIf="!canDispVis" style="padding: 0.1em; border-radius: 10px;" id="seach-icon" (click)="toggleSearchVis()">search</mat-icon>
+            <div *ngIf="canDispVis" wmAnimate="fadeInRight" speed="normal">
+                <mat-form-field 
+                style="width: 224px; font-size: .7rem; color: #666666; margin-top: 1em;" appearance="fill">
+                <mat-label>Search</mat-label>                                                   
+                <input #searchinput type="search" style="font-size: 1rem; font-family: system-ui !important;" matInput [ngModel]="searchText"
+                >
+            </mat-form-field>
+            </div>
+        </div>
     </div>
     <div style="width: 50%; height: 100%; float: right; overflow-x:hidden;">
         <app-earnings-losses>

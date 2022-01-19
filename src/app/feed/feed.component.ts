@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { Bid } from '../models/bid';
 import { AuthUser } from '../models/user';
@@ -15,6 +16,7 @@ export class FeedComponent implements OnInit {
   authUser !:AuthUser | null;
   bidCount : number = 0;
   initialLoad :boolean = true;
+  @Input() searchText !: string;
 
   constructor(
     private bidService: BidService,
@@ -85,6 +87,21 @@ export class FeedComponent implements OnInit {
     }
 
     return tmpArray;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        let change = changes[propName];
+        console.log("propname is " + propName)
+
+        switch (propName) {
+          case 'searchText': {
+            console.log("change: " + change.currentValue)
+          }
+        }
+      }
+    }
   }
 
   getCounterableBids(allBids: Bid[]) : Bid[]{
