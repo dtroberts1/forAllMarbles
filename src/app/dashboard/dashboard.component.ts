@@ -3,8 +3,10 @@ import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FeedComponent } from '../feed/feed.component';
 import { IM } from '../models/im';
+import { StatusNotification } from '../models/status-notification';
 import { AuthUser, User } from '../models/user';
 import { AuthService } from '../services/auth.service';
+import { NotificationService } from '../services/notifications.service';
 import { YourBidsComponent } from '../your-bids/your-bids.component';
 
 @Component({
@@ -17,6 +19,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild(FeedComponent) feed !: FeedComponent;
   @ViewChild(YourBidsComponent) yourBids !: YourBidsComponent;
   @ViewChild('searchinput') searchInput !: ElementRef;
+  notificationList !: StatusNotification[];
 
   canDispNewMessageScrn :boolean = false;
   existingMessage !: IM;
@@ -27,6 +30,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private notificationService: NotificationService,
+
   ) { }
 
   notifyChild(event: any){
@@ -56,11 +61,35 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.notificationList = []
+
     this.authUser = this.authService.getAccount();
     if (!this.authUser){
       this.router.navigate(['/login']);
     }
-   
+    this.getNotifications();
+
+  }
+
+  getNotifications(){
+    
+    if (this.authUser){
+
+      this.notificationService.getNotificationsForUser(<string>this.authUser?.key)
+        .subscribe(
+          res => {
+            this.notificationList = []
+
+            if (Array.isArray(res)){
+              this.notificationList = res;
+              console.log({"this.notificationsList":this.notificationList});
+            }
+            if (!res || !Array.isArray(res) || !res.length){
+              //this.selectedFooterItem = null as any;
+            }
+          }
+        );
+    } 
   }
 
   toggleSearchVis(){
