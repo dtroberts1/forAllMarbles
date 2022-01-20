@@ -170,15 +170,12 @@ export class EarningsLossesComponent implements OnInit {
                         });
       
                       this.dataset = this.data;
-                      console.log({"data":this.data})
                       this.user = allUsers.find(user => user.key == this.authUser?.key);
                       this.getReducedBidsBetweenUserCompetitor(allUsers);
                       this.todaysBidStats = this.getBidStats(new Date(), this.data);                      
 
-                      console.log({"todayBidStats":this.todaysBidStats});
                       let yesterdaysDate = new Date(new Date().setDate(new Date().getDate()-1));
                       this.yesterdaysBidStats = this.getBidStats(yesterdaysDate, this.data);
-                      console.log({"yesterdaysstats":this.yesterdaysBidStats})
                       this.setTrendData(this.yesterdaysBidStats, this.todaysBidStats);
                     }
                   }
@@ -223,7 +220,6 @@ export class EarningsLossesComponent implements OnInit {
       averageEarnings : todayStats.averageEarnings - yesterdayStats.averageEarnings,
       totalBidCount : todayStats.totalBidCount - yesterdayStats.totalBidCount,
     }
-    console.log({"this.trend":this.trend})
 
   }
 
@@ -255,7 +251,6 @@ export class EarningsLossesComponent implements OnInit {
         stats.greatestWinBidName = <string>greatestWinBid.bidName;
       }
       let worstLossBid: CellData | null = this.greatestLoss(filteredByDate);
-      console.log({"worstLossBid":worstLossBid})
       if (worstLossBid){
         stats.worstLossYet = <number>worstLossBid.bidAmount;
         stats.worstLossBidName = <string>worstLossBid.bidName;

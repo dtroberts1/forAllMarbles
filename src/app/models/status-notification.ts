@@ -4,4 +4,6 @@ export class StatusNotification {
     notificationDateStr ?: string;
     userKey ?: string;
     key ?: string;
+    type ?: string;
+    recencyString ?: string;
 }

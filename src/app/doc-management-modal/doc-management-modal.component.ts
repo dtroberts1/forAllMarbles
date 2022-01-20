@@ -2,14 +2,18 @@ import { Component, ElementRef, Inject, OnInit, SecurityContext, ViewChild } fro
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
+import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { FileService } from '../file-service.service';
 import { Bid } from '../models/bid';
 import { FileUpload } from '../models/file-upload';
+import { StatusNotification } from '../models/status-notification';
 import { SupportingDoc } from '../models/supporting-doc';
 import { AuthUser, User } from '../models/user';
 import { AuthService } from '../services/auth.service';
 import { BidService } from '../services/bid.service';
+import { NotificationService } from '../services/notifications.service';
+import { UserService } from '../services/user.service';
 
 
 type ModalInput = {isWinner: boolean; attachedFile: File; bid: Bid} 
@@ -37,6 +41,8 @@ export class DocManagementModalComponent implements OnInit {
     private authService: AuthService,
     private bidService: BidService,
     private domSanitizer:DomSanitizer,
+    private notificationService: NotificationService,
+    private userService: UserService,
   ) { }
 
 
@@ -236,6 +242,8 @@ export class DocManagementModalComponent implements OnInit {
         // Upload docs to storage
         this.attachmentsToLink.forEach(attach => attach.isLoading = true);
         this.attachmentsToLink = this.attachmentsToLink.filter(attach => attach.isLinked == true);
+        let filesHaveBeenAdded = this.attachmentsToLink?.length > this.attachmentsToLink.filter(attach => attach.isLinked == false)?.length;
+
         let promises =  this.upload();
         // Save Reference in database  
         Promise.all(promises)
@@ -288,6 +296,30 @@ export class DocManagementModalComponent implements OnInit {
 
                     this.attachmentsToLink = [...existingAttachments as any];
                     this.attachmentsToLink.forEach(attach => attach.isLoading = false);
+
+                    if (filesHaveBeenAdded){
+                      let toUserKey = this.bid.declaredWinner === this.currAuthUser?.key ? this.bid.declaredLoser : this.bid.declaredWinner;
+
+                      firstValueFrom(
+                        this.userService.getAll()
+                      )
+                        .then((res) =>{
+                          if (Array.isArray(res)){
+                            let currUser = res.find(user => user.key === this.currAuthUser?.key);
+                            let newNotification : StatusNotification = {
+                              notificationText : `Your competitor, ${currUser?.fullName}, has added supporting documents `+
+                              ` to their bid in attempt to prove that he/she has won the bid, ${(<Bid>this.bid).title}.`,
+                              isRead : false,
+                              notificationDateStr : new Date().toISOString(),
+                              userKey : <string>toUserKey,
+                              type : 'added_document',
+                            }
+      
+                            this.notificationService.create(newNotification);
+                          }
+                        });
+                          
+                    }
 
                   });
                 })

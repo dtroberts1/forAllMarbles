@@ -64,7 +64,6 @@ export class NotificationService {
           let val = snap.val();
 
           if (val){
-            console.log({"keys": Object.keys(val)})
             let notifications =  <any[]>Object.keys(val).map((myKey : any, index: number) => <any>{
               key : myKey,
               ...val[Object.keys(val)[index]]
@@ -88,7 +87,6 @@ export class NotificationService {
     ])
     .pipe(
       tap((itm: any[]) =>{
-        console.log({"tappedItem":itm})
       }),
       map((itm : any[]) => {
         let reduced = itm.reduce((a : any, b : any) => { return a.concat(b); }, []) as StatusNotification[];

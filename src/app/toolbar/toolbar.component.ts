@@ -13,6 +13,7 @@ import { NotificationService } from '../services/notifications.service';
 export class ToolbarComponent implements OnInit {
   selectedFooterItem = '';
   profCardLocked :boolean = false;
+  notificationCardLocked :boolean = false;
   @Input() authUser!: AuthUser | null;
   @ViewChild('profileCard') profileCard !: ElementRef;
   @ViewChild('notifications') notifications !: ElementRef;
@@ -30,17 +31,48 @@ export class ToolbarComponent implements OnInit {
   }
 
   getNotifications(){
-    
     if (this.authUser){
 
       this.notificationService.getNotificationsForUser(<string>this.authUser?.key)
         .subscribe(
           res => {
-            this.notificationList = []
-
             if (Array.isArray(res)){
+              res.forEach(itm => {
+
+                let notifDateMS = new Date(<string>itm.notificationDateStr).getTime();
+                let nowMS = new Date().getTime();
+                let minutes = (nowMS - notifDateMS) / 1000 / 60;
+
+                let val = null;
+                let type = null;
+                
+                if (minutes < 60){
+                  val = minutes;
+                  type = "minutes";
+                }
+                else if (minutes < (60 * 24)){
+                  val = minutes / 60;
+                  type = "hours";
+                }
+                else if (minutes < (60 * 24 * 7)){
+                  val = minutes / 60 / 24;
+                  type = "days";
+                }
+                else {
+                  val = minutes / 60 / 24 / 7;
+                  type = "weeks";
+                }
+
+                val = Math.round(val).toString();
+
+                itm.recencyString = `${val} ${type} ago`;
+
+              });
               this.notificationList = res;
               this.notificationUnreadCount = this.notificationList.filter(notif => !notif.isRead)?.length;
+                          }
+            else{
+              this.notificationList = []
             }
             if (!res || !Array.isArray(res) || !res.length){
               this.selectedFooterItem = null as any;
@@ -83,6 +115,10 @@ export class ToolbarComponent implements OnInit {
     this.profCardLocked = true;
   }
 
+  lockNotificationCard(event: any){
+    this.notificationCardLocked = true;
+  }
+
   openNotificationMenu(){
     this.selectedFooterItem = 'notifications';
     setTimeout(() => {
@@ -93,13 +129,14 @@ export class ToolbarComponent implements OnInit {
   }
 
   blurCard(event : any){
-
+    if (event.relatedTarget && event.relatedTarget.id === 'notif-collapser'){
+      return;
+    }
     setTimeout(() => {
       this.selectedFooterItem = null as any;
       this.profCardLocked = false;
-  
+      this.notificationCardLocked = false;
     }, 150)
-
   }
   
   ngOnChanges(changes: SimpleChanges) {
@@ -108,12 +145,14 @@ export class ToolbarComponent implements OnInit {
         let change = changes[propName];
         switch (propName) {
           case 'notificationList': {
-            this.notificationList = []
 
             if (Array.isArray(change.currentValue)){
               this.notificationList = change.currentValue;
               this.notificationUnreadCount = this.notificationList.filter(notif => !notif.isRead)?.length;
 
+            }
+            else{
+              this.notificationList = []
             }
             if (!change.currentValue || !Array.isArray(change.currentValue) || !change.currentValue.length){
               this.selectedFooterItem = null as any;
@@ -123,6 +162,11 @@ export class ToolbarComponent implements OnInit {
         }
       }
     }
+  }
+
+  toggleCollapse(event: any){
+    event.stopPropagation();
+    this.canSeeAllNotifs = !this.canSeeAllNotifs;
   }
 
   logout(event: any){

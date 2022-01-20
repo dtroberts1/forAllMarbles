@@ -44,7 +44,7 @@
 
 <div *ngIf="selectedFooterItem === 'notifications' && notificationList && notificationList.length" class="notification-menu" tabindex="1"
 #notifications
-(mousedown)="lockProfileCard($event)"
+(mousedown)="lockNotificationCard($event)"
 (blur)="blurCard($event)"
   >
   <div class="notif-list-container">
@@ -53,16 +53,23 @@
         <div [ngClass]="{'is-marked-read':notification.isRead}" style="width: 100%; height: 100%; display: flex; align-items: center; font-size: 1.08rem;">
           <div class="notif-img-container">
             <div>
-              <mat-icon style="color: forestgreen;"> attach_money</mat-icon>
+                <mat-icon *ngIf="!notification.type"  style="color: forestgreen;"> attach_money</mat-icon>
+                <img *ngIf="notification.type" 
+                [ngClass]="{'victory':notification.type === 'victory',
+                'counter-offer': notification.type === 'counter_offer',
+                'added-document':notification.type === 'added_document',
+                'approved':notification.type === 'approved',
+                'defeat': notification.type === 'defeat'}" 
+                class="notification-icon" style="height: 24px; width: 24px;"  />
             </div>
             <div class="mark-notif-as-read">
               <mat-icon (click)="markNotificationAsRead(notification)">remove_red_eye</mat-icon>
             </div>
           </div>
           <div class="notif-item-container">
-            {{notification.notificationText}} blablawel wl;gjwlk gwrglkjeglkregh lkgj realh
+            {{notification.notificationText}}
             <div class="notif-time-container">
-              30 min ago
+              {{notification.recencyString}}
               <div class="notification-dot">.</div>
             </div>
           </div>
@@ -75,11 +82,11 @@
       </li>
     </ul>
   </div>
-  <div [ngStyle]="{'visibility': notificationList && notificationList.length > 3 ? 'visible' : 'hidden'}" 
+  <div id="notif-collapser" [ngStyle]="{'visibility': notificationList && notificationList.length > 3 ? 'visible' : 'hidden'}" 
     class="view-all-notif" tabindex="1" 
     [matTooltip]="'Delete Notification'"
     [matTooltipClass]="{ 'notification-trash-tooltip': true }" 
-    (click)="canSeeAllNotifs = !canSeeAllNotifs;">
+    (mousedown)="toggleCollapse($event)">
     {{canSeeAllNotifs ? 'Collapse' : 'See All'}}
     
   </div>

@@ -19,8 +19,6 @@
         color: #F3F8FF;
         gap: 0.8em;
 
-
-
         .toolbar-icon{
             &#notif-bell{
                 ::ng-deep mat-icon{
@@ -221,5 +219,23 @@
     span{
         background: transparent !important;
         color: transparent !important;
+    }
+}
+
+.notification-icon{
+    &.victory{
+        content:url(../../assets/icons/trophy.png);
+    }
+    &.defeat{
+        content:url(../../assets/icons/broken_chess_peice.jpg);
+    }
+    &.counter-offer{
+        content:url(../../assets/icons/counter_offer_image.jpg);
+    }
+    &.added-document{
+        content:url(../../assets/icons/document.png);
+    }
+    &.approved{
+        content: url(../../assets/icons/handshake.png);
     }
 }

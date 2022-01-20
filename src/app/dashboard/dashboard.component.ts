@@ -81,11 +81,41 @@ export class DashboardComponent implements OnInit {
             this.notificationList = []
 
             if (Array.isArray(res)){
+              res.forEach(itm => {
+
+                let notifDateMS = new Date(<string>itm.notificationDateStr).getTime();
+                let nowMS = new Date().getTime();
+                let minutes = (nowMS - notifDateMS) / 1000 / 60;
+
+                let val = null;
+                let type = null;
+                
+                if (minutes < 60){
+                  val = minutes;
+                  type = "minutes";
+                }
+                else if (minutes < (60 * 24)){
+                  val = minutes / 60;
+                  type = "hours";
+                }
+                else if (minutes < (60 * 24 * 7)){
+                  val = minutes / 60 / 24;
+                  type = "days";
+                }
+                else {
+                  val = minutes / 60 / 24 / 7;
+                  type = "weeks";
+                }
+
+                val = Math.round(val);
+
+                itm.recencyString = `${val} ${type} ago`;
+
+              });
+              
               this.notificationList = res;
-              console.log({"this.notificationsList":this.notificationList});
             }
             if (!res || !Array.isArray(res) || !res.length){
-              //this.selectedFooterItem = null as any;
             }
           }
         );
