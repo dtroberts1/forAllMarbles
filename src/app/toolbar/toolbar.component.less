@@ -42,9 +42,9 @@
 }
 
 .profile-menu-card{
-    background: #FF4A4A;
-    width: 13em;
+    background: white;
     right: .55em !important;
+    width: 18em;
     /* bottom: 35px; */
     top: 4.2em;
     position: absolute;
@@ -52,25 +52,33 @@
     border-radius: 8px;
     color: white;
     font-family: system-ui !important;
-    padding: 10px 0;
+    padding: .3em 0 0 0;
     z-index: 200;
+    color: #666666;
+    filter: brightness(.99);
+    box-shadow: 0px 0px 6px 2px #da3e3e;
+    -webkit-box-shadow: 0px 0px 6px 2px #da3e3e;
+    background: lightgray;
+    filter: brightness(118%);
+    padding: 1ch;
+    box-sizing: border-box;
 
     .prof-btn{
         text-align: right;
         padding: 10px;
         font-size: 17px;
-        background: #FF4A4A;
+        /*background: #FF4A4A;*/
         border-bottom: 1px solid white;
         
         &:hover{
             cursor: pointer;
-            filter: brightness(200%);
+            /*filter: brightness(200%);*/
+            color: #da3e3e
         }
     }
  }
 
  .notification-menu{
-    background: white;
     right: .55em !important;
     width: 24em;
     /* bottom: 35px; */
@@ -86,6 +94,7 @@
     filter: brightness(.99);
     box-shadow: 0px 0px 6px 2px #da3e3e;
     -webkit-box-shadow: 0px 0px 6px 2px #da3e3e;
+    background: white;
 
     .prof-btn{
         text-align: right;
@@ -104,6 +113,7 @@
  ul{
      list-style: none;
      padding-inline-start: 0;
+     background: white;
 
      li{
         padding: 0.4em 0;
@@ -178,6 +188,12 @@
     -moz-transition: 1s;
     -o-transition: 1s;
     transition: 1s;
+    z-index: 205;
+
+    background: lightgray;
+    filter: brightness(119%);
+    padding: 1ch;
+    box-sizing: border-box;
 }
 
 .notif-list-container::-webkit-scrollbar {
@@ -238,4 +254,8 @@
     &.approved{
         content: url(../../assets/icons/handshake.png);
     }
+}
+
+#notif-collapser{
+    background: white;
 }

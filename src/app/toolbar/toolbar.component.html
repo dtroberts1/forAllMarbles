@@ -5,6 +5,7 @@
     <div id="toolbar-btns">
         <div class="toolbar-icon" id="notif-bell">
           <mat-icon
+          id="notif-bell-mat-icon"
           [ngClass]="{'hide-bell-badge': !notificationList || !notificationList.length}"
           [ngStyle]="{'filter': notificationList && notificationList.length? 'brightness(1)':'brightness(0.5)',
         'opacity': notificationList && notificationList.length?'1' : '0.5'}"
@@ -13,7 +14,7 @@
         </div>
         <div class="toolbar-icon" 
         >
-            <mat-icon tabindex="1" (click)="openProfileContext()" >person</mat-icon>
+            <mat-icon id="profile-dropdown-icon" tabindex="1" (click)="openProfileContext()" >person</mat-icon>
         </div>
     </div>
 </div>
@@ -63,7 +64,10 @@
                 class="notification-icon" style="height: 24px; width: 24px;"  />
             </div>
             <div class="mark-notif-as-read">
-              <mat-icon (click)="markNotificationAsRead(notification)">remove_red_eye</mat-icon>
+              <mat-icon 
+              [matTooltip]="'Mark as read'"
+              [matTooltipClass]="{ 'notification-trash-tooltip': true }" 
+              (click)="markNotificationAsRead(notification)">remove_red_eye</mat-icon>
             </div>
           </div>
           <div class="notif-item-container">
@@ -75,7 +79,11 @@
           </div>
           <div class="notification-trash-can">
             <div>
-              <mat-icon (click)="deleteNotification(notification)" style="color: red; ">delete</mat-icon>
+              <mat-icon     
+              [matTooltip]="'Delete Notification'"
+              [matTooltipClass]="{ 'notification-trash-tooltip': true }" 
+              
+              (click)="deleteNotification(notification)" style="color: red; ">delete</mat-icon>
             </div>
           </div>
         </div>
@@ -84,8 +92,6 @@
   </div>
   <div id="notif-collapser" [ngStyle]="{'visibility': notificationList && notificationList.length > 3 ? 'visible' : 'hidden'}" 
     class="view-all-notif" tabindex="1" 
-    [matTooltip]="'Delete Notification'"
-    [matTooltipClass]="{ 'notification-trash-tooltip': true }" 
     (mousedown)="toggleCollapse($event)">
     {{canSeeAllNotifs ? 'Collapse' : 'See All'}}
     

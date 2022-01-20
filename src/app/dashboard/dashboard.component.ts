@@ -61,6 +61,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.notificationList = []
 
     this.authUser = this.authService.getAccount();

@@ -27,7 +27,6 @@ export class ToolbarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.notificationList = []
   }
 
   getNotifications(){
@@ -129,14 +128,24 @@ export class ToolbarComponent implements OnInit {
   }
 
   blurCard(event : any){
+
+    if (event.relatedTarget && event.relatedTarget.id === 'profile-dropdown-icon' && this.selectedFooterItem === 'notifications'){
+      return;
+    }
+
+    if (event.relatedTarget && event.relatedTarget.id === 'notif-bell-mat-icon' && this.selectedFooterItem === 'profile'){
+      return;
+    }
+
     if (event.relatedTarget && event.relatedTarget.id === 'notif-collapser'){
       return;
     }
+
     setTimeout(() => {
       this.selectedFooterItem = null as any;
       this.profCardLocked = false;
       this.notificationCardLocked = false;
-    }, 150)
+    }, 150);
   }
   
   ngOnChanges(changes: SimpleChanges) {
@@ -165,7 +174,6 @@ export class ToolbarComponent implements OnInit {
   }
 
   toggleCollapse(event: any){
-    event.stopPropagation();
     this.canSeeAllNotifs = !this.canSeeAllNotifs;
   }
 
