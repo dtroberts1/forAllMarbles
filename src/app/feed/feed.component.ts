@@ -2,9 +2,11 @@ import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { Bid } from '../models/bid';
+import { StatusNotification } from '../models/status-notification';
 import { AuthUser } from '../models/user';
 import { AuthService } from '../services/auth.service';
 import { BidService } from '../services/bid.service';
+import { NotificationService } from '../services/notifications.service';
 
 @Component({
   selector: 'app-feed',
@@ -40,7 +42,8 @@ export class FeedComponent implements OnInit {
           }
           this.searchedBids = this.allBids;
 
-        });
+        });       
+    
   }
 
   public accordionCallback(){

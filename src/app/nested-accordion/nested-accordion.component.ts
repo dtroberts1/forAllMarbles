@@ -7,9 +7,11 @@ import { AdminChooseWinnerComponent } from '../admin-choose-winner/admin-choose-
 import { BidConfirmationDialogComponent } from '../bid-confirmation-dialog/bid-confirmation-dialog.component';
 import { DocManagementModalComponent } from '../doc-management-modal/doc-management-modal.component';
 import { Bid } from '../models/bid';
+import { StatusNotification } from '../models/status-notification';
 import { SupportingDoc } from '../models/supporting-doc';
 import { AuthUser } from '../models/user';
 import { BidService } from '../services/bid.service';
+import { NotificationService } from '../services/notifications.service';
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -68,6 +70,7 @@ export class NestedAccordionComponent implements OnInit {
     private bidService: BidService,
     public dialog: MatDialog,
     private userService: UserService,
+    private notificationService: NotificationService,
   ) { }
 
   ngOnInit(): void {
@@ -119,6 +122,22 @@ export class NestedAccordionComponent implements OnInit {
 
     this.bidService.update(<string>bid.key, bid)
     .then(() => {
+      firstValueFrom(
+        this.userService.getAll()
+      )
+        .then((res) =>{
+          if (Array.isArray(res)){
+            let user = res.find(user => user.key === this.user?.key);
+            let newNotification : StatusNotification = {
+              notificationText : `${user?.fullName} has approved your bid, "${(<Bid>bid).title}"`,
+              isRead : false,
+              notificationDateStr : new Date().toISOString(),
+              userKey : bid.bidCreatorKey,
+              type : 'approved',
+            }
+            this.notificationService.create(newNotification);
+          }
+        });
     });
   }
   updateBid(bid: Bid){
@@ -244,6 +263,7 @@ export class NestedAccordionComponent implements OnInit {
     dialogRef.afterClosed().subscribe(selectedUser => {
 
       if (selectedUser){
+
         let declaredLoserKey = this.bid.bidCreatorKey != selectedUser.key ? this.bid.bidCreatorKey : this.bid.bidChallengerKey;
 
         this.bid.verifiedLoser = declaredLoserKey;
@@ -272,6 +292,29 @@ export class NestedAccordionComponent implements OnInit {
             }
             promise
               .then(() => {
+
+                let newNotification : StatusNotification = {
+                  notificationText : `It has been decided through verification that you have won ` +
+                  `bid, "${(<Bid>this.bid).title}". ` +
+                  `Congratulations! Funds will be deposited shortly."`,
+                  isRead : false,
+                  notificationDateStr : new Date().toISOString(),
+                  userKey : <string>newBid.verifiedWinner,
+                  type : 'victory',
+                }
+                this.notificationService.create(newNotification);
+
+                  newNotification = {
+                  notificationText : `It has been decided through verification that you have lost ` +
+                  `bid, "${(<Bid>this.bid).title}". ` +
+                  `We are sorry for the news. Funds have been deducted from your account."`,
+                  isRead : false,
+                  notificationDateStr : new Date().toISOString(),
+                  userKey : <string>newBid.verifiedLoser,
+                  type : 'defeat',
+                }
+                this.notificationService.create(newNotification);
+
                 this.accordionBaseCallback.emit();
               });
           });
@@ -293,6 +336,24 @@ export class NestedAccordionComponent implements OnInit {
       parentPath : `${parentBid.parentPath}${parentBid.key}/bids/`,
       isNew: true,
     });
+
+    firstValueFrom(
+      this.userService.getAll()
+    )
+      .then((res) =>{
+        if (Array.isArray(res)){
+          let user = res.find(user => user.key === this.user?.key);
+          let newNotification : StatusNotification = {
+            notificationText : `${user?.fullName} has made a counter offer to your bid, "${(<Bid>this.bid).title}"`,
+            isRead : false,
+            notificationDateStr : new Date().toISOString(),
+            userKey : parentBid.bidCreatorKey,
+            type : 'counter_offer',
+          }
+          this.notificationService.create(newNotification);
+        }
+      });
+
     this.refreshBid(this.bid);
   }
 
@@ -387,6 +448,23 @@ export class NestedAccordionComponent implements OnInit {
             }
             promise
               .then(() => {
+                firstValueFrom(
+                  this.userService.getAll()
+                )
+                  .then((res) =>{
+                    if (Array.isArray(res)){
+                      let user = res.find(user => user.key === this.user?.key);
+                      let newNotification : StatusNotification = {
+                        notificationText : `${user?.fullName} has conceded defeat for bid, "${bid.title}". ` +
+                        `You are the winner! Funds will be deposited shortly."`,
+                        isRead : false,
+                        notificationDateStr : new Date().toISOString(),
+                        userKey : <string>bid.declaredWinner,
+                        type : 'victory',
+                      }
+                      this.notificationService.create(newNotification);
+                    }
+                  });
                 this.accordionBaseCallback.emit();
               });
           });
@@ -398,8 +476,9 @@ export class NestedAccordionComponent implements OnInit {
 
     this.bidService.update(<string>bid.key, bid)
     .then(() => {
+
     })
-    .catch((err) => console.log("error: "+ err))
+    .catch((err) => console.log("error: "+ err));
   }
 
   refreshBase(){

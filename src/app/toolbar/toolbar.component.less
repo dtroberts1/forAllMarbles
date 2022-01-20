@@ -17,30 +17,84 @@
         justify-content: end; 
         align-items: center;
         color: #F3F8FF;
+        gap: 0.8em;
 
-        &:hover{
+        .toolbar-icon{
+            &#notif-bell{
+                ::ng-deep mat-icon{
+                    span{
+                        background: #26D1A7;
+                        opacity: .7;
+                        border-radius: 90%;
+                    }
+                }
+            }
+
+            &:hover{
                 ::ng-deep mat-icon{
                     cursor: pointer;
-                    //background-image: url(../assets/icons/DashboardIcon/2x/outline_dashboard_white_24dp.png);
                     color: #F3F8FF;
                     filter: brightness(65%);
                 }
+        }
         }
     }
 }
 
 .profile-menu-card{
-    background: #FF4A4A;
-    width: 200px;
+    background: white;
+    right: .55em !important;
+    width: 18em;
     /* bottom: 35px; */
-    top: 58px;
+    top: 4.2em;
     position: absolute;
     right: 2px;
     border-radius: 8px;
     color: white;
     font-family: system-ui !important;
-    padding: 10px 0;
+    padding: .3em 0 0 0;
     z-index: 200;
+    color: #666666;
+    filter: brightness(.99);
+    box-shadow: 0px 0px 6px 2px #da3e3e;
+    -webkit-box-shadow: 0px 0px 6px 2px #da3e3e;
+    background: lightgray;
+    filter: brightness(118%);
+    padding: 1ch;
+    box-sizing: border-box;
+
+    .prof-btn{
+        text-align: right;
+        padding: 10px;
+        font-size: 17px;
+        /*background: #FF4A4A;*/
+        border-bottom: 1px solid white;
+        
+        &:hover{
+            cursor: pointer;
+            /*filter: brightness(200%);*/
+            color: #da3e3e
+        }
+    }
+ }
+
+ .notification-menu{
+    right: .55em !important;
+    width: 24em;
+    /* bottom: 35px; */
+    top: 4.2em;
+    position: absolute;
+    right: 2px;
+    border-radius: 8px;
+    color: white;
+    font-family: system-ui !important;
+    padding: .3em 0 0 0;
+    z-index: 200;
+    color: #666666;
+    filter: brightness(.99);
+    box-shadow: 0px 0px 6px 2px #da3e3e;
+    -webkit-box-shadow: 0px 0px 6px 2px #da3e3e;
+    background: white;
 
     .prof-btn{
         text-align: right;
@@ -55,3 +109,153 @@
         }
     }
  }
+
+ ul{
+     list-style: none;
+     padding-inline-start: 0;
+     background: white;
+
+     li{
+        padding: 0.4em 0;
+
+        &:nth-child(1){
+            border-top: 1px solid #dddfe2;
+        }
+
+        border-bottom: 1px solid #dddfe2;
+
+     }
+ }
+
+ .view-all-notif{
+    display: flex;
+    border-top: 1px solid #dddfe2;
+    justify-content: center;
+    padding: 0.6em;
+    font-size: 1.2rem;
+    width: 100%;
+    padding-inline-start: 0;
+    box-sizing: border-box;
+
+    &:hover{
+        //box-shadow: inset 0 0 100px 100px rgb(255 255 255 / 30%);
+        color: #ff4a4a;
+        cursor: pointer;
+        background: #ffecec;
+    }
+
+ }
+
+ .notif-item-container{
+    height: 100%;
+    flex: 4;
+    padding: 0.3em 0.6em 0.3em 0;
+}
+
+.notif-img-container{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between !important;
+    gap: 0.5em;
+}
+
+.notif-time-container{
+    font-weight: 500;
+    display: inline-block;
+    position: relative;
+    margin-left: 0.8em;
+    padding-left: 0.2em;
+
+    .notification-dot{
+        display: inline-block;
+        position: absolute;
+        left: -0.25em;
+        top: -0.69em;
+        font-size: 2.3em;
+    }
+}
+
+.notif-list-container{
+    width: 100%; 
+    max-height: 30em; 
+    overflow-y: auto;
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    -webkit-transition: 1s;
+    -moz-transition: 1s;
+    -o-transition: 1s;
+    transition: 1s;
+    z-index: 205;
+
+    background: lightgray;
+    filter: brightness(119%);
+    padding: 1ch;
+    box-sizing: border-box;
+}
+
+.notif-list-container::-webkit-scrollbar {
+    display: none;
+}
+
+.mark-notif-as-read{
+    padding: 0.15em 0.1em .04em 0.1em;
+    border-radius: 10em;
+    
+    &:hover{
+        cursor: pointer;
+        color: #FF4A4A;
+    }
+}
+
+.notification-trash-can{
+    flex: .5;
+
+    ::ng-deep mat-icon{
+        border-radius: 0.4em;
+    }
+    &:hover{
+        cursor: pointer;
+
+        ::ng-deep mat-icon{
+            box-shadow: 0 0 .3em .3em #FF4A4A;
+        }
+    }
+}
+
+.is-marked-read{
+    filter: brightness(113%);
+    opacity: .4;
+    background: lightgray;
+}
+
+::ng-deep .hide-bell-badge{
+    span{
+        background: transparent !important;
+        color: transparent !important;
+    }
+}
+
+.notification-icon{
+    &.victory{
+        content:url(../../assets/icons/trophy.png);
+    }
+    &.defeat{
+        content:url(../../assets/icons/broken_chess_peice.jpg);
+    }
+    &.counter-offer{
+        content:url(../../assets/icons/counter_offer_image.jpg);
+    }
+    &.added-document{
+        content:url(../../assets/icons/document.png);
+    }
+    &.approved{
+        content: url(../../assets/icons/handshake.png);
+    }
+}
+
+#notif-collapser{
+    background: white;
+}
