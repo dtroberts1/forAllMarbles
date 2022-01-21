@@ -1,0 +1,51 @@
+.modal-title{
+    font-size: 25px;
+    font-weight: 400;
+    background: #DA3E3E;
+    text-align: center;
+    line-height: 50px;
+    border-bottom: 1px solid;
+    color: white;
+    font-family: system-ui;
+    position: relative;
+}
+
+.modal-close-container{
+    position: absolute; 
+    top: 0; 
+    right: 0; 
+    padding: 10px;
+    height: 50px;
+    box-sizing: border-box;
+
+    .close-icon-background{
+        box-sizing: border-box;
+        display: flex;
+        height: 100%;
+
+        &:hover{
+            border-radius: 38px;
+    
+            transition: all 1s ease;
+            background-color: lightgray;
+            opacity:0.5;
+            cursor: pointer;
+        }
+    }
+}
+
+#bid-lower-left-btns{
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 3;
+    grid-row-end: 3;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    
+    #lower-left-btn-container{
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+}

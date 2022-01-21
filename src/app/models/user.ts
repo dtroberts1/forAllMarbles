@@ -13,6 +13,10 @@ export class User {
     city ?: string;
     state ?: string;
     isAdmin ?: boolean;
+    backgroundUrlPreference ?: string;
+    backgroundSizePreference ?: string;
+    backgroundPositionPreference ?: string;
+    opacity ?: number;
 }
 
 export class AuthUser{

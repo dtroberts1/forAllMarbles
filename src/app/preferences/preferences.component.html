@@ -1,0 +1,79 @@
+<div style="position: relative; height: 100%;">
+    <div class="modal-title">
+        Manage Preferences
+        <div class="modal-close-container">
+            <div (click)="closeModal(false)" tabindex="1" class="close-icon-background">
+                <mat-icon style="color: white; padding-top: 3px;">close</mat-icon>
+            </div>
+        </div>
+    </div>
+    <div>
+        <mat-slide-toggle
+        aria-label="Toggle Background Image Source"
+        [(ngModel)]="enableBackgroundImage"
+        >
+
+        </mat-slide-toggle>
+    </div>
+    <div>
+        <div style="padding: 10px; display: flex; gap: 10px;"
+            *ngIf="enableBackgroundImage"
+            >
+            <label style="color: white; width: 48px;" 
+            class="custom-file-upload mat-raised-button" 
+            style="background-color: #DA3E3E; font-family: system-ui !important; color: white; width: 78px; display: flex; align-items: center;">
+            Browse           
+            <input 
+                type="file"
+                accept=".png, .jpg, .jpeg"
+                class="text-nowrap text-truncate"
+                style="visibility: hidden;"
+                (change)="attachmentAdded($event)"
+            />
+            </label>    
+        </div>
+        <div *ngIf="!enableBackgroundImage">
+
+        </div>
+        <mat-form-field style="width: 224px; padding-left: 20px; padding-top: 10px;" appearance="outline">
+            <mat-label>Background Size</mat-label>
+            <mat-select [(ngModel)]="backgroundSize"
+                (selectionChange)="objectFitModified()"
+            >
+                <mat-option *ngFor="let option of backgroundSizeOptions" [value]="option">{{option}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field style="width: 224px; padding-left: 20px; padding-top: 10px;" appearance="outline">
+            <mat-label>Background Position</mat-label>
+            <mat-select [(ngModel)]="backgroundPosition"
+                (selectionChange)="backgroundPositionModified()"
+            >
+                <mat-option *ngFor="let option of backgroundPositionOptions" [value]="option">{{option}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <div>
+            <mat-slider 
+            (input)="opacity = $event.value; this.emitChange();"
+            aria-label="units"
+            [(ngModel)]="opacity"
+            thumbLabel 
+            step=".01"
+            min="0"
+            max="1"
+            [displayWith]="formatLabel"
+            tickInterval="auto"></mat-slider>
+        </div>
+    </div>
+    <div style="bottom: 0; position: absolute; padding-bottom: 0.6em; display: flex; justify-content: center; width: 100%;">
+        <div id="bid-lower-right-btns">
+            <div>
+                <div id="lower-right-btn-container">
+                    <button style="font-family: system-ui !important;" 
+                    class="pending-changes" 
+                    (click)="closeModal(true)"
+                    mat-raised-button color="accent">Save Preferences</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

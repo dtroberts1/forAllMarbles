@@ -1,12 +1,15 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { FeedComponent } from '../feed/feed.component';
+import { Preferences } from '../interfaces/preferences';
 import { IM } from '../models/im';
 import { StatusNotification } from '../models/status-notification';
 import { AuthUser, User } from '../models/user';
 import { AuthService } from '../services/auth.service';
 import { NotificationService } from '../services/notifications.service';
+import { UserService } from '../services/user.service';
 import { YourBidsComponent } from '../your-bids/your-bids.component';
 
 @Component({
@@ -21,17 +24,22 @@ export class DashboardComponent implements OnInit {
   @ViewChild('searchinput') searchInput !: ElementRef;
   notificationList !: StatusNotification[];
 
+  backgroundSrc !: string | undefined;
+  backgroundSize : string | undefined;
   canDispNewMessageScrn :boolean = false;
   existingMessage !: IM;
   selectedUser !: User | null;
   searchText !: string;
   canDispVis !: boolean;
+  backgroundPosition !: string | undefined;
+  opacity !: number | undefined;
+  preferences !: Preferences;
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private notificationService: NotificationService,
-
+    private userService: UserService,
   ) { }
 
   notifyChild(event: any){
@@ -65,6 +73,25 @@ export class DashboardComponent implements OnInit {
     this.notificationList = []
 
     this.authUser = this.authService.getAccount();
+    if (this.authUser){
+      this.userService.getSingle(<string>this.authUser?.key)
+        .then((user) => {
+          this.preferences = {
+            backgroundUrl : user.backgroundUrlPreference,
+            backgroundPosition : user.backgroundPositionPreference,
+            backgroundSize : user.backgroundSizePreference,
+            opacity: user.opacity,
+          }
+
+          this.backgroundSrc = this.preferences.backgroundUrl;
+          this.opacity = this.preferences.opacity;
+          this.backgroundPosition = this.preferences.backgroundPosition;
+          this.backgroundSize = this.preferences.backgroundSize;
+
+        })
+
+    }
+
     if (!this.authUser){
       this.router.navigate(['/login']);
     }
@@ -121,6 +148,20 @@ export class DashboardComponent implements OnInit {
           }
         );
     } 
+  }
+
+  preferencesChanged(event : any){
+    this.backgroundSrc = (<Preferences>event.preferences).backgroundUrl;
+    this.backgroundSize = (<Preferences>event.preferences).backgroundSize;
+    this.backgroundPosition = (<Preferences>event.preferences).backgroundPosition;
+    this.opacity = (<Preferences>event.preferences).opacity;
+    this.preferences = {
+      backgroundUrl : this.backgroundSrc,
+      backgroundSize : this.backgroundSize,
+      backgroundPosition : this.backgroundPosition,
+      opacity : this.opacity,
+    }
+    
   }
 
   toggleSearchVis(){

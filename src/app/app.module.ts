@@ -53,7 +53,10 @@ import { registerPlugin, UndoRedo } from 'handsontable/plugins';
 import { PlayerComparisonChartComponent } from './player-comparison-chart/player-comparison-chart.component';
 import { AnimateDirective } from './animate.directive';
 import { AnimateComponent } from './animate/animate.component';
-
+import { PreferencesComponent } from './preferences/preferences.component';
+import {MatSlider, MatSliderModule} from '@angular/material/slider'
+import{MatButtonToggle, MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 registerAllModules();
 
 // register the `NumericCellType` module
@@ -85,7 +88,8 @@ registerPlugin(UndoRedo);
     AdminChooseWinnerComponent,
     PlayerComparisonChartComponent,
     AnimateDirective,
-    AnimateComponent
+    AnimateComponent,
+    PreferencesComponent
   ],
   imports: [
     CommonModule,
@@ -109,9 +113,12 @@ registerPlugin(UndoRedo);
     MatNativeDateModule,
     BrowserModule,
     HotTableModule,
+    MatButtonToggleModule,
+    MatSliderModule,
     MatTooltipModule,
     MatSortModule,
     CdkAccordionModule,
+    MatSlideToggleModule,
     MatTabsModule,
     MatProgressSpinnerModule,
     AngularFirestoreModule,

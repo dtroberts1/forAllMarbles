@@ -1,12 +1,20 @@
 <app-toolbar
     [authUser]="authUser"
     [notificationList]="notificationList"
+    (preferencesChanged)="preferencesChanged($event)"
+    [preferences]="preferences"
 ></app-toolbar>
-<div style="background-color: #F3F2EF; height: 1200px;"
->
+<div id="main-view" style="background-color: #F3F2EF; height: 1200px;"
+[ngStyle]="{'background-image': (backgroundSrc ? 'url(' + backgroundSrc + ')' : 'initial'),
+            'background-size':backgroundSize,
+        'background-position': backgroundPosition}"
+>   
+
     <div *ngIf="authUser">
     </div>
-    <div style="width: 50%; height: 100%; float: left;">
+    <div style="width: 50%; height: 100%; float: left;"
+        [ngStyle]="{'opacity': opacity}"
+    >
         <mat-tab-group (selectedTabChange)="notifyChild($event)"
         >
             <mat-tab label="Feed" #feed>
@@ -24,8 +32,16 @@
                 </div>
             </mat-tab>
         </mat-tab-group>
-        <div style="position: absolute; top: 3.5em; left: 32em; width: 15em; height: 2.6em; display: flex; align-items: center;                                                                                                     ">
-            <mat-icon *ngIf="!canDispVis" style="padding: 0.1em; border-radius: 10px;" id="seach-icon" (click)="toggleSearchVis()">search</mat-icon>
+        <div style="position: absolute;
+        top: 3.1em;
+        left: 30em;
+        width: 100%;
+        height: 3.1em;
+        display: flex;
+        align-items: center;
+        background: white;">
+            <mat-icon *ngIf="!canDispVis"  style="padding: 0.1em; border-radius: 10px; background: white;" id="seach-icon" (click)="toggleSearchVis()"
+            >search</mat-icon>
             <div *ngIf="canDispVis" wmAnimate="fadeInRight" speed="normal">
                 <mat-form-field 
                 style="width: 224px; font-size: .7rem; color: #666666; margin-top: 1em;" appearance="fill">
@@ -37,12 +53,14 @@
             </div>
         </div>
     </div>
-    <div style="width: 50%; height: 100%; float: right; overflow-x:hidden;">
+    <div 
+    [ngStyle]="{'opacity': opacity}"
+    style="width: 50%; height: 100%; float: right; overflow-x:hidden;">
         <app-earnings-losses>
 
         </app-earnings-losses>
     </div>
-    <div>
+    <div [ngStyle]="{'opacity': opacity}">
         <app-messaging
         (createNewMsgtCallback)="openCreateNewMsg()"
         (openMsgThreadCallback)="openMessageThread($event)"

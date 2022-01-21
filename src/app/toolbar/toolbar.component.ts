@@ -1,9 +1,13 @@
-import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { Preferences } from '../interfaces/preferences';
 import { StatusNotification } from '../models/status-notification';
 import { AuthUser } from '../models/user';
+import { PreferencesComponent } from '../preferences/preferences.component';
 import { AuthService } from '../services/auth.service';
 import { NotificationService } from '../services/notifications.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -18,15 +22,74 @@ export class ToolbarComponent implements OnInit {
   @ViewChild('profileCard') profileCard !: ElementRef;
   @ViewChild('notifications') notifications !: ElementRef;
   @Input() notificationList !: StatusNotification[];
+  //Input() pref !: Preferences;
+  @Input() preferences !: Preferences;
+
+  @Output() preferencesChanged = new EventEmitter();
+
   canSeeAllNotifs : boolean = false;
   notificationUnreadCount : number = 0;
   constructor(
     private authService: AuthService,
     private router: Router,
     private notificationService: NotificationService,
+    public dialog: MatDialog,
+    private userService: UserService,
   ) { }
 
   ngOnInit(): void {
+  }
+
+  openPreferences(event: any){
+
+    let origPref = this.preferences;
+    
+    const dialogRef = this.dialog.open(PreferencesComponent, {
+      width: '550px',
+      height: '640px',
+      data: {
+        preferences: this.preferences,
+      },
+      panelClass: 'modal-class'
+    });
+
+    dialogRef.componentInstance.preferencesChanged.subscribe(
+      pref => {
+        this.preferences = pref;
+        this.preferencesChanged.emit(this.preferences);
+
+      }
+    )
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result){
+        this.preferences = {
+          backgroundUrl : result.backgroundUrl,
+          backgroundSize : result.backgroundSize,
+          backgroundPosition : result.backgroundPosition,
+          opacity: result.opacity,
+        };
+        this.preferencesChanged.emit({preferences: this.preferences});
+
+        if (this.authUser){
+          this.userService.getSingle(<string>this.authUser?.key)
+          .then((user) => {
+              user.backgroundUrlPreference = this.preferences.backgroundUrl;
+              user.backgroundSizePreference = this.preferences.backgroundSize;
+              user.backgroundPositionPreference = this.preferences.backgroundPosition;
+              user.opacity = this.preferences.opacity;
+              this.userService.update(
+                <string>this.authUser?.key, user,
+              );
+          });
+        }
+      }
+      else{
+        this.preferences = origPref;
+        this.preferencesChanged.emit({preferences: this.preferences});
+
+      }
+    });
   }
 
   getNotifications(){
