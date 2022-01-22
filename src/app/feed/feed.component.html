@@ -1,6 +1,6 @@
 <ul class="my-bid-list">
-    <li *ngFor="let bid of searchedBids" class="bid-list-item" style="width: fit-content;">
-        <div *ngIf="authUser" class="accordion-container" wmAnimate="fadeInRight" speed="normal" style="min-width: 106ch;">
+    <li *ngFor="let bid of searchedBids" class="bid-list-item">
+        <div *ngIf="authUser" class="accordion-container" wmAnimate="fadeInRight" speed="normal">
             <app-nested-accordion
             [bid]="bid"
             [user]="authUser"
