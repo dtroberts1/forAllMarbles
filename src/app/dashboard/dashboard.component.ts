@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostBinding, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostBinding, Inject, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';

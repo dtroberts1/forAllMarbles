@@ -1,10 +1,9 @@
 .msg-preview-main-container{
-    color: black; 
     display: flex; 
     font-size: 18px;
 
     &:hover{
-        
+        background: var(--hover-color) !important;
     }
 
     #msg-profileimg-container{
@@ -19,11 +18,15 @@
         width: 75%;
         padding: 10px;
         line-height: 1.3em;
+
+        &:hover{
+            background: var(--hover-color);
+        }
     
         #message-profile-name{
             font-weight: 500;
-            opacity: .7;
             position: relative;
+            color: var(--text-color);
         }
     }
 }

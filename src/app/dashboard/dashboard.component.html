@@ -74,11 +74,13 @@
             <app-messaging
             (createNewMsgtCallback)="openCreateNewMsg()"
             (openMsgThreadCallback)="openMessageThread($event)"
+            [isThemeDark]="isThemeDark"
             >
             </app-messaging>
             <app-new-message *ngIf="canDispNewMessageScrn" 
             [selectedUser]="selectedUser"
             (closeNewMsgCallback)="closeNewMessage()"
+            [isThemeDark]="isThemeDark"
             ></app-new-message>
         </div>
 

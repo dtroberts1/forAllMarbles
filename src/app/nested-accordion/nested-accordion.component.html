@@ -18,10 +18,12 @@
                 <div tabindex="1" (click)="enableTitleEditMode($event)">
                 </div>
             </div>
-            <div style="display: inline-block;">
+            <div style="display: inline-flex;">
                 <input matInput 
+                    [ngStyle]="{background: titleEditMode ? 'var(--divider-color)' : 'initial'}"
                     placeholder="Bid Title" 
-                    style="border: none; outline: none; font-family: system-ui !important; background: initial;"
+                    style="border: none; outline: none; font-family: system-ui !important; background: initial;
+                    padding-bottom: .4em;"
                     (click)="stopPropagation($event, accordionItem.expanded)"
                     #titleInput
                     [readonly]="!titleEditMode"
@@ -56,7 +58,7 @@
                     {{(user && bid.verifiedWinner == user.key ? 'Won' : (bid.verifiedLoser == user.key ? 'Lost' : ''))}}
                 </span>
             </div>
-            <div>
+            <div style="display: flex;">
                 <mat-icon style="float:right;" class="expand-icon"  [@openClose]="!accordionItem.expanded ? 'open' : 'closed'">keyboard_arrow_up</mat-icon>
                 <mat-icon
                     color="warn"
@@ -88,10 +90,11 @@
                         </div>
                     </div>
                 </div>
-                <div style="display: inline-block;">
+                <div style="display: inline-block; width: 90%;">
                     <textarea matInput 
                         placeholder="Bid Message" 
-                        style="border: none; outline: none; color: var(--secondary-text-color)"
+                        [ngStyle]="{'background': bidMessageEditMode ? 'var(--divider-color)' : 'initial'}"
+                        style="border: none; outline: none; color: var(--secondary-text-color);"
                         #bidMessageInput
                         [readonly]="!bidMessageEditMode"
                         (keydown)="detailDataChanged(bidMessageEditMode)"
@@ -135,10 +138,12 @@
                 <div id="bid-amt-value">
                     <div>
                         <input  matInput 
-                        [ngStyle]="{'color': (isThemeDark ? 'var(--secondary-text-color)': 'forestgreen')}"
+                        [ngStyle]="{'color': (isThemeDark ? 'var(--secondary-text-color)': 'forestgreen'),
+                        background: (bidAmtEditMode ? 'var(--divider-color)' : 'initial')}"
                         placeholder="23.55" 
                         style="border: none; outline: none; height: initial; width: initial; 
-                        text-align: right; padding-right: 13px;"
+                        text-align: right; padding-right: 13px; width: 40%; float: right; padding-bottom: 0.4em; 
+                        "
                         #bidAmtInput
                         type="number"
                         [readonly]="!bidAmtEditMode"

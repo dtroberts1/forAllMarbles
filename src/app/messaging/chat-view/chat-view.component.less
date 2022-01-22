@@ -2,30 +2,37 @@
     list-style: none;
     padding-inline-start: 0;
 
-    #im-item-left{
-        height: 100%;
-        width:25%;
-        float: left;
-    }
+    .im{
 
-    #im-item-right{
-        height: 100%;
-        width: 75%;
-        float: right;
-        position: relative;
-
-        #full-name{
-            font-weight: 500;
-            font-size: 18px;
-            font-family: system-ui !important;
-            display: flex;
-            align-items: center;
+        &:hover{
+            cursor: default !important;
         }
-
-        #msg-date{
-            position: absolute;
-            top: 0;
-            right: 0;
+        #im-item-left{
+            height: 100%;
+            width:25%;
+            float: left;
+        }
+    
+        #im-item-right{
+            height: 100%;
+            width: 75%;
+            float: right;
+            position: relative;
+    
+            #full-name{
+                font-weight: 500;
+                font-size: 18px;
+                font-family: system-ui !important;
+                display: flex;
+                align-items: center;
+                color: var(--text-color);
+            }
+    
+            #msg-date{
+                position: absolute;
+                top: 0;
+                right: 0;
+            }
         }
     }
 }

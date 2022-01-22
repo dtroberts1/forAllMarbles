@@ -1,4 +1,5 @@
-<div id="new-msg-container" [ngClass]="{'expanded': expanded}">
+<div id="new-msg-container" [ngClass]="{'expanded': expanded, 
+'dark-mode' : isThemeDark}">
     <div id="recent-msg-header" tabindex="1" (click)="expandCollapse()">
         <div id="messaging-icons-left">
             <mat-icon *ngIf="!isExistingThread" tabindex="1" >message</mat-icon>
@@ -20,6 +21,7 @@
         <div id="new-message-body">
             <div *ngIf="!selectedMessageUser" id="contact-search-input-container">
                 <input
+                    [ngClass]="{'dark-mode' : isThemeDark}"
                     [(ngModel)]="userSearchStr"
                     placeholder="Type a name to find a contact"
                     (click)="stopPropagation($event)"
@@ -56,13 +58,13 @@
             </div>
             <div id="new-message-input-container">
                 <textarea
+                    [ngClass]="{'dark-mode' : isThemeDark}"
                     [(ngModel)]="msgText"
                     placeholder="Write a message..." 
                 ></textarea>
             </div>
             <div id="message-controls">
                 <div id="left-msg-ctrls">
-                    Left ctrls
                 </div>
                 <div id="right-msg-ctrls">
                     <button [disabled]="!selectedMessageUser || !msgText" 
