@@ -8,13 +8,18 @@ import { PreferencesComponent } from '../preferences/preferences.component';
 import { AuthService } from '../services/auth.service';
 import { NotificationService } from '../services/notifications.service';
 import { UserService } from '../services/user.service';
+import {HostBinding} from '@angular/core';
+import {OverlayContainer} from "@angular/cdk/overlay";
+const THEME_DARKNESS_SUFFIX = `-dark`;
 
 @Component({
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.less']
+  styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent implements OnInit {
+  @HostBinding('class') activeThemeCssClass: string | undefined;
+  activeTheme: string | undefined;
   selectedFooterItem = '';
   profCardLocked :boolean = false;
   notificationCardLocked :boolean = false;
@@ -22,6 +27,7 @@ export class ToolbarComponent implements OnInit {
   @ViewChild('profileCard') profileCard !: ElementRef;
   @ViewChild('notifications') notifications !: ElementRef;
   @Input() notificationList !: StatusNotification[];
+  @Input() isThemeDark !: boolean;
   //Input() pref !: Preferences;
   @Input() preferences !: Preferences;
 
@@ -35,10 +41,35 @@ export class ToolbarComponent implements OnInit {
     private notificationService: NotificationService,
     public dialog: MatDialog,
     private userService: UserService,
-  ) { }
+    private overlayContainer: OverlayContainer,
+  ) { 
+//    this.setTheme('purple-green', true); // Default theme
+
+  }
 
   ngOnInit(): void {
   }
+
+  setTheme(theme: string, darkness: boolean | null = null) {
+    if (darkness === null)
+        darkness = this.isThemeDark;
+    else if (this.isThemeDark === darkness) {
+        if (this.activeTheme === theme) return;
+    } else
+        this.isThemeDark = darkness;
+
+    this.activeTheme = theme;
+
+    const cssClass = darkness === true ? theme + THEME_DARKNESS_SUFFIX : theme;
+
+    const classList = this.overlayContainer.getContainerElement().classList;
+    if (classList.contains(<string>this.activeThemeCssClass))
+        classList.replace(<string>this.activeThemeCssClass, cssClass);
+    else
+        classList.add(cssClass);
+
+    this.activeThemeCssClass = cssClass;
+}
 
   openPreferences(event: any){
 

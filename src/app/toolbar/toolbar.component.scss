@@ -1,5 +1,8 @@
+@import "../../custom-theme.scss";
+
+  
 #toolbar-container{
-    background-color: #DA3E3E;
+     /*#DA3E3E;*/
     height: 50px;
     filter: brightness(120%);
     box-shadow: 0 0 2px 4px #da3e3e;
@@ -9,6 +12,9 @@
     padding: 8px 12px 8px 12px;
     box-sizing: border-box;
     font-family: system-ui !important;
+    color : mat-color($dark-primary);
+    z-index: 3;
+    position: relative;
 
     #toolbar-btns{
         float: right; 

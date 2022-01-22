@@ -16,6 +16,7 @@ export class CreateNewBidComponent implements OnInit {
   @Input() bid !: Bid | any;
   @Input() user !:AuthUser | null;
   @Input() parentBid !: Bid;
+  @Input() isThemeDark !: boolean;
   bidMessageEditMode : boolean = false;
   bidAmtEditMode : boolean = false;
   titleEditMode : boolean = false;
@@ -27,6 +28,7 @@ export class CreateNewBidComponent implements OnInit {
   bidAmtFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\d+(?:\.\d{0,2})$/)]);
   titleFormControl = new FormControl('', [Validators.required]);
   authUser !: AuthUser | null;
+
 
   amountPositionX !: number;
   @Output() refreshCallback: EventEmitter<any> = new EventEmitter();

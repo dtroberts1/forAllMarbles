@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostBinding, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -11,6 +11,10 @@ import { AuthService } from '../services/auth.service';
 import { NotificationService } from '../services/notifications.service';
 import { UserService } from '../services/user.service';
 import { YourBidsComponent } from '../your-bids/your-bids.component';
+import {OverlayContainer} from "@angular/cdk/overlay";
+
+const THEME_DARKNESS_SUFFIX = `-dark`;
+
 
 @Component({
   selector: 'app-dashboard',
@@ -18,12 +22,13 @@ import { YourBidsComponent } from '../your-bids/your-bids.component';
   styleUrls: ['./dashboard.component.less']
 })
 export class DashboardComponent implements OnInit {
+  @HostBinding('class') activeThemeCssClass: string | undefined;
   authUser !:AuthUser | null;
   @ViewChild(FeedComponent) feed !: FeedComponent;
   @ViewChild(YourBidsComponent) yourBids !: YourBidsComponent;
   @ViewChild('searchinput') searchInput !: ElementRef;
   notificationList !: StatusNotification[];
-
+  activeTheme: string | undefined;
   backgroundSrc !: string | undefined;
   backgroundSize : string | undefined;
   canDispNewMessageScrn :boolean = false;
@@ -34,13 +39,19 @@ export class DashboardComponent implements OnInit {
   backgroundPosition !: string | undefined;
   opacity !: number | undefined;
   preferences !: Preferences;
+  isThemeDark !: boolean;
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private notificationService: NotificationService,
     private userService: UserService,
-  ) { }
+    private overlayContainer: OverlayContainer,
+
+  ) {
+    this.setTheme('standard', false); // Default theme
+
+   }
 
   notifyChild(event: any){
     let index = event.index;
@@ -52,6 +63,27 @@ export class DashboardComponent implements OnInit {
         this.yourBids.accordionCallback();
         break; 
     }
+  }
+
+  setTheme(theme: string, darkness: boolean | null = null) {
+    if (darkness === null)
+        darkness = this.isThemeDark;
+    else if (this.isThemeDark === darkness) {
+        if (this.activeTheme === theme) return;
+    } else
+        this.isThemeDark = darkness;
+    
+    this.activeTheme = theme;
+
+    const cssClass = darkness === true ? theme + THEME_DARKNESS_SUFFIX : theme;
+
+    const classList = this.overlayContainer.getContainerElement().classList;
+    if (classList.contains(<string>this.activeThemeCssClass))
+        classList.replace(<string>this.activeThemeCssClass, cssClass);
+    else
+        classList.add(cssClass);
+
+    this.activeThemeCssClass = cssClass;
   }
 
   openMessageThread(user: User){

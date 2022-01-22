@@ -1,12 +1,20 @@
 .example-accordion {
     display: block;
     /*max-width: 500px;*/
+    border: 2px solid transparent;
+
+    &:not(.card-expanded){
+
+      &:hover{
+        border: 2px solid var(--primary-color);
+      }
+    }
   }
   
   .example-accordion-item {
     display: block;
     /*border: solid 1px #D62929;*/
-    max-width: 920px;
+    /*max-width: 920px;*/
     box-shadow: 0 0 3px 0px #da3e3e;
   }
   
@@ -18,7 +26,6 @@
     display: flex;
     align-content: center;
     justify-content: space-between;
-
   }
   
   .example-accordion-item-description {
@@ -32,15 +39,14 @@
   }
 
   .example-accordion-item-header, .example-accordion-item-body{
-    background: white;    
+    background: var(--card-color);
   }
+
 
   
   .example-accordion-item-header:hover {
     cursor: pointer;
-    background-color: #eee;
-    cursor: pointer;
-
+    /*background-color: var(--status-bar-color);*/
 
     input{
       background-color: #eee;
@@ -75,8 +81,7 @@
   }
 
   .bid-item-container{
-    background-color: white;
-    
+    background-color:var(--card-color);    
     max-width: 920px;
     border-radius: 10px;
     padding: 20px;
@@ -134,7 +139,7 @@
         padding-right: 38px;
         padding-top: 10px;
         font-family: 'system ui';
-        color: '#666666';
+        color: var(--secondary-text-color);
       }
     }
 
@@ -202,7 +207,8 @@
   font-weight: 600 !important;
   font-family: system-ui !important;
   font-size: 18px !important;
-  color: #666666 !important;
+  /*color: #666666 !important;*/
+  color: var(--text-color)
 }
 
 .cell-data-div-img-edit{

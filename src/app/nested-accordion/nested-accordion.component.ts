@@ -45,6 +45,7 @@ export class NestedAccordionComponent implements OnInit {
   @Input() bid !: Bid | any;
   @Input() user !:AuthUser | null;
   @Input() parentBid !: Bid;
+  @Input() isThemeDark !: boolean;
   bidMessageEditMode : boolean = false;
   isAdmin : boolean = false;
   bidAmtEditMode : boolean = false;

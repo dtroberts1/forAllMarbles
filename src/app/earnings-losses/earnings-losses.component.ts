@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import Handsontable from 'handsontable';
 import { filter, firstValueFrom, map } from 'rxjs';
 import { Bid } from '../models/bid';
@@ -92,6 +92,7 @@ Handsontable
   styleUrls: ['./earnings-losses.component.less']
 })
 export class EarningsLossesComponent implements OnInit {
+  @Input() isThemeDark !: boolean;
   data !:CellData[];
   authUser !:AuthUser | null;
   user !: User | undefined;
@@ -153,7 +154,7 @@ export class EarningsLossesComponent implements OnInit {
                       this.data = bids
                         .filter(bid => bid.title === 'Total' || bid.bidCreatorChallengerKey?.includes(<string>this.authUser?.key) && 
                           bid.resultVerified && (bid.verifiedLoser == (<AuthUser>this.authUser)?.key || 
-                          bid.verifiedWinner == (<AuthUser>this.authUser)?.key)).slice(0, 10)
+                          bid.verifiedWinner == (<AuthUser>this.authUser)?.key))
                         .map((bid) => <BidNameWithDateAndAmt>{
                           bidName: bid.title,
                           bidAmount: bid.verifiedLoser == ((<AuthUser>this.authUser)?.key) ? 
@@ -172,7 +173,7 @@ export class EarningsLossesComponent implements OnInit {
                       this.dataset = this.data;
                       this.user = allUsers.find(user => user.key == this.authUser?.key);
                       this.getReducedBidsBetweenUserCompetitor(allUsers);
-                      this.todaysBidStats = this.getBidStats(new Date(), this.data);                      
+                      this.todaysBidStats = this.getBidStats(new Date(), this.data);                 
 
                       let yesterdaysDate = new Date(new Date().setDate(new Date().getDate()-1));
                       this.yesterdaysBidStats = this.getBidStats(yesterdaysDate, this.data);

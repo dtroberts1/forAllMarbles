@@ -1,5 +1,7 @@
-@import '~handsontable/dist/handsontable.full.css';
+/*@import '~handsontable/dist/handsontable.full.css';*/
 /* You can add global styles to this file, and also import other style files */
+@import '@angular/material/theming';
+
 .modal-class{
     .mat-dialog-container {
         overflow: hidden;
