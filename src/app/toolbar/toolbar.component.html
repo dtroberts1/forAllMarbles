@@ -52,7 +52,9 @@
   <div class="notif-list-container">
     <ul>
       <li *ngFor="let notification of notificationList | slice:0:(!canSeeAllNotifs ? 3 : notificationList.length);">
-        <div [ngClass]="{'is-marked-read':notification.isRead}" style="width: 100%; height: 100%; display: flex; align-items: center; font-size: 1.08rem;">
+        <div [ngClass]="{'is-marked-read':notification.isRead}" 
+        style="width: 100%; height: 100%; display: flex; align-items: center; font-size: 1.08rem;
+        color: var(--text-color);">
           <div class="notif-img-container">
             <div>
                 <mat-icon *ngIf="!notification.type"  style="color: forestgreen;"> attach_money</mat-icon>
@@ -64,7 +66,7 @@
                 'defeat': notification.type === 'defeat'}" 
                 class="notification-icon" style="height: 24px; width: 24px;"  />
             </div>
-            <div class="mark-notif-as-read">
+            <div [ngStyle]="{'visibility': !notification.isRead ? 'visible': 'hidden'}" class="mark-notif-as-read">
               <mat-icon 
               [matTooltip]="'Mark as read'"
               [matTooltipClass]="{ 'notification-trash-tooltip': true }" 

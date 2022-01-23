@@ -49,7 +49,7 @@ export class DashboardComponent implements OnInit {
     private overlayContainer: OverlayContainer,
 
   ) {
-    this.setTheme('standard', false); // Default theme
+    this.setTheme('standard', true); // Default theme
 
    }
 

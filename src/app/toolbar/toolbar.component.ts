@@ -222,7 +222,6 @@ export class ToolbarComponent implements OnInit {
   }
 
   blurCard(event : any){
-
     if (event.relatedTarget && event.relatedTarget.id === 'profile-dropdown-icon' && this.selectedFooterItem === 'notifications'){
       return;
     }

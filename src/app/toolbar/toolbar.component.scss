@@ -5,7 +5,7 @@
      /*#DA3E3E;*/
     height: 50px;
     filter: brightness(120%);
-    box-shadow: 0 0 2px 4px #da3e3e;
+    box-shadow: 0 0 2px 4px var(--primary-color);
     display: flex;
     align-items: center;
     box-sizing: border-box;
@@ -48,7 +48,6 @@
 }
 
 .profile-menu-card{
-    background: white;
     right: .55em !important;
     width: 18em;
     /* bottom: 35px; */
@@ -60,26 +59,25 @@
     font-family: system-ui !important;
     padding: .3em 0 0 0;
     z-index: 200;
-    color: #666666;
     filter: brightness(.99);
-    box-shadow: 0px 0px 6px 2px #da3e3e;
-    -webkit-box-shadow: 0px 0px 6px 2px #da3e3e;
-    background: lightgray;
+    box-shadow: 0px 0px 6px 2px var(--primary-color);
+    -webkit-box-shadow: 0px 0px 6px 2px var(--primary-color);
     filter: brightness(118%);
     padding: 1ch;
     box-sizing: border-box;
+    background: var(--card-color);
+    color: var(--text-color);
 
     .prof-btn{
         text-align: right;
         padding: 10px;
         font-size: 17px;
-        /*background: #FF4A4A;*/
-        border-bottom: 1px solid white;
+        border-bottom: 1px solid var(--hover-color);
         
         &:hover{
             cursor: pointer;
             /*filter: brightness(200%);*/
-            color: #da3e3e
+            color: var(--primary-color);
         }
     }
  }
@@ -98,16 +96,16 @@
     z-index: 200;
     color: #666666;
     filter: brightness(.99);
-    box-shadow: 0px 0px 6px 2px #da3e3e;
-    -webkit-box-shadow: 0px 0px 6px 2px #da3e3e;
-    background: white;
+    box-shadow: 0px 0px 6px 2px var(--primary-color);
+    -webkit-box-shadow: 0px 0px 6px 2px var(--primary-color);
+    background: var(--card-color);
 
     .prof-btn{
         text-align: right;
         padding: 10px;
         font-size: 17px;
         background: #FF4A4A;
-        border-bottom: 1px solid white;
+        border-bottom: 1px solid var(--hover-color);
         
         &:hover{
             cursor: pointer;
@@ -119,16 +117,17 @@
  ul{
      list-style: none;
      padding-inline-start: 0;
-     background: white;
+     background: var(--card-color);
+     color: var(--secondary-text-color);
 
      li{
         padding: 0.4em 0;
 
         &:nth-child(1){
-            border-top: 1px solid #dddfe2;
+            border-top: 1px solid var(--hover-color);
         }
 
-        border-bottom: 1px solid #dddfe2;
+        border-bottom: 1px solid var(--hover-color);
 
      }
  }
@@ -196,7 +195,7 @@
     transition: 1s;
     z-index: 205;
 
-    background: lightgray;
+    background: var(--card-color);
     filter: brightness(119%);
     padding: 1ch;
     box-sizing: border-box;
@@ -212,7 +211,7 @@
     
     &:hover{
         cursor: pointer;
-        color: #FF4A4A;
+        color: var(--primary-color);
     }
 }
 
@@ -226,7 +225,7 @@
         cursor: pointer;
 
         ::ng-deep mat-icon{
-            box-shadow: 0 0 .3em .3em #FF4A4A;
+            box-shadow: 0 0 .3em .3em var(--primary-color);
         }
     }
 }
@@ -234,7 +233,7 @@
 .is-marked-read{
     filter: brightness(113%);
     opacity: .4;
-    background: lightgray;
+    background: var(--divider-color);
 }
 
 ::ng-deep .hide-bell-badge{
@@ -263,5 +262,11 @@
 }
 
 #notif-collapser{
-    background: white;
+    background: var(--card-color);
+    color: var(--primary-color);
+
+    &:hover{
+        background: var(--divider-color);
+    }
+
 }

@@ -73,8 +73,10 @@ export class LoginComponent implements OnInit {
   }
 
   login(){
+    /*
     this.loginTxt = "emily@emily.com";
     this.passwordTxt = "emily1234";
+    */
     
     this.authService.SignIn(this.loginTxt, this.passwordTxt)
       .then(() => {
