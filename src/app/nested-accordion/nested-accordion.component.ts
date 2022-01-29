@@ -253,12 +253,16 @@ export class NestedAccordionComponent implements OnInit {
   }
 
   adminChooseWinner(){
+    let cssClasses = ['modal-class'];
+    cssClasses.push(this.isThemeDark ? 'dark-theme': 'light-theme');
+
     const dialogRef = this.dialog.open(AdminChooseWinnerComponent, {
       width: '550px',
       position: {top: '200px'},
       data: {
        bid: this.bid,
-      }
+      },
+      panelClass: cssClasses,
     });
 
     dialogRef.afterClosed().subscribe(selectedUser => {
@@ -364,6 +368,9 @@ export class NestedAccordionComponent implements OnInit {
   }
 
   declareVictory(bid: Bid){
+    let cssClasses = ['modal-class'];
+    cssClasses.push(this.isThemeDark ? 'dark-theme': 'light-theme');
+
     let declaredLoserKey = bid.bidCreatorKey != this.user?.key ? bid.bidCreatorKey : bid.bidChallengerKey;
     let declaredLoserName : string;
     firstValueFrom(
@@ -386,7 +393,7 @@ export class NestedAccordionComponent implements OnInit {
                evidence must be provided in order to verify that you\'re the winner. 
                If no evidence is provided by either party within 10 day, this bid will be cancelled.`,
               },
-              panelClass: 'modal-class'
+              panelClass: cssClasses,
             });
             dialogRef.afterClosed().subscribe(result => {
               if (result){
@@ -409,6 +416,9 @@ export class NestedAccordionComponent implements OnInit {
   }
   
   concedeDefeat(bid: Bid){
+    let cssClasses = ['modal-class'];
+    cssClasses.push(this.isThemeDark ? 'dark-theme': 'light-theme');
+
     const dialogRef = this.dialog.open(BidConfirmationDialogComponent, {
       width: '550px',
       height: '240px',
@@ -418,7 +428,7 @@ export class NestedAccordionComponent implements OnInit {
        isOk: false,
        dialogText: 'Are you sure you would like to concede defeat? This operation cannot be reversed.',
       },
-      panelClass: 'modal-class'
+      panelClass: cssClasses,
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -487,6 +497,9 @@ export class NestedAccordionComponent implements OnInit {
   }
 
   challengeResult(bid: Bid){
+    let cssClasses = ['modal-class'];
+    cssClasses.push(this.isThemeDark ? 'dark-theme': 'light-theme');
+
     const initialDialog = this.dialog.open(BidConfirmationDialogComponent, {
       width: '550px',
       height: '240px',
@@ -496,7 +509,7 @@ export class NestedAccordionComponent implements OnInit {
        isOk: true,
        dialogText: 'Upload files as evidence to challenge result. The evidence will be compared and the winner will be announced within 15 days.',
       },
-      panelClass: 'modal-class'
+      panelClass: cssClasses,
     });
 
     initialDialog.afterClosed().subscribe(result => {
@@ -509,8 +522,9 @@ export class NestedAccordionComponent implements OnInit {
             attachedFile: null,
             isWinner: isWinner,
             bid: this.bid,
+            isThemeDark: this.isThemeDark
           },
-          panelClass: 'modal-class'
+          panelClass: cssClasses,
         });
     
         dialogRef.afterClosed().subscribe(result => {
@@ -525,6 +539,9 @@ export class NestedAccordionComponent implements OnInit {
   }
 
   manageDocumentation(){
+    let cssClasses = ['modal-class'];
+    cssClasses.push(this.isThemeDark ? 'dark-theme': 'light-theme');
+
     let isWinner = this.user && this.user.key && this.user.key == this.bid.declaredWinner;
     const dialogRef = this.dialog.open(DocManagementModalComponent, {
       width: '550px',
@@ -533,8 +550,9 @@ export class NestedAccordionComponent implements OnInit {
         attachedFile: null,
         isWinner: isWinner,
         bid: this.bid,
+        isThemeDark: this.isThemeDark
       },
-      panelClass: 'modal-class'
+      panelClass: cssClasses,
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -547,6 +565,9 @@ export class NestedAccordionComponent implements OnInit {
   }
 
   attachmentAdded(event: any, bid: Bid){
+    let cssClasses = ['modal-class'];
+    cssClasses.push(this.isThemeDark ? 'dark-theme': 'light-theme');
+
     const initialDialog = this.dialog.open(BidConfirmationDialogComponent, {
       width: '550px',
       height: '240px',
@@ -558,7 +579,7 @@ export class NestedAccordionComponent implements OnInit {
        does not submit counter-evidence within 10 days, you will be declared as winner; otherwise,
        the evidence will be compared and the winner will be announced within 15 days.`,
       },
-      panelClass: 'modal-class'
+      panelClass: cssClasses,
     });
 
     initialDialog.afterClosed().subscribe(result => {
@@ -578,8 +599,9 @@ export class NestedAccordionComponent implements OnInit {
             attachedFile: this.attachedFile,
             isWinner: isWinner,
             bid: bid,
+            isThemeDark: this.isThemeDark
           },
-          panelClass: 'modal-class'
+          panelClass: cssClasses,
         });
     
         dialogRef.afterClosed().subscribe(result => {
@@ -594,6 +616,9 @@ export class NestedAccordionComponent implements OnInit {
   }
 
   deleteBid(bid: Bid){
+    let cssClasses = ['modal-class'];
+    cssClasses.push(this.isThemeDark ? 'dark-theme': 'light-theme');
+
     const dialogRef = this.dialog.open(BidConfirmationDialogComponent, {
       width: '550px',
       height: '240px',
@@ -603,7 +628,7 @@ export class NestedAccordionComponent implements OnInit {
        isOk: false,
        dialogText: `Are you sure you would like to delete bids? All counter offers will be removed.`,
       },
-      panelClass: 'modal-class'
+      panelClass: cssClasses,
     });
 
     dialogRef.afterClosed().subscribe(result => {

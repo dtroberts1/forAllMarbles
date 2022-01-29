@@ -3,4 +3,5 @@ export interface Preferences {
     backgroundSize ?: string;
     backgroundPosition ?: string;
     opacity ?: number;
+    nightMode ?: boolean;
 }

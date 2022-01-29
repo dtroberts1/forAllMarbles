@@ -168,14 +168,14 @@
                 <div>
                     <div id="lower-left-btn-container">
                         <!--<button *ngIf="!bid.isEditing" (click)="modifyBid(bid)" mat-raised-button color="accent">View Counter Offers</button>-->
-                        <button style="font-family: system-ui !important; color: var(--card-color);" *ngIf="canDisplayCounterOfferOrApprove(bid)" (click)="createCounterOffer()" mat-raised-button color="accent">Counter Offer</button>
-                        <button *ngIf="canDeclareVictory(bid)" style="font-family: system-ui !important; color: var(--card-color);" (click)="declareVictory(bid)" mat-raised-button color="accent">Declare Victory</button>
-                        <button *ngIf="canConcedeDefeat(bid)" style="font-family: system-ui !important; color: var(--card-color);" (click)="concedeDefeat(bid)" mat-raised-button color="accent">Concede Defeat</button>
-                        <button *ngIf="!bid.resultVerified && bid.hasResult && user && bid.declaredWinner != user.key" style="font-family: system-ui !important; color: var(--card-color);" (click)="challengeResult(bid)" mat-raised-button color="accent">Challenge Result</button>
+                        <button style="font-family: system-ui !important; color: white; background: var(--primary-color);" *ngIf="canDisplayCounterOfferOrApprove(bid)" (click)="createCounterOffer()" mat-raised-button color="accent">Counter Offer</button>
+                        <button *ngIf="canDeclareVictory(bid)" style="font-family: system-ui !important; color: white; background: var(--primary-color);" (click)="declareVictory(bid)" mat-raised-button color="accent">Declare Victory</button>
+                        <button *ngIf="canConcedeDefeat(bid)" style="font-family: system-ui !important; color: white; background: var(--primary-color); " (click)="concedeDefeat(bid)" mat-raised-button color="primary">Concede Defeat</button>
+                        <button *ngIf="!bid.resultVerified && bid.hasResult && user && bid.declaredWinner != user.key" style="font-family: system-ui !important; color: white; background: var(--primary-color);" (click)="challengeResult(bid)" mat-raised-button color="accent">Challenge Result</button>
                         <!--Challenge Result button will also prompt for upload of documentation-->
-                        <label *ngIf="!bid.resultVerified && bid.hasResult && user && user.key && user.key == bid.declaredWinner && !hasWinnerDocs" style="color: var(--card-color); width: 48px;" 
+                        <label *ngIf="!bid.resultVerified && bid.hasResult && user && user.key && user.key == bid.declaredWinner && !hasWinnerDocs" style="color: white; width: 48px;" 
                             class="custom-file-upload mat-raised-button" 
-                            style="background-color: var(--primary-color); font-family: system-ui !important; color: var(--card-color); width: 123px; display: flex; align-items: center;">
+                            style="background-color: var(--primary-color); font-family: system-ui !important; color: white; width: 123px; display: flex; align-items: center;">
                             Prove Victory
                             <input 
                                 type="file"
@@ -185,17 +185,17 @@
                                 (change)="attachmentAdded($event, bid)"
                             />
                         </label>
-                        <button *ngIf="hasWinnerDocs" style="font-family: system-ui !important; color: var(--card-color);"  (click)="manageDocumentation()" mat-raised-button color="accent">Manage Documentation</button>
-                        <button style="font-family: system-ui !important; color: var(--card-color);" *ngIf="canDisplayCounterOfferOrApprove(bid)" (click)="approveBid(bid)" mat-raised-button color="accent">Approve</button>
-                        <button style="font-family: system-ui !important; color: var(--card-color);" *ngIf="bid.isApproved && !bid.resultVerified && bid.hasResult && isAdmin" (click)="adminChooseWinner()" mat-raised-button color="accent">Choose Winner</button>
+                        <button *ngIf="hasWinnerDocs" style="font-family: system-ui !important; color: white; background: var(--primary-color);"  (click)="manageDocumentation()" mat-raised-button color="accent">Manage Documentation</button>
+                        <button style="font-family: system-ui !important; color: white; background: var(--primary-color);" *ngIf="canDisplayCounterOfferOrApprove(bid)" (click)="approveBid(bid)" mat-raised-button color="accent">Approve</button>
+                        <button style="font-family: system-ui !important; color: white; background: var(--primary-color);" *ngIf="bid.isApproved && !bid.resultVerified && bid.hasResult && isAdmin" (click)="adminChooseWinner()" mat-raised-button color="accent">Choose Winner</button>
                     </div>
                 </div>            
             </div>
             <div id="bid-lower-right-btns">
                 <div>
                     <div id="lower-right-btn-container">
-                        <button style="font-family: system-ui !important;" *ngIf="detailChangesPending" (click)="saveUpdate()" class="pending-changes" mat-raised-button color="primary">Save Changes</button>
-                        <button style="font-family: system-ui !important; color: var(--card-color);" *ngIf="titleEditMode || bidMessageEditMode || bidAmtEditMode || detailChangesPending" 
+                        <button style="font-family: system-ui !important; color: white; background: var(--primary-color);" *ngIf="detailChangesPending" (click)="saveUpdate()" class="pending-changes" mat-raised-button color="primary">Save Changes</button>
+                        <button style="font-family: system-ui !important; color: white; background: var(--primary-color);" *ngIf="titleEditMode || bidMessageEditMode || bidAmtEditMode || detailChangesPending" 
                         (click)="cancelDetailChanges()"
                         mat-raised-button color="accent">Cancel</button>
                     </div>

@@ -17,6 +17,7 @@ export class User {
     backgroundSizePreference ?: string;
     backgroundPositionPreference ?: string;
     opacity ?: number;
+    nightMode ?: boolean;
 }
 
 export class AuthUser{

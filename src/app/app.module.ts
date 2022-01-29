@@ -45,11 +45,6 @@ import { BidConfirmationDialogComponent } from './bid-confirmation-dialog/bid-co
 import { EarningsLossesComponent } from './earnings-losses/earnings-losses.component';
 import { GraphicalChartComponent } from './earnings-losses/graphical-chart/graphical-chart.component';
 import { AdminChooseWinnerComponent } from './admin-choose-winner/admin-choose-winner.component';
-import { HotTableModule } from '@handsontable/angular';
-import { registerAllModules } from 'handsontable/registry';
-import Handsontable from 'handsontable/base';
-import { NumericCellType, registerCellType } from 'handsontable/cellTypes';
-import { registerPlugin, UndoRedo } from 'handsontable/plugins';
 import { PlayerComparisonChartComponent } from './player-comparison-chart/player-comparison-chart.component';
 import { AnimateDirective } from './animate.directive';
 import { AnimateComponent } from './animate/animate.component';
@@ -57,13 +52,8 @@ import { PreferencesComponent } from './preferences/preferences.component';
 import {MatSlider, MatSliderModule} from '@angular/material/slider'
 import{MatButtonToggle, MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-registerAllModules();
 
-// register the `NumericCellType` module
-registerCellType(NumericCellType);
 
-// register the `UndoRedo` module
-registerPlugin(UndoRedo);
 
 @NgModule({
   declarations: [
@@ -112,7 +102,6 @@ registerPlugin(UndoRedo);
     MatDatepickerModule,
     MatNativeDateModule,
     BrowserModule,
-    HotTableModule,
     MatButtonToggleModule,
     MatSliderModule,
     MatTooltipModule,

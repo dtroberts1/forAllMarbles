@@ -12,9 +12,18 @@ import { NotificationService } from '../services/notifications.service';
 import { UserService } from '../services/user.service';
 import { YourBidsComponent } from '../your-bids/your-bids.component';
 import {OverlayContainer} from "@angular/cdk/overlay";
+import { BehaviorSubject } from 'rxjs';
 
 const THEME_DARKNESS_SUFFIX = `-dark`;
+export interface Color {
+  name: string;
+  hex: string;
+  darkContrast: boolean;
+}
 
+declare var require: any;
+var tinycolor = require("tinycolor2");
+var color = tinycolor("red");
 
 @Component({
   selector: 'app-dashboard',
@@ -40,6 +49,10 @@ export class DashboardComponent implements OnInit {
   opacity !: number | undefined;
   preferences !: Preferences;
   isThemeDark !: boolean;
+  primaryColor =  '#8A2BE2';//'#DA3E3E';
+  accentColor = '#6DFCD9';
+  primaryColorPalette: Color[] = [];
+  accentColorPalette: Color[] = [];
 
   constructor(
     private authService: AuthService,
@@ -49,8 +62,8 @@ export class DashboardComponent implements OnInit {
     private overlayContainer: OverlayContainer,
 
   ) {
-    this.setTheme('standard', true); // Default theme
-
+    this.savePrimaryColor();
+    this.saveAccentColor();
    }
 
   notifyChild(event: any){
@@ -63,6 +76,58 @@ export class DashboardComponent implements OnInit {
         this.yourBids.accordionCallback();
         break; 
     }
+  }
+
+  
+  savePrimaryColor() {
+    this.primaryColorPalette = this.computeColors(this.primaryColor);
+    this.updateTheme(this.primaryColorPalette, 'primary');
+  }
+
+  saveAccentColor() {
+    this.accentColorPalette = this.computeColors(this.accentColor);
+    this.updateTheme(this.accentColorPalette, 'accent');
+  }
+
+  updateTheme(colors: Color[], theme: string) {
+    colors.forEach(color => {
+        document.documentElement.style.setProperty(
+          `--theme-${theme}-${color.name}`,
+          color.hex
+        );
+        document.documentElement.style.setProperty(
+          `--theme-${theme}-contrast-${color.name}`,
+          color.darkContrast ? 'rgba(black, 0.87)' : 'white'
+        );
+      });
+  }
+  
+  computeColors(hex: string): Color[] {
+    return [
+      this.getColorObject(tinycolor(hex).lighten(52), '50'),
+      this.getColorObject(tinycolor(hex).lighten(37), '100'),
+      this.getColorObject(tinycolor(hex).lighten(26), '200'),
+      this.getColorObject(tinycolor(hex).lighten(12), '300'),
+      this.getColorObject(tinycolor(hex).lighten(6), '400'),
+      this.getColorObject(tinycolor(hex), '500'),
+      this.getColorObject(tinycolor(hex).darken(6), '600'),
+      this.getColorObject(tinycolor(hex).darken(12), '700'),
+      this.getColorObject(tinycolor(hex).darken(18), '800'),
+      this.getColorObject(tinycolor(hex).darken(24), '900'),
+      this.getColorObject(tinycolor(hex).lighten(50).saturate(30), 'A100'),
+      this.getColorObject(tinycolor(hex).lighten(30).saturate(30), 'A200'),
+      this.getColorObject(tinycolor(hex).lighten(10).saturate(15), 'A400'),
+      this.getColorObject(tinycolor(hex).lighten(5).saturate(5), 'A700')
+    ];
+  }
+  
+  getColorObject(value : any, name : any): Color {
+    const c = tinycolor(value);
+    return {
+      name: name,
+      hex: c.toHexString(),
+      darkContrast: c.isLight()
+    };
   }
 
   setTheme(theme: string, darkness: boolean | null = null) {
@@ -113,12 +178,16 @@ export class DashboardComponent implements OnInit {
             backgroundPosition : user.backgroundPositionPreference,
             backgroundSize : user.backgroundSizePreference,
             opacity: user.opacity,
+            nightMode : user.nightMode,
           }
 
           this.backgroundSrc = this.preferences.backgroundUrl;
           this.opacity = this.preferences.opacity;
           this.backgroundPosition = this.preferences.backgroundPosition;
           this.backgroundSize = this.preferences.backgroundSize;
+
+          this.updateThemePalette();
+          this.setTheme('standard', this.preferences.nightMode); // Default theme
 
         })
 
@@ -129,6 +198,12 @@ export class DashboardComponent implements OnInit {
     }
     this.getNotifications();
 
+  }
+
+  updateThemePalette(){
+
+    this.primaryColorPalette = this.computeColors(this.primaryColor);
+    this.updateTheme(this.primaryColorPalette, 'primary');
   }
 
   getNotifications(){
@@ -187,13 +262,23 @@ export class DashboardComponent implements OnInit {
     this.backgroundSize = (<Preferences>event.preferences).backgroundSize;
     this.backgroundPosition = (<Preferences>event.preferences).backgroundPosition;
     this.opacity = (<Preferences>event.preferences).opacity;
+    let isNightMode= <boolean>(<Preferences>event.preferences).nightMode;
     this.preferences = {
       backgroundUrl : this.backgroundSrc,
       backgroundSize : this.backgroundSize,
       backgroundPosition : this.backgroundPosition,
       opacity : this.opacity,
+      nightMode : isNightMode,
     }
-    
+
+    this.updateThemePalette();
+
+
+    setTimeout(() => {
+      this.setTheme('standard', isNightMode); // Default theme
+
+    },100)
+
   }
 
   toggleSearchVis(){

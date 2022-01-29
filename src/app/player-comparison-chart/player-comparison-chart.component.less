@@ -3,7 +3,8 @@
     position: absolute;
     top: -2px;
     left: -2px;
-    background: linear-gradient(-45deg, #23a6d5, #23d5ab, #ee7752, #FF4A4A,);
+    /*background: linear-gradient(-45deg, #23a6d5, #23d5ab, #ee7752, #FF4A4A,);*/
+    background: linear-gradient(-45deg, var(--accent-color), var(--primary-color) );
     animation: gradient 15s linear infinite;
 
     background-size: 400%;
@@ -30,7 +31,7 @@
         width: 4.4em; display: flex; justify-content: center;     
         font-weight: 600 !important;
         font-family: system-ui !important;
-        color: #666666 !important;
+        color: var(--text-color) !important;
     }
 
     .player-chart-image-container:before, .player-chart-image-container:after{
@@ -38,7 +39,7 @@
         position: absolute;
         top: -2px;
         left: -2px;
-        background: linear-gradient(-45deg, #23a6d5, #23d5ab, #ee7752, #FF4A4A,);
+        background: linear-gradient(-45deg, var(--accent-color), var(--primary-color) );
         animation: gradient 15s linear infinite;
     
         background-size: 400%;

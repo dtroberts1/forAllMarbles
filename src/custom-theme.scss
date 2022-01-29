@@ -78,9 +78,118 @@ $md-standard-acc: (
     )
 );
 
+$dynamic-theme-primary: (
+  50 : var(--theme-primary-50),
+  100 : var(--theme-primary-100),
+  200 : var(--theme-primary-200),
+  300 : var(--theme-primary-300),
+  400 : var(--theme-primary-400),
+  500 : var(--theme-primary-500),
+  600 : var(--theme-primary-600),
+  700 : var(--theme-primary-700),
+  800 : var(--theme-primary-800),
+  900 : var(--theme-primary-900),
+  A100 : var(--theme-primary-A100),
+  A200 : var(--theme-primary-A200),
+  A400 : var(--theme-primary-A400),
+  A700 : var(--theme-primary-A700),
+  contrast: (
+    50: var(--theme-primary-contrast-50),
+    100: var(--theme-primary-contrast-100),
+    200: var(--theme-primary-contrast-200),
+    300: var(--theme-primary-contrast-300),
+    400: var(--theme-primary-contrast-400),
+    500: var(--theme-primary-contrast-500),
+    600: var(--theme-primary-contrast-600),
+    700: var(--theme-primary-contrast-700),
+    800: var(--theme-primary-contrast-800),
+    900: var(--theme-primary-contrast-900),
+    A100: var(--theme-primary-contrast-A100),
+    A200: var(--theme-primary-contrast-A200),
+    A400: var(--theme-primary-contrast-A400),
+    A700: var(--theme-primary-contrast-A700),
+  )
+);
 
-$custom-primary:  mat-palette($md-standard);
-$custom-accent:  mat-palette($md-standard, 800, A100, A200, A400);
+$dynamic-theme-accent: (
+  50 : var(--theme-accent-50),
+  100 : var(--theme-accent-100),
+  200 : var(--theme-accent-200),
+  300 : var(--theme-accent-300),
+  400 : var(--theme-accent-400),
+  500 : var(--theme-accent-500),
+  600 : var(--theme-accent-600),
+  700 : var(--theme-accent-700),
+  800 : var(--theme-accent-800),
+  900 : var(--theme-accent-900),
+  A100 : var(--theme-accent-A100),
+  A200 : var(--theme-accent-A200),
+  A400 : var(--theme-accent-A400),
+  A700 : var(--theme-accent-A700),
+  contrast: (
+    50: var(--theme-accent-contrast-50),
+    100: var(--theme-accent-contrast-100),
+    200: var(--theme-accent-contrast-200),
+    300: var(--theme-accent-contrast-300),
+    400: var(--theme-accent-contrast-400),
+    500: var(--theme-accent-contrast-500),
+    600: var(--theme-accent-contrast-600),
+    700: var(--theme-accent-contrast-700),
+    800: var(--theme-accent-contrast-800),
+    900: var(--theme-accent-contrast-900),
+    A100: var(--theme-accent-contrast-A100),
+    A200: var(--theme-accent-contrast-A200),
+    A400: var(--theme-accent-contrast-A400),
+    A700: var(--theme-accent-contrast-A700),
+  )
+);
+
+$dynamic-light-theme-background: (
+  status-bar: map_get($mat-grey, 300),
+  app-bar:    map_get($mat-grey, 100),
+  background: map_get($mat-grey, 50),
+  hover:      rgba(black, 0.04),
+  card:       white,
+  dialog:     white,
+  disabled-button: rgba(black, 0.12),
+  raised-button: white,
+  focused-button: $dark-focused,
+  selected-button: map_get($mat-grey, 300),
+  selected-disabled-button: map_get($mat-grey, 400),
+  disabled-button-toggle: map_get($mat-grey, 200),
+  unselected-chip: map_get($mat-grey, 300),
+  disabled-list-option: map_get($mat-grey, 200),
+);
+
+$dynamic-light-theme-foreground: (
+  base:              black,
+  divider:           $dark-dividers,
+  dividers:          $dark-dividers,
+  disabled:          $dark-disabled-text,
+  disabled-button:   rgba(black, 0.26),
+  disabled-text:     $dark-disabled-text,
+  elevation:         black,
+  hint-text:         $dark-disabled-text,
+  secondary-text:    $dark-secondary-text,
+  icon:              rgba(black, 0.54),
+  icons:             rgba(black, 0.54),
+  text:              rgba(black, 0.87),
+  slider-min:        rgba(black, 0.87),
+  slider-off:        rgba(black, 0.26),
+  slider-off-active: rgba(black, 0.38),
+);
+
+$dynamic-app-theme: (
+  primary: mat-palette($dynamic-theme-primary),
+  accent: mat-palette($dynamic-theme-accent),
+  warn: mat-palette($mat-red),
+  is-dark: false,
+  foreground: $dynamic-light-theme-foreground,
+  background: $dynamic-light-theme-background
+);
+
+$custom-primary:  mat-palette($dynamic-theme-primary);
+$custom-accent:  mat-palette($dynamic-theme-primary, 800, A100, A200, A400);
 $custom-warn:    mat-palette($mat-red);
 
 $custom-theme: mat-light-theme($custom-primary, $custom-accent, $custom-warn);
@@ -91,8 +200,8 @@ $primary: mat-color($custom-primary);
 $primary-lighter: mat-light-theme($custom-primary, $custom-accent, $custom-warn);
 
 // ? 2. Define an alternate dark theme.
-$dark-primary: mat-palette($md-standard, 900);
-$dark-accent: mat-palette($md-standard, A300, A400, A500);
+$dark-primary: mat-palette($dynamic-theme-primary, 900);
+$dark-accent: mat-palette($dynamic-theme-primary, A300, A400, A500);
 $dark-warn: mat-palette($mat-deep-orange);
 $primary-darker: mat-dark-theme(
   (
@@ -104,63 +213,20 @@ $primary-darker: mat-dark-theme(
   )
 );
 
-
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$allmarbles-primary: mat.define-palette(mat.$indigo-palette);
-$allmarbles-accent: mat.define-palette(mat.$pink-palette, #c12525, #d62929, #de5454);
-
-// The warn palette is optional (defaults to red).
-$allmarbles-warn: mat.define-palette(mat.$red-palette);
-
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$allmarbles-theme: mat.define-light-theme((
-  color: (
-    primary: $allmarbles-primary,
-    accent: $allmarbles-accent,
-    warn: $allmarbles-warn,
-  )
-));
-
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 /*@include mat.all-component-themes($allmarbles-theme);*/
 
 // Define a custom mixin that takes in the current theme
-@mixin define-css-classes($theme) {
-  // Parse the theme and create variables for each color in the pallete
-  @include angular-material-theme($theme);
-
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $warn: map-get($theme, warn);
-  $background: map-get($theme, background);
-  $foreground: map-get($theme, foreground);
-
-  // CSS THEME-DEPENDENT-STYLES ARE HERE:
-  .theme-dependent-colors {
-      background: mat-color($primary);
-      color: mat-color($accent);
-  }
-}
-
-// Set variables to whatever colors you want for your app
-$dark-theme-primary: mat-palette($md-standard);
-$dark-theme-accent: mat-palette($mat-light-blue);
-$dark-theme-warn: mat-palette($mat-red);
 
 $dark-theme: mat-dark-theme(
-    $dark-theme-primary,
-    $dark-theme-accent,
-    $dark-theme-warn
+  $dynamic-theme-primary, $dynamic-theme-accent, $mat-red
 );
 
 // You have to define one of those for every theme you offer
 
-$light-theme: mat-light-theme($custom-primary, $custom-accent, $custom-warn);
+$light-theme: mat-light-theme($dynamic-theme-primary, $dynamic-theme-accent, $mat-red);
 
 .dark-theme {
   @include angular-material-theme($dark-theme);
@@ -168,36 +234,6 @@ $light-theme: mat-light-theme($custom-primary, $custom-accent, $custom-warn);
 }
 
 .light-theme {
-  @include angular-material-theme($light-theme);
+  /*@include angular-material-theme($light-theme);*/
   @include generate-theme-vars($light-theme);
-}
-
-$app-themes: (
-        indigo-pink : (primary-base: $mat-indigo, accent-base: $mat-pink),
-        deeppurple-amber: (primary-base: $mat-deep-purple, accent-base: $mat-amber),
-        pink-bluegrey : (primary-base: $mat-pink, accent-base: $mat-blue-gray, is-dark: true),
-        purple-green : (primary-base: $mat-purple, accent-base: $mat-green, is-dark: true),
-        standard: (primary-base: $md-standard, accent-base: $md-standard-acc)
-);
-
-@each $css-class, $theme in $app-themes {
-    $primary: if(map-has-key($theme, primary), map-get($theme, primary), mat-palette(map-get($theme, primary-base)));
-
-    $accent: if(map-has-key($theme, accent), map-get($theme, accent), mat-palette(map-get($theme, accent-base)));
-
-    $warn: if(map-has-key($theme, warn), map-get($theme, warn), mat-palette(
-            if(map-has-key($theme, warn-base), map-get($theme, warn-base), $mat-red)
-    ));
-
-    .#{$css-class} {
-        @include define-css-classes(mat-light-theme($primary, $accent, $warn));
-    }
-
-    .#{$css-class}-dark {
-        @include define-css-classes(mat-dark-theme($primary, $accent, $warn));
-    }
-
-    .theme-primary.#{$css-class} {
-        background-color: mat-color($primary);
-    }
 }

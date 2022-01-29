@@ -266,7 +266,7 @@
     color: var(--primary-color);
 
     &:hover{
-        background: var(--divider-color);
+        filter: brightness(1.4);
     }
 
 }

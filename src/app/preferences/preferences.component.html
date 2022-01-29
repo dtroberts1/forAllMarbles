@@ -7,13 +7,46 @@
             </div>
         </div>
     </div>
-    <div>
-        <mat-slide-toggle
-        aria-label="Toggle Background Image Source"
-        [(ngModel)]="enableBackgroundImage"
-        >
-
-        </mat-slide-toggle>
+    <div style="display: flex; flex-direction: column; padding: 1em; gap: 0.8em;">
+        <div>
+            <label>Night Mode</label>
+            <div style="margin-left: 2ch; padding-top: .2em;">
+                <mat-slide-toggle
+                aria-label="Toggle Night Mode"
+                [(ngModel)]="nightMode"
+                (change)="nightModeChanged($event)"
+                >
+                </mat-slide-toggle>
+            </div>
+        </div>
+        <div>
+            <label>Image Source</label>
+            <div style="margin-left: 2ch; padding-top: .2em;">
+                <mat-slide-toggle
+                aria-label="Toggle Background Image Source"
+                [(ngModel)]="enableBackgroundImage"
+                >
+                </mat-slide-toggle>
+            </div>
+        </div>
+        <div>
+            <mat-label>Opacity</mat-label>
+            <div style="margin-left: 2ch; padding-top: .2em;">
+                <mat-slider 
+                style="margin-top: -0.5em;"
+                (input)="opacity = $event.value; this.emitChange();"
+                aria-label="units"
+                [(ngModel)]="opacity"
+                thumbLabel 
+                step=".01"
+                min="0"
+                max="1"
+                [displayWith]="formatLabel"
+                tickInterval="auto"
+                >
+                </mat-slider>
+            </div>
+        </div>
     </div>
     <div>
         <div style="padding: 10px; display: flex; gap: 10px;"
@@ -21,7 +54,7 @@
             >
             <label style="color: white; width: 48px;" 
             class="custom-file-upload mat-raised-button" 
-            style="background-color: #DA3E3E; font-family: system-ui !important; color: white; width: 78px; display: flex; align-items: center;">
+            style="background-color: var(--primary-color); font-family: system-ui !important; color: white; width: 78px; display: flex; align-items: center;">
             Browse           
             <input 
                 type="file"
@@ -35,15 +68,18 @@
         <div *ngIf="!enableBackgroundImage">
 
         </div>
-        <mat-form-field style="width: 224px; padding-left: 20px; padding-top: 10px;" appearance="outline">
+        <mat-form-field  *ngIf="enableBackgroundImage" style="width: 224px; padding-left: 20px; padding-top: 10px;" 
+        color="primary"
+        appearance="outline">
             <mat-label>Background Size</mat-label>
             <mat-select [(ngModel)]="backgroundSize"
+                
                 (selectionChange)="objectFitModified()"
             >
                 <mat-option *ngFor="let option of backgroundSizeOptions" [value]="option">{{option}}</mat-option>
             </mat-select>
         </mat-form-field>
-        <mat-form-field style="width: 224px; padding-left: 20px; padding-top: 10px;" appearance="outline">
+        <mat-form-field *ngIf="enableBackgroundImage" style="width: 224px; padding-left: 20px; padding-top: 10px;" appearance="outline">
             <mat-label>Background Position</mat-label>
             <mat-select [(ngModel)]="backgroundPosition"
                 (selectionChange)="backgroundPositionModified()"
@@ -51,27 +87,16 @@
                 <mat-option *ngFor="let option of backgroundPositionOptions" [value]="option">{{option}}</mat-option>
             </mat-select>
         </mat-form-field>
-        <div>
-            <mat-slider 
-            (input)="opacity = $event.value; this.emitChange();"
-            aria-label="units"
-            [(ngModel)]="opacity"
-            thumbLabel 
-            step=".01"
-            min="0"
-            max="1"
-            [displayWith]="formatLabel"
-            tickInterval="auto"></mat-slider>
-        </div>
     </div>
     <div style="bottom: 0; position: absolute; padding-bottom: 0.6em; display: flex; justify-content: center; width: 100%;">
         <div id="bid-lower-right-btns">
             <div>
                 <div id="lower-right-btn-container">
-                    <button style="font-family: system-ui !important;" 
-                    class="pending-changes" 
-                    (click)="closeModal(true)"
-                    mat-raised-button color="accent">Save Preferences</button>
+                    <button style="font-family: system-ui !important; color: white; background: var(--primary-color);" 
+                        class="pending-changes" 
+                        (click)="closeModal(true)"
+                        mat-raised-button color="accent">Save Preferences
+                    </button>
                 </div>
             </div>
         </div>

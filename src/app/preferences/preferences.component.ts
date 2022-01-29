@@ -13,6 +13,8 @@ type ModalInput = {preferences: Preferences;}
 export class PreferencesComponent implements OnInit {
   url !: string | undefined;
   enableBackgroundImage : boolean = false;
+  nightMode : boolean | undefined = false;
+
   backgroundSizeOptions : string[] = [
     'auto',
     'contain',
@@ -52,11 +54,16 @@ export class PreferencesComponent implements OnInit {
     this.backgroundSize = this.data.preferences.backgroundSize;
     this.opacity = this.data.preferences.opacity;
     this.backgroundPosition = this.data.preferences.backgroundPosition;
+    this.nightMode = this.data.preferences.nightMode;
   }
 
   sliderChanged(event : any){
     this.emitChange();
 
+  }
+
+  nightModeChanged(event: any){
+    this.emitChange();
   }
 
   backgroundPositionModified(){
@@ -69,6 +76,7 @@ export class PreferencesComponent implements OnInit {
         backgroundSize: this.backgroundSize,
         backgroundPosition: this.backgroundPosition,
         opacity: this.opacity,
+        nightMode: this.nightMode,
       });
     }
     else{
@@ -80,6 +88,7 @@ export class PreferencesComponent implements OnInit {
     this.emitChange();
 
   }
+
 
   attachmentAdded(event :any){
     
@@ -108,6 +117,7 @@ export class PreferencesComponent implements OnInit {
       backgroundSize: this.backgroundSize,
       backgroundPosition: this.backgroundPosition,
       opacity: this.opacity,
+      nightMode: this.nightMode,
     }});
 
   }

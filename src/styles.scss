@@ -1,6 +1,7 @@
 /*@import '~handsontable/dist/handsontable.full.css';*/
 /* You can add global styles to this file, and also import other style files */
 @import '@angular/material/theming';
+@import '../src/custom-theme.scss';
 
 .modal-class{
     .mat-dialog-container {
@@ -10,5 +11,16 @@
         padding-right: 0;
         padding-left: 0;
         padding-bottom: 0;
+
+        .modal-title{
+          color: white;
+
+        }
       }
+}
+.standard-dark{
+  .mat-select-panel{
+    filter: brightness(.8);
+  
+  }   
 }

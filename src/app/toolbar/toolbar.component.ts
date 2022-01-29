@@ -30,8 +30,8 @@ export class ToolbarComponent implements OnInit {
   @Input() isThemeDark !: boolean;
   //Input() pref !: Preferences;
   @Input() preferences !: Preferences;
-
   @Output() preferencesChanged = new EventEmitter();
+  cssClasses !: string[];
 
   canSeeAllNotifs : boolean = false;
   notificationUnreadCount : number = 0;
@@ -74,19 +74,30 @@ export class ToolbarComponent implements OnInit {
   openPreferences(event: any){
 
     let origPref = this.preferences;
-    
+    this.cssClasses = ['modal-class'];
+    this.cssClasses.push(this.isThemeDark ? 'dark-theme': 'light-theme');
+
     const dialogRef = this.dialog.open(PreferencesComponent, {
       width: '550px',
       height: '640px',
       data: {
         preferences: this.preferences,
       },
-      panelClass: 'modal-class'
+      panelClass: this.cssClasses,
     });
 
     dialogRef.componentInstance.preferencesChanged.subscribe(
       pref => {
         this.preferences = pref;
+        this.cssClasses[0] = 'modal-class';
+        //this.cssClasses[1] = (this.preferences.nightMode ? 'dark-theme': 'light-theme');
+        setTimeout(() => {
+          dialogRef.removePanelClass('dark-theme');
+          dialogRef.removePanelClass('light-theme');
+
+            dialogRef.addPanelClass(this.preferences.nightMode ? 'dark-theme': 'light-theme');
+
+        }, 100);
         this.preferencesChanged.emit(this.preferences);
 
       }
@@ -99,6 +110,7 @@ export class ToolbarComponent implements OnInit {
           backgroundSize : result.backgroundSize,
           backgroundPosition : result.backgroundPosition,
           opacity: result.opacity,
+          nightMode : result.nightMode,
         };
         this.preferencesChanged.emit({preferences: this.preferences});
 
@@ -109,6 +121,7 @@ export class ToolbarComponent implements OnInit {
               user.backgroundSizePreference = this.preferences.backgroundSize;
               user.backgroundPositionPreference = this.preferences.backgroundPosition;
               user.opacity = this.preferences.opacity;
+              user.nightMode = this.preferences.nightMode;
               this.userService.update(
                 <string>this.authUser?.key, user,
               );

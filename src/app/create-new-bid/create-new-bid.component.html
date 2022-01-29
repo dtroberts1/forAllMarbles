@@ -1,5 +1,5 @@
 <div style="width: 90%; padding-left: 40px; margin: 25px 25px 25px 10px;" *ngIf="authUser" >
-    <div style="box-shadow: 0 0 3px 0px var(--primary-color); background: var(--card-color);">
+    <div style="box-shadow: 0 0 3px 0px var(--primary-color); background: var(--divider-color);">
         <div class="example-accordion-item-header">
             <div class="bid-item-metric-header" style="display: flex;">
                 <div [ngStyle]="{'visibility': false && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
@@ -25,7 +25,7 @@
                 </div>
                 <div style="display: inline-flex; align-items: center; margin-left: 8px; vertical-align: middle;" [ngStyle]="{'visibility': true ? 'visible': 'hidden'}">
                     <mat-icon *ngIf="titleFormControl.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
-                    <mat-icon *ngIf="titleFormControl.invalid" style="color: red;" matSuffix>{{getInputErrorMessage(titleFormControl)}}</mat-icon>
+                    <mat-icon *ngIf="titleFormControl.invalid" color="warn" matSuffix>{{getInputErrorMessage(titleFormControl)}}</mat-icon>
                 </div>
             </div>
             <div style="width: 47.99px; display: flex;" class="example-accordion-item-description">
@@ -45,7 +45,7 @@
     
                         <div style="display: inline-block; margin-left: 8px; vertical-align: middle;" [ngStyle]="{'visibility': true ? 'visible': 'hidden'}">
                             <mat-icon *ngIf="bidMessageFormControl.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
-                            <mat-icon *ngIf="bidMessageFormControl.invalid" style="color: red;" matSuffix>{{getInputErrorMessage(bidMessageFormControl)}}</mat-icon>
+                            <mat-icon *ngIf="bidMessageFormControl.invalid" color="warn" matSuffix>{{getInputErrorMessage(bidMessageFormControl)}}</mat-icon>
                         </div>
                         <div [ngStyle]="{'visibility': false && user && user.key === bid.bidCreatorKey ? 'visible' : 'hidden'}"
                         class="cell-data-div-img-edit" 
@@ -115,13 +115,13 @@
                             <button
                             color="accent"
                             (click)="clearFields()"
-                            style="font-family: system-ui !important; color: var(--card-color)"
+                            style="font-family: system-ui !important; color : white; background: var(--primary-color);"
                             mat-raised-button>Clear
                             </button>
                             <button
                                 [ngStyle]="{'filter': (!bidMessageFormControl.valid || !titleFormControl.valid || !bidAmtFormControl.valid ? 'brightness(50%)' : 'none')}"
                                 [disabled]="!bidMessageFormControl.valid || !titleFormControl.valid || !bidAmtFormControl.valid" 
-                                style="font-family: system-ui !important; background-color: forestgreen !important; color: var(--card-color);"
+                                style="font-family: system-ui !important; color : white; background: var(--primary-color);"
                                 (click)="createBid()" mat-raised-button color="accent">Create
                             </button>
                         </div>
