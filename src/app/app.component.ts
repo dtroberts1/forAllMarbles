@@ -4,6 +4,7 @@ import { Player } from './interfaces/player';
 import { Team } from './interfaces/team';
 import { NflFeedService } from './services/nfl-feed.service';
 
+
 type PlayerParent =  {players: Player[] };
 
 @Component({
@@ -38,7 +39,6 @@ export class AppComponent {
   constructor(
     private nflService: NflFeedService,
   ){
-
   }
 
   focusBet(event: any){
@@ -52,6 +52,7 @@ export class AppComponent {
       let currPhraseIndex = phrases.length - 1 >= 0 ? phrases.length - 1 : 0;
     }
   }
+
 
   betChanged(){
     // Bet String text changed

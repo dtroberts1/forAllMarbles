@@ -1,15 +1,13 @@
 .modal-title{
-    font-size: 24px;
-    font-weight: 700;
+    font-size: 25px;
+    font-weight: 400;
     background: var(--primary-color);
-    text-align: start;
-    line-height: 40px;
-    border-bottom: 1px dotted black;
-    color: var(--text-color);
+    text-align: center;
+    line-height: 50px;
+    border-bottom: 1px solid;
+    color: white;
     font-family: system-ui;
     position: relative;
-    /* padding-left: 10px; */
-    padding: 6px 10px;
 }
 
 .modal-close-container{
@@ -34,4 +32,25 @@
             cursor: pointer;
         }
     }
+}
+
+#bid-lower-left-btns{
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 3;
+    grid-row-end: 3;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    
+    #lower-left-btn-container{
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+}
+
+.arrow{
+    visibility: hidden !important;
+    height: 0;
 }

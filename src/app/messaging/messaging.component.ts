@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter} from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import { IM } from '../models/im';
 import { User } from '../models/user';
 import { AuthService } from '../services/auth.service';
@@ -14,6 +14,7 @@ type MessagePrev = {user: User, contents: string, dateStr: string};
 })
 export class MessagingComponent implements OnInit {
   convoListExpanded: boolean = false;
+  @Input() isThemeDark !: boolean;
   @Output() createNewMsgtCallback : EventEmitter<any> = new EventEmitter();
   @Output() openMsgThreadCallback : EventEmitter<any> = new EventEmitter();
   availUsers!: User[];

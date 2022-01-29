@@ -2,7 +2,7 @@
     Manage Documents
     <div class="modal-close-container">
         <div (click)="closeModal()" tabindex="1" class="close-icon-background">
-            <mat-icon style="color: white; padding-top: 3px;">close</mat-icon>
+            <mat-icon style="padding-top: 3px;">close</mat-icon>
         </div>
     </div>
 </div>
@@ -16,14 +16,14 @@ style="width: 1000px;"
                 <span>Bid: </span>
                 <span>{{bid.title}}</span>
             </div>
-            <div style="color: #666666; font-family: system-ui; font-size: 18px; font-weight: 500; padding: 10px;">
+            <div style="color: var(--text-color); font-family: system-ui; font-size: 18px; font-weight: 500; padding: 10px;">
                 Files
             </div>
             <ul style="list-style: none; margin-block-start: 0;">
                 <li *ngFor="let attachedDoc of attachmentsToLink" style="display: flex; align-items: center; gap: 10px;">
                     <span *ngIf="attachedDoc">
                         <mat-checkbox 
-                            style="color: #666666; font-family: system-ui; font-size: 18px; font-weight: 500; display: flex;"
+                            style="color: var(--secondary-text-color); font-family: system-ui; font-size: 18px; font-weight: 500; display: flex;"
                             [checked]="attachedDoc.isLinked"
                             [(ngModel)]="attachedDoc.isLinked"
                             [color]="'accent'">
@@ -34,7 +34,7 @@ style="width: 1000px;"
                         <mat-icon  style="padding-top: 4px;">notes</mat-icon>
                       </div>
                       <div *ngIf="!attachedDoc.isLoading">
-                          <a [href]="getSafeUrl(attachedDoc.url ? attachedDoc.url : null)" target="_blank">View</a>
+                          <a style="color: white !important;" [href]="getSafeUrl(attachedDoc.url ? attachedDoc.url : null)" target="_blank">View</a>
                       </div>
                       <div *ngIf="attachedDoc.isLoading" style="margin-bottom: -10px;">
                         <mat-spinner [diameter]="20"></mat-spinner>
@@ -42,12 +42,12 @@ style="width: 1000px;"
                 </li>
             </ul>
             <div style="padding: 10px; display: flex; gap: 10px;">
-                <button style="font-family: system-ui !important;" (click)="saveAttachments()" mat-raised-button color="accent">
+                <button style="font-family: system-ui !important; color: white;" (click)="saveAttachments()" mat-raised-button color="accent">
                     Save File{{attachmentsToLink && attachmentsToLink.length > 1 ? 's' :''}}
                 </button>
                 <label *ngIf="!attachmentsToLink || !attachmentsToLink.length || attachmentsToLink && attachmentsToLink.length < 3"  style="color: white; width: 48px;" 
                 class="custom-file-upload mat-raised-button" 
-                style="background-color: #DA3E3E; font-family: system-ui !important; color: white; width: 78px; display: flex; align-items: center;">
+                style="background-color: var(--primary-color); font-family: system-ui !important; color: white; width: 78px; display: flex; align-items: center;">
                 Browse           
                 <input 
                     type="file"
@@ -60,11 +60,12 @@ style="width: 1000px;"
             </div>
         
             <div *ngIf="selectedNoteAttachment" style="padding: 10px; color: #666666; font-family: system-ui; font-size: 18px; font-weight: 500;">
-                <div>
+                <div style="color: white !important;">
                     Notes for attachment,
                 </div>
                 <div style="text-align: center; padding: 10px;">
                     <textarea
+                        [ngStyle]="{'filter': isThemeDark ? 'brightness(.8)' : 'initial'}"
                         style="width: 450px; height: 160px; padding: 10px; box-sizing: border-box;"
                         placeholder="Bid Message" 
                         [readonly]="false"
@@ -74,8 +75,8 @@ style="width: 1000px;"
                 </div>
             </div>
             <div *ngIf="selectedNoteAttachment" style="padding: 10px; display: flex; gap: 10px;">
-                <button *ngIf="selectedNoteAttachment" style="font-family: system-ui !important;" (click)="saveNotes()" mat-raised-button color="accent">Save Notes</button>
-                <button style="font-family: system-ui !important;" (click)="cancelAttachmentChange()" mat-raised-button color="accent">Cancel</button>
+                <button *ngIf="selectedNoteAttachment" style="font-family: system-ui !important; color: white;" (click)="saveNotes()" mat-raised-button color="accent">Save Notes</button>
+                <button style="font-family: system-ui !important; color: white;" (click)="cancelAttachmentChange()" mat-raised-button color="accent">Cancel</button>
             </div>
         </div>
     </mat-tab>
@@ -85,14 +86,14 @@ style="width: 1000px;"
                 <span>Bid: </span>
                 <span>{{bid.title}}</span>
             </div>
-            <div style="color: #666666; font-family: system-ui; font-size: 18px; font-weight: 500; padding: 10px;">
+            <div style="color: var(--text-color); font-family: system-ui; font-size: 18px; font-weight: 500; padding: 10px;">
                 Files
             </div>
             <ul style="list-style: none; margin-block-start: 0;">
                 <li *ngFor="let attachedDoc of attachmentsToLink" style="display: flex; align-items: center; gap: 10px;">
                     <span *ngIf="attachedDoc">
                         <mat-checkbox 
-                            style="color: #666666; font-family: system-ui; font-size: 18px; font-weight: 500;"
+                            style="color: var(--secondary-text-color); font-family: system-ui; font-size: 18px; font-weight: 500;"
                             [checked]="attachedDoc.isLinked"
                             [(ngModel)]="attachedDoc.isLinked"
                             [disabled]="true"
@@ -104,7 +105,7 @@ style="width: 1000px;"
                         <mat-icon  style="padding-top: 4px;">notes</mat-icon>
                       </div>
                       <div>
-                          <a [href]="getSafeUrl(attachedDoc.url ? attachedDoc.url : null)" target="_blank">View</a>
+                          <a [href]="getSafeUrl(attachedDoc.url ? attachedDoc.url : null)" style="color: white;" target="_blank">View</a>
                       </div>
                 </li>
             </ul>
@@ -114,6 +115,7 @@ style="width: 1000px;"
                 </div>
                 <div style="text-align: center; padding: 10px;">
                     <textarea
+                        [ngStyle]="{'filter': isThemeDark ? 'brightness(.8)' : 'initial'}"
                         style="width: 450px; height: 160px; padding: 10px; box-sizing: border-box;"
                         placeholder="Bid Message" 
                         [readonly]="true"
@@ -123,7 +125,7 @@ style="width: 1000px;"
                 </div>
             </div>
             <div *ngIf="selectedNoteAttachment" style="padding: 10px; display: flex; gap: 10px;">
-                <button style="font-family: system-ui !important;" (click)="cancelAttachmentChange()" mat-raised-button color="accent">Close Notes</button>
+                <button style="font-family: system-ui !important; color: white;" (click)="cancelAttachmentChange()" mat-raised-button color="accent">Close Notes</button>
             </div>
         </div>
     </mat-tab>

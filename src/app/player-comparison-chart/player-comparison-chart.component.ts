@@ -23,7 +23,7 @@ export class PlayerComparisonChartComponent implements OnInit {
           case 'histories': {
             if (Array.isArray(change.currentValue) && change.currentValue.length){
               change.currentValue.forEach((history : CompetitorHistory) => {
-                history.percentWon = history.nbrWonAgainst / (history.nbrWonAgainst  + history.nbrLostAgainst) * 100;
+                history.percentWon = parseInt(Math.round(history.nbrWonAgainst / (history.nbrWonAgainst  + history.nbrLostAgainst) * 100).toFixed(2));
                 history.displayedPercentWon = history.percentWon < 10 ? 10 : history.percentWon;
               });
             }

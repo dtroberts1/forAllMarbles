@@ -1,0 +1,40 @@
+/*@import '~handsontable/dist/handsontable.full.css';*/
+/* You can add global styles to this file, and also import other style files */
+@import '@angular/material/theming';
+@import '../src/custom-theme.scss';
+
+.modal-class{
+    .mat-dialog-container {
+        overflow: hidden;
+        background-color: whitesmoke;
+        padding-top: 0;
+        padding-right: 0;
+        padding-left: 0;
+        padding-bottom: 0;
+
+        .modal-title{
+          color: white;
+
+        }
+      }
+}
+.standard-dark{
+  .mat-select-panel{
+    filter: brightness(.8);
+  
+  }   
+}
+
+.color-picker.open{
+  left: 0 !important;
+  top: 2em !important;
+  position: absolute !important;
+}
+
+.arrow.ng-star-inserted.arrow-left{
+  visibility: hidden;
+}
+
+.arrow.ng-star-inserted.arrow-bottom{
+  visibility: hidden;
+}

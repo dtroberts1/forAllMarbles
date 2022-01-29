@@ -1,23 +1,29 @@
 ::ng-deep mat-tab-header{
     display: inline-flex;
     width: fit-content;
-    
+    background: var(--app-bar-color);
+
     .mat-tab-label-container{
 
         .mat-tab-label-content{
             font-family: -webkit-pictograph;
         }
         mat-ink-bar{
-            background-color: #DA3E3E !important;
+            background-color: var(--primary-color) !important;
         }
     }
 }
 
 #seach-icon{
+    color: var(--text-color);
+
     &:hover{
         cursor: pointer;
-        background: lightgray;
-        color: #da3e3e;
+        color: var(--primary-color);
 
     }
+}
+
+#main-view{
+    /*background-image: url(../../assets/images/money.jpeg);*/
 }

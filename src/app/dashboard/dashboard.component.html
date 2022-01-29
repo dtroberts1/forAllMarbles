@@ -1,57 +1,89 @@
-<app-toolbar
+    <div [ngClass]="{'light-theme': !isThemeDark, 'dark-theme': isThemeDark}" class="light-theme" >
+    <div>
+    <app-toolbar
+    color="primary"
     [authUser]="authUser"
     [notificationList]="notificationList"
-></app-toolbar>
-<div style="background-color: #F3F2EF; height: 1200px;"
->
-    <div *ngIf="authUser">
-    </div>
-    <div style="width: 50%; height: 100%; float: left;">
-        <mat-tab-group (selectedTabChange)="notifyChild($event)"
-        >
-            <mat-tab label="Feed" #feed>
-                <app-feed
-                [searchText]="searchText"
-                >
+    (preferencesChanged)="preferencesChanged($event)"
+    [preferences]="preferences"
+    [isThemeDark]="isThemeDark"
+    ></app-toolbar>
+    <div id="main-view" style="background-color: #F3F2EF; height: 1200px;"
+    [ngStyle]="{'background-image': (backgroundSrc ? 'url(' + backgroundSrc + ')' : 'initial'),
+                'background-size':backgroundSize,
+            'background-position': backgroundPosition}"
+    >   
 
-                </app-feed>
-            </mat-tab>
-            <mat-tab label="Your Bids" #yourBids><app-your-bids></app-your-bids></mat-tab>
-            <mat-tab label="Create Bid" #createBid> 
-                <div>
-                    <app-create-new-bid>
-                    </app-create-new-bid>
+        <div *ngIf="authUser">
+        </div>
+        <div style="width: 50%; height: 100%; float: left; margin-top: 0.2em; position: relative;"
+            [ngStyle]="{'opacity': opacity,
+            'background': isThemeDark ? 'var(--background-color)' : 'initial'}"
+        >
+            <mat-tab-group color="primary" (selectedTabChange)="notifyChild($event)"
+            >
+                <mat-tab label="Feed" #feed>
+                    <app-feed
+                    [searchText]="searchText"
+                    [isThemeDark]="isThemeDark"
+                    >
+
+                    </app-feed>
+                </mat-tab>
+                <mat-tab label="Your Bids" #yourBids><app-your-bids></app-your-bids></mat-tab>
+                <mat-tab label="Create Bid" #createBid> 
+                    <div>
+                        <app-create-new-bid
+                            [isThemeDark]="isThemeDark"
+                        >
+                        </app-create-new-bid>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+            <div style="position: absolute;
+            top: 0;
+            left: 30em;
+            width: 100vw;
+            height: 3em;
+            display: flex;
+            align-items: center;"
+            [ngStyle]="{'background': isThemeDark ? 'var(--app-bar-color)' : 'var(--app-bar-color)'}"
+            >
+                <mat-icon *ngIf="!canDispVis"  style="padding: 0.1em; border-radius: 10px;" id="seach-icon" (click)="toggleSearchVis()"
+                >search</mat-icon>
+                <div *ngIf="canDispVis" wmAnimate="fadeInRight" speed="normal">
+                    <mat-form-field 
+                    style="width: 224px; font-size: .7rem; color: var(--text-color); margin-top: 1em;" appearance="fill">
+                    <mat-label>Search</mat-label>                                                   
+                    <input #searchinput type="search" style="font-size: 1rem; font-family: system-ui !important;" matInput 
+                    [(ngModel)]="searchText"
+                    >
+                </mat-form-field>
                 </div>
-            </mat-tab>
-        </mat-tab-group>
-        <div style="position: absolute; top: 3.5em; left: 32em; width: 15em; height: 2.6em; display: flex; align-items: center;                                                                                                     ">
-            <mat-icon *ngIf="!canDispVis" style="padding: 0.1em; border-radius: 10px;" id="seach-icon" (click)="toggleSearchVis()">search</mat-icon>
-            <div *ngIf="canDispVis" wmAnimate="fadeInRight" speed="normal">
-                <mat-form-field 
-                style="width: 224px; font-size: .7rem; color: #666666; margin-top: 1em;" appearance="fill">
-                <mat-label>Search</mat-label>                                                   
-                <input #searchinput type="search" style="font-size: 1rem; font-family: system-ui !important;" matInput 
-                [(ngModel)]="searchText"
-                >
-            </mat-form-field>
             </div>
         </div>
-    </div>
-    <div style="width: 50%; height: 100%; float: right; overflow-x:hidden;">
-        <app-earnings-losses>
+        <div 
+        [ngStyle]="{'opacity': opacity, 'background': isThemeDark ? 'var(--background-color)' : 'initial'}"
+        style="width: 50%; height: 100%; float: right; overflow-x:hidden; margin-top: 0.2em;">
+            <app-earnings-losses
+            [isThemeDark]="isThemeDark"
+            >
 
-        </app-earnings-losses>
-    </div>
-    <div>
-        <app-messaging
-        (createNewMsgtCallback)="openCreateNewMsg()"
-        (openMsgThreadCallback)="openMessageThread($event)"
-        >
-        </app-messaging>
-        <app-new-message *ngIf="canDispNewMessageScrn" 
-        [selectedUser]="selectedUser"
-        (closeNewMsgCallback)="closeNewMessage()"
-        ></app-new-message>
-    </div>
+            </app-earnings-losses>
+        </div>
+        <div [ngStyle]="{'opacity': opacity}">
+            <app-messaging
+            (createNewMsgtCallback)="openCreateNewMsg()"
+            (openMsgThreadCallback)="openMessageThread($event)"
+            [isThemeDark]="isThemeDark"
+            >
+            </app-messaging>
+            <app-new-message *ngIf="canDispNewMessageScrn" 
+            [selectedUser]="selectedUser"
+            (closeNewMsgCallback)="closeNewMessage()"
+            [isThemeDark]="isThemeDark"
+            ></app-new-message>
+        </div>
 
+    </div>
 </div>

@@ -16,18 +16,19 @@ import { NotificationService } from '../services/notifications.service';
 import { UserService } from '../services/user.service';
 
 
-type ModalInput = {isWinner: boolean; attachedFile: File; bid: Bid} 
+type ModalInput = {isWinner: boolean; attachedFile: File; bid: Bid, isThemeDark: boolean;} 
 type BidDocument = {file?:any; name ?: string, isLoading ?: boolean, isLinked : boolean, notes?: string | null, url ?: string | null, fileUpload ?: FileUpload | null, path ?: string | null} 
 
 @Component({
   selector: 'app-doc-management-modal',
   templateUrl: './doc-management-modal.component.html',
-  styleUrls: ['./doc-management-modal.component.less']
+  styleUrls: ['./doc-management-modal.component.scss']
 })
 export class DocManagementModalComponent implements OnInit {
   bid !: Bid;
   attachmentsToLink !: BidDocument[];
   newFile !: File;
+  isThemeDark !: boolean;
   selectedNoteAttachment !: BidDocument | null;
   openedNotesFormControl = new FormControl('', [Validators.required]);
   currAuthUser ?: AuthUser | null;
@@ -48,6 +49,7 @@ export class DocManagementModalComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.isThemeDark = this.data.isThemeDark;
     let existingAttachments : SupportingDoc[] = [];
     this.bid = this.data.bid;
     existingAttachments = this.getAttachmentsToLink(existingAttachments, true);

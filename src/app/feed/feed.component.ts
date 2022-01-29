@@ -20,6 +20,7 @@ export class FeedComponent implements OnInit {
   initialLoad :boolean = true;
   searchedBids !: (Bid | any)[];
   @Input() searchText !: string;
+  @Input() isThemeDark !: boolean;
 
   constructor(
     private bidService: BidService,

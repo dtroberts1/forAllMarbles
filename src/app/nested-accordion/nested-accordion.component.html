@@ -1,5 +1,6 @@
-<cdk-accordion class="example-accordion">
+<cdk-accordion class="example-accordion" [ngClass]="{'card-expanded':accordionItem.expanded}">
     <cdk-accordion-item
+      color="primary"
       #accordionItem="cdkAccordionItem"
       class="example-accordion-item"
       role="button"
@@ -8,7 +9,7 @@
       [attr.id]="'accordion-header-' + 0"
       [@detailExpand]="accordionItem.expanded ? 'expanded' : 'collapsed'"
       [attr.aria-controls]="'accordion-body-' + 0">
-      <div class="example-accordion-item-header"  (click)="accordionItem.toggle()">
+      <div class="example-accordion-item-header" (click)="accordionItem.toggle()">
         <div class="bid-item-metric-header" style="display: flex;">
             <div [ngStyle]="{'visibility': !titleEditMode && user && user.key === bid.bidCreatorKey && !bid.hasResult ? 'visible' : 'hidden'}"
             class="cell-data-div-img-edit"  
@@ -17,10 +18,12 @@
                 <div tabindex="1" (click)="enableTitleEditMode($event)">
                 </div>
             </div>
-            <div style="display: inline-block;">
+            <div style="display: inline-flex;">
                 <input matInput 
+                    [ngStyle]="{background: titleEditMode ? 'var(--divider-color)' : 'initial'}"
                     placeholder="Bid Title" 
-                    style="border: none; outline: none; font-family: system-ui !important;"
+                    style="border: none; outline: none; font-family: system-ui !important; background: initial;
+                    padding-bottom: .4em;"
                     (click)="stopPropagation($event, accordionItem.expanded)"
                     #titleInput
                     [readonly]="!titleEditMode"
@@ -28,7 +31,7 @@
                     [formControl]="titleFormControl"
                 />
             </div>
-            <div style="display: inline-flex; align-items: center; margin-left: 8px; vertical-align: middle;" [ngStyle]="{'visibility': titleEditMode ? 'visible': 'hidden'}">
+            <div style="display: inline-flex; align-items: center; margin-left: 8px; vertical-align: middle;  white-space: nowrap;" [ngStyle]="{'visibility': titleEditMode ? 'visible': 'hidden'}">
                 <mat-icon *ngIf="titleFormControl.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
                 <mat-error *ngIf="titleFormControl.invalid">{{getInputErrorMessage(titleFormControl)}}</mat-error>
             </div>
@@ -37,7 +40,7 @@
             font-weight: 600 !important;
             font-family: system-ui !important;
             font-size: 18px !important;
-            color: #666666 !important;" class="example-accordion-item-description">
+            color: var(--disabled-text-color) !important;" class="example-accordion-item-description">
             <div style="padding-right:20px; white-space: nowrap;">
                 Created by {{creatorName}}
             </div>
@@ -51,14 +54,16 @@
                     color: rgb(255,74,74);
                     padding-left: 8px;
                     padding-right: 10px;" 
-                    [ngStyle]="{'color': user && bid.verifiedWinner == user.key ? 'green' : 'red'}">
+                    [ngStyle]="{'color': user && bid.verifiedWinner == user.key ? 'green' : 'var(--warn-color)'}">
                     {{(user && bid.verifiedWinner == user.key ? 'Won' : (bid.verifiedLoser == user.key ? 'Lost' : ''))}}
                 </span>
             </div>
-            <div>
+            <div style="display: flex;">
                 <mat-icon style="float:right;" class="expand-icon"  [@openClose]="!accordionItem.expanded ? 'open' : 'closed'">keyboard_arrow_up</mat-icon>
-                <mat-icon [ngStyle]="{'transform': (user && user.key === bid.bidCreatorKey ? 'scale(1)' : 'scale(0')}" 
-                tabindex="1" (click)="deleteBid(bid)" id="trash-icon" style="float:right; color: red;">delete</mat-icon>
+                <mat-icon
+                    color="warn"
+                [ngStyle]="{'transform': (user && user.key === bid.bidCreatorKey ? 'scale(1)' : 'scale(0')}" 
+                tabindex="1" (click)="deleteBid(bid)" id="trash-icon" style="float:right;">delete</mat-icon>
             </div>
         </div>
 
@@ -73,7 +78,7 @@
             <div id="bid-item-message">
                 <div class="bid-item-metric-header" style="line-height: 20px; display:flex;">
                     {{(user?.key == bid.bidCreatorKey ? 'Your': 'Their')}} Offer
-                    <div style="display: inline-block; margin-left: 8px; vertical-align: middle;" [ngStyle]="{'visibility': bidMessageEditMode ? 'visible': 'hidden'}">
+                    <div style="display: inline-block; margin-left: 8px; vertical-align: middle; white-space: nowrap;" [ngStyle]="{'visibility': bidMessageEditMode ? 'visible': 'hidden'}">
                         <mat-icon *ngIf="bidMessageFormControl.invalid == false" matSuffix>sentiment_very_satisfied</mat-icon>
                         <mat-error *ngIf="bidMessageFormControl.invalid">{{getInputErrorMessage(bidMessageFormControl)}}</mat-error>
                     </div>
@@ -85,10 +90,11 @@
                         </div>
                     </div>
                 </div>
-                <div style="display: inline-block;">
+                <div style="display: inline-block; width: 90%;">
                     <textarea matInput 
                         placeholder="Bid Message" 
-                        style="border: none; outline: none; color: #666666;"
+                        [ngStyle]="{'background': bidMessageEditMode ? 'var(--divider-color)' : 'initial'}"
+                        style="border: none; outline: none; color: var(--secondary-text-color);"
                         #bidMessageInput
                         [readonly]="!bidMessageEditMode"
                         (keydown)="detailDataChanged(bidMessageEditMode)"
@@ -106,7 +112,7 @@
                         font-weight: 600 !important;
                         font-family: system-ui !important;
                         font-size: 18px !important;
-                        color: #666666 !important;">
+                        color: var(--text-color) !important;">
                         {{(bid.verifiedWinner != null ? 'Winner' : 'Unconfirmed Winner')}}
                     </div>
                     <div style="width: 37.9px;
@@ -132,9 +138,11 @@
                 <div id="bid-amt-value">
                     <div>
                         <input  matInput 
+                        [ngStyle]="{'color': (isThemeDark ? 'var(--secondary-text-color)': 'forestgreen'),
+                        background: (bidAmtEditMode ? 'var(--divider-color)' : 'initial')}"
                         placeholder="23.55" 
-                        style="border: none; outline: none; height: initial; width: initial; text-align: right; padding-right: 13px;
-                            color: forestGreen;
+                        style="border: none; outline: none; height: initial; width: initial; 
+                        text-align: right; padding-right: 13px; width: 40%; float: right; padding-bottom: 0.4em; 
                         "
                         #bidAmtInput
                         type="number"
@@ -160,14 +168,14 @@
                 <div>
                     <div id="lower-left-btn-container">
                         <!--<button *ngIf="!bid.isEditing" (click)="modifyBid(bid)" mat-raised-button color="accent">View Counter Offers</button>-->
-                        <button style="font-family: system-ui !important;" *ngIf="canDisplayCounterOfferOrApprove(bid)" (click)="createCounterOffer()" mat-raised-button color="accent">Counter Offer</button>
-                        <button *ngIf="canDeclareVictory(bid)" style="font-family: system-ui !important;" (click)="declareVictory(bid)" mat-raised-button color="accent">Declare Victory</button>
-                        <button *ngIf="canConcedeDefeat(bid)" style="font-family: system-ui !important;" (click)="concedeDefeat(bid)" mat-raised-button color="accent">Concede Defeat</button>
-                        <button *ngIf="!bid.resultVerified && bid.hasResult && user && bid.declaredWinner != user.key" style="font-family: system-ui !important;" (click)="challengeResult(bid)" mat-raised-button color="accent">Challenge Result</button>
+                        <button style="font-family: system-ui !important; color: white; background: var(--primary-color);" *ngIf="canDisplayCounterOfferOrApprove(bid)" (click)="createCounterOffer()" mat-raised-button color="accent">Counter Offer</button>
+                        <button *ngIf="canDeclareVictory(bid)" style="font-family: system-ui !important; color: white; background: var(--primary-color);" (click)="declareVictory(bid)" mat-raised-button color="accent">Declare Victory</button>
+                        <button *ngIf="canConcedeDefeat(bid)" style="font-family: system-ui !important; color: white; background: var(--primary-color); " (click)="concedeDefeat(bid)" mat-raised-button color="primary">Concede Defeat</button>
+                        <button *ngIf="!bid.resultVerified && bid.hasResult && user && bid.declaredWinner != user.key" style="font-family: system-ui !important; color: white; background: var(--primary-color);" (click)="challengeResult(bid)" mat-raised-button color="accent">Challenge Result</button>
                         <!--Challenge Result button will also prompt for upload of documentation-->
                         <label *ngIf="!bid.resultVerified && bid.hasResult && user && user.key && user.key == bid.declaredWinner && !hasWinnerDocs" style="color: white; width: 48px;" 
                             class="custom-file-upload mat-raised-button" 
-                            style="background-color: #DA3E3E; font-family: system-ui !important; color: white; width: 123px; display: flex; align-items: center;">
+                            style="background-color: var(--primary-color); font-family: system-ui !important; color: white; width: 123px; display: flex; align-items: center;">
                             Prove Victory
                             <input 
                                 type="file"
@@ -177,17 +185,17 @@
                                 (change)="attachmentAdded($event, bid)"
                             />
                         </label>
-                        <button *ngIf="hasWinnerDocs" style="font-family: system-ui !important;"  (click)="manageDocumentation()" mat-raised-button color="accent">Manage Documentation</button>
-                        <button style="font-family: system-ui !important;" *ngIf="canDisplayCounterOfferOrApprove(bid)" (click)="approveBid(bid)" mat-raised-button color="accent">Approve</button>
-                        <button style="font-family: system-ui !important;" *ngIf="bid.isApproved && !bid.resultVerified && bid.hasResult && isAdmin" (click)="adminChooseWinner()" mat-raised-button color="accent">Choose Winner</button>
+                        <button *ngIf="hasWinnerDocs" style="font-family: system-ui !important; color: white; background: var(--primary-color);"  (click)="manageDocumentation()" mat-raised-button color="accent">Manage Documentation</button>
+                        <button style="font-family: system-ui !important; color: white; background: var(--primary-color);" *ngIf="canDisplayCounterOfferOrApprove(bid)" (click)="approveBid(bid)" mat-raised-button color="accent">Approve</button>
+                        <button style="font-family: system-ui !important; color: white; background: var(--primary-color);" *ngIf="bid.isApproved && !bid.resultVerified && bid.hasResult && isAdmin" (click)="adminChooseWinner()" mat-raised-button color="accent">Choose Winner</button>
                     </div>
                 </div>            
             </div>
             <div id="bid-lower-right-btns">
                 <div>
                     <div id="lower-right-btn-container">
-                        <button style="font-family: system-ui !important;" *ngIf="detailChangesPending" (click)="saveUpdate()" class="pending-changes" mat-raised-button color="primary">Save Changes</button>
-                        <button style="font-family: system-ui !important;" *ngIf="titleEditMode || bidMessageEditMode || bidAmtEditMode || detailChangesPending" 
+                        <button style="font-family: system-ui !important; color: white; background: var(--primary-color);" *ngIf="detailChangesPending" (click)="saveUpdate()" class="pending-changes" mat-raised-button color="primary">Save Changes</button>
+                        <button style="font-family: system-ui !important; color: white; background: var(--primary-color);" *ngIf="titleEditMode || bidMessageEditMode || bidAmtEditMode || detailChangesPending" 
                         (click)="cancelDetailChanges()"
                         mat-raised-button color="accent">Cancel</button>
                     </div>
@@ -206,6 +214,7 @@
                 (refreshCallback)="refreshBid(bid)"
                 (accordionBaseCallback)="refreshBase()"
                 [parentBid]="bid"
+                [isThemeDark]="isThemeDark"
                 [bid]="childBid">
             </app-nested-accordion>
     

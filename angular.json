@@ -32,8 +32,9 @@
             ],
             "styles": [
               "src/allmarbles-theme.scss",
-              "src/styles.less",
-              "node_modules/ngx-toastr/toastr.css"
+              "src/styles.scss",
+              "node_modules/ngx-toastr/toastr.css",
+              "src/custom-theme.scss"
             ],
             "scripts": []
           },
@@ -101,7 +102,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.less"
+              "src/styles.scss"
             ],
             "scripts": []
           }

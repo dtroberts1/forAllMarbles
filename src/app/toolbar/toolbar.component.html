@@ -1,4 +1,5 @@
-<div id="toolbar-container">
+<div id="toolbar-container" [ngStyle]="{ 'background-color' : (isThemeDark ? 
+'var(--app-bar-color)' : 'var(--primary-color)')}">
     <div style="float: left; width: 50%;">
         <img style="height: 40px; width: 40px;" src="../../assets/icons/dice.png" />
     </div>
@@ -30,8 +31,8 @@
   <div class="prof-btn" tabindex="1" (click)="logout($event)" class="prof-btn">
     Account
   </div>
-  <div class="prof-btn" tabindex="1" (click)="logout($event)" class="prof-btn">
-    Settings
+  <div class="prof-btn" tabindex="1" (click)="openPreferences($event)" class="prof-btn">
+    Preferences
   </div>
   <div style="text-align: right; padding: 0 10px 0 10px;">
     User
@@ -51,7 +52,9 @@
   <div class="notif-list-container">
     <ul>
       <li *ngFor="let notification of notificationList | slice:0:(!canSeeAllNotifs ? 3 : notificationList.length);">
-        <div [ngClass]="{'is-marked-read':notification.isRead}" style="width: 100%; height: 100%; display: flex; align-items: center; font-size: 1.08rem;">
+        <div [ngClass]="{'is-marked-read':notification.isRead}" 
+        style="width: 100%; height: 100%; display: flex; align-items: center; font-size: 1.08rem;
+        color: var(--text-color);">
           <div class="notif-img-container">
             <div>
                 <mat-icon *ngIf="!notification.type"  style="color: forestgreen;"> attach_money</mat-icon>
@@ -63,7 +66,7 @@
                 'defeat': notification.type === 'defeat'}" 
                 class="notification-icon" style="height: 24px; width: 24px;"  />
             </div>
-            <div class="mark-notif-as-read">
+            <div [ngStyle]="{'visibility': !notification.isRead ? 'visible': 'hidden'}" class="mark-notif-as-read">
               <mat-icon 
               [matTooltip]="'Mark as read'"
               [matTooltipClass]="{ 'notification-trash-tooltip': true }" 

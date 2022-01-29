@@ -15,6 +15,7 @@ import { UserService } from 'src/app/services/user.service';
 export class NewMessageComponent implements OnInit {
   @Output() closeNewMsgCallback : EventEmitter<any> = new EventEmitter();
   @Input() selectedUser !: User | null;
+  @Input() isThemeDark !: boolean;
 
   expanded: boolean = true;
   userSearchStr !: null;

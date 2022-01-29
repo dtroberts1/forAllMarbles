@@ -13,6 +13,13 @@ export class User {
     city ?: string;
     state ?: string;
     isAdmin ?: boolean;
+    backgroundUrlPreference ?: string;
+    backgroundSizePreference ?: string;
+    backgroundPositionPreference ?: string;
+    opacity ?: number;
+    nightMode ?: boolean;
+    primaryColor ?: string;
+    accentColor ?: string;
 }
 
 export class AuthUser{
