@@ -52,6 +52,7 @@ import { PreferencesComponent } from './preferences/preferences.component';
 import {MatSlider, MatSliderModule} from '@angular/material/slider'
 import{MatButtonToggle, MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 
 
@@ -105,6 +106,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     MatButtonToggleModule,
     MatSliderModule,
     MatTooltipModule,
+    ColorPickerModule,
     MatSortModule,
     CdkAccordionModule,
     MatSlideToggleModule,

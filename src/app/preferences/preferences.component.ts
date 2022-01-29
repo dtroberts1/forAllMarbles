@@ -14,6 +14,17 @@ export class PreferencesComponent implements OnInit {
   url !: string | undefined;
   enableBackgroundImage : boolean = false;
   nightMode : boolean | undefined = false;
+  title = 'colorPicker';
+  primaryColor : string = '#DA3E3E';
+  accentColor : string = '#6DFCD9';
+  arrayColors: any = {
+    color1: '#2883e9',
+    color2: '#e920e9',
+    color3: 'rgb(255,245,0)',
+    color4: 'rgb(236,64,64)',
+    color5: 'rgba(45,208,45,1)'
+  };
+  selectedColor: string = 'color1';
 
   backgroundSizeOptions : string[] = [
     'auto',
@@ -55,11 +66,17 @@ export class PreferencesComponent implements OnInit {
     this.opacity = this.data.preferences.opacity;
     this.backgroundPosition = this.data.preferences.backgroundPosition;
     this.nightMode = this.data.preferences.nightMode;
+    this.primaryColor = this.data.preferences.primaryColor ? this.data.preferences.primaryColor : '#DA3E3E';
+    this.accentColor = this.data.preferences.accentColor ? this.data.preferences.accentColor : '#6DFCD9';
   }
 
   sliderChanged(event : any){
     this.emitChange();
 
+  }
+
+  colorChanged(){
+    this.emitChange();
   }
 
   nightModeChanged(event: any){
@@ -77,6 +94,8 @@ export class PreferencesComponent implements OnInit {
         backgroundPosition: this.backgroundPosition,
         opacity: this.opacity,
         nightMode: this.nightMode,
+        primaryColor: this.primaryColor,
+        accentColor: this.accentColor,
       });
     }
     else{
@@ -118,6 +137,8 @@ export class PreferencesComponent implements OnInit {
       backgroundPosition: this.backgroundPosition,
       opacity: this.opacity,
       nightMode: this.nightMode,
+      primaryColor: this.primaryColor,
+      accentColor: this.accentColor,
     }});
 
   }

@@ -98,6 +98,7 @@ export class ToolbarComponent implements OnInit {
             dialogRef.addPanelClass(this.preferences.nightMode ? 'dark-theme': 'light-theme');
 
         }, 100);
+
         this.preferencesChanged.emit(this.preferences);
 
       }
@@ -111,6 +112,8 @@ export class ToolbarComponent implements OnInit {
           backgroundPosition : result.backgroundPosition,
           opacity: result.opacity,
           nightMode : result.nightMode,
+          primaryColor: result.primaryColor,
+          accentColor: result.accentColor,
         };
         this.preferencesChanged.emit({preferences: this.preferences});
 
@@ -122,6 +125,8 @@ export class ToolbarComponent implements OnInit {
               user.backgroundPositionPreference = this.preferences.backgroundPosition;
               user.opacity = this.preferences.opacity;
               user.nightMode = this.preferences.nightMode;
+              user.primaryColor = this.preferences.primaryColor;
+              user.accentColor = this.preferences.accentColor;
               this.userService.update(
                 <string>this.authUser?.key, user,
               );

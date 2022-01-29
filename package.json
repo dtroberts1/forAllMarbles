@@ -29,13 +29,14 @@
     "chartjs-adapter-moment": "^1.0.0",
     "firebase": "^8.10.0",
     "handsontable": "^11.0.1",
+    "ngx-color-picker": "^11.0.0",
     "ngx-toastr": "^14.2.1",
     "querybase": "^0.6.0",
     "rxjs": "~7.4.0",
+    "tinycolor2": "^1.4.1",
     "tslib": "^2.3.0",
     "xlsx": "^0.17.5",
-    "zone.js": "~0.11.4",
-    "tinycolor2": "^1.4.1"
+    "zone.js": "~0.11.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~13.0.3",

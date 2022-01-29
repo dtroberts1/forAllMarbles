@@ -49,8 +49,8 @@ export class DashboardComponent implements OnInit {
   opacity !: number | undefined;
   preferences !: Preferences;
   isThemeDark !: boolean;
-  primaryColor =  '#8A2BE2';//'#DA3E3E';
-  accentColor = '#6DFCD9';
+  primaryColor : string = '#8A2BE2';//'#DA3E3E';
+  accentColor : string = '#6DFCD9';
   primaryColorPalette: Color[] = [];
   accentColorPalette: Color[] = [];
 
@@ -179,12 +179,16 @@ export class DashboardComponent implements OnInit {
             backgroundSize : user.backgroundSizePreference,
             opacity: user.opacity,
             nightMode : user.nightMode,
+            primaryColor : user.primaryColor,
+            accentColor: user.accentColor,
           }
 
           this.backgroundSrc = this.preferences.backgroundUrl;
           this.opacity = this.preferences.opacity;
           this.backgroundPosition = this.preferences.backgroundPosition;
           this.backgroundSize = this.preferences.backgroundSize;
+          this.primaryColor = this.preferences.primaryColor ? this.preferences.primaryColor : '#DA3E3E';
+          this.accentColor = this.preferences.accentColor ? this.preferences.accentColor : '#6DFCD9';
 
           this.updateThemePalette();
           this.setTheme('standard', this.preferences.nightMode); // Default theme
@@ -201,9 +205,10 @@ export class DashboardComponent implements OnInit {
   }
 
   updateThemePalette(){
-
     this.primaryColorPalette = this.computeColors(this.primaryColor);
+    this.accentColorPalette = this.computeColors(this.accentColor);
     this.updateTheme(this.primaryColorPalette, 'primary');
+    this.updateTheme(this.accentColorPalette, 'accent');
   }
 
   getNotifications(){
@@ -262,6 +267,8 @@ export class DashboardComponent implements OnInit {
     this.backgroundSize = (<Preferences>event.preferences).backgroundSize;
     this.backgroundPosition = (<Preferences>event.preferences).backgroundPosition;
     this.opacity = (<Preferences>event.preferences).opacity;
+    this.primaryColor = <string>((<Preferences>event.preferences).primaryColor ?(<Preferences>event.preferences).primaryColor : this.primaryColor);
+    this.accentColor = <string>((<Preferences>event.preferences).accentColor ? (<Preferences>event.preferences).accentColor : this.accentColor);
     let isNightMode= <boolean>(<Preferences>event.preferences).nightMode;
     this.preferences = {
       backgroundUrl : this.backgroundSrc,
@@ -269,6 +276,8 @@ export class DashboardComponent implements OnInit {
       backgroundPosition : this.backgroundPosition,
       opacity : this.opacity,
       nightMode : isNightMode,
+      primaryColor : this.primaryColor,
+      accentColor: this.accentColor,
     }
 
     this.updateThemePalette();

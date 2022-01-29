@@ -1,4 +1,4 @@
-<div style="position: relative; height: 100%;">
+<div style="position: relative; height: 100%; font-family: system-ui;">
     <div class="modal-title">
         Manage Preferences
         <div class="modal-close-container">
@@ -7,86 +7,115 @@
             </div>
         </div>
     </div>
-    <div style="display: flex; flex-direction: column; padding: 1em; gap: 0.8em;">
-        <div>
-            <label>Night Mode</label>
-            <div style="margin-left: 2ch; padding-top: .2em;">
-                <mat-slide-toggle
-                aria-label="Toggle Night Mode"
-                [(ngModel)]="nightMode"
-                (change)="nightModeChanged($event)"
-                >
-                </mat-slide-toggle>
+    <div style="width: 100%; height: 17em;">
+        <div style="width: 50%; float: left;">
+            <div style="display: flex; flex-direction: column; padding: 1em; gap: 0.8em;">
+                <div>
+                    <label>Night Mode</label>
+                    <div style="margin-left: 2ch; padding-top: .2em;">
+                        <mat-slide-toggle
+                        aria-label="Toggle Night Mode"
+                        [(ngModel)]="nightMode"
+                        (change)="nightModeChanged($event)"
+                        >
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div>
+                    <label>Image Source</label>
+                    <div style="margin-left: 2ch; padding-top: .2em;">
+                        <mat-slide-toggle
+                        aria-label="Toggle Background Image Source"
+                        [(ngModel)]="enableBackgroundImage"
+                        >
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div>
+                    <mat-label>Opacity</mat-label>
+                    <div style="margin-left: 2ch; padding-top: .2em;">
+                        <mat-slider 
+                        style="margin-top: -0.5em;"
+                        (input)="opacity = $event.value; this.emitChange();"
+                        aria-label="units"
+                        [(ngModel)]="opacity"
+                        thumbLabel 
+                        step=".01"
+                        min="0"
+                        max="1"
+                        [displayWith]="formatLabel"
+                        tickInterval="auto"
+                        >
+                        </mat-slider>
+                    </div>
+                </div>
+                <div>
+                    <div style="padding: 10px; display: flex; gap: 10px;"
+                        *ngIf="enableBackgroundImage"
+                        >
+                        <label style="color: white; width: 48px;" 
+                        class="custom-file-upload mat-raised-button" 
+                        style="background-color: var(--primary-color); font-family: system-ui !important; color: white; width: 78px; display: flex; align-items: center;">
+                        Browse           
+                        <input 
+                            type="file"
+                            accept=".png, .jpg, .jpeg"
+                            class="text-nowrap text-truncate"
+                            style="visibility: hidden;"
+                            (change)="attachmentAdded($event)"
+                        />
+                        </label>    
+                    </div>
+                    <div *ngIf="!enableBackgroundImage">
+            
+                    </div>
+                </div>
             </div>
         </div>
-        <div>
-            <label>Image Source</label>
-            <div style="margin-left: 2ch; padding-top: .2em;">
-                <mat-slide-toggle
-                aria-label="Toggle Background Image Source"
-                [(ngModel)]="enableBackgroundImage"
+        <div style="width: 50%; float: right; padding-top: 1em;">
+            <mat-form-field  *ngIf="enableBackgroundImage" style="width: 224px; padding-left: 20px; padding-top: 10px;" 
+            color="primary"
+            appearance="outline">
+                <mat-label>Background Size</mat-label>
+                <mat-select [(ngModel)]="backgroundSize"
+                    
+                    (selectionChange)="objectFitModified()"
                 >
-                </mat-slide-toggle>
+                    <mat-option *ngFor="let option of backgroundSizeOptions" [value]="option">{{option}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field *ngIf="enableBackgroundImage" style="width: 224px; padding-left: 20px; padding-top: 10px;" appearance="outline">
+                <mat-label>Background Position</mat-label>
+                <mat-select [(ngModel)]="backgroundPosition"
+                    (selectionChange)="backgroundPositionModified()"
+                >
+                    <mat-option *ngFor="let option of backgroundPositionOptions" [value]="option">{{option}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <div style="display: flex; flex-direction: column;">
+                <div style="display: flex; gap: 2ch;">
+                    <div style="display: inline;">
+                        <label>Primary Color</label>
+                    </div>
+                    <div style="display: inline;">
+                        <label>Accent Color</label>
+                    </div>                    
+                </div>
+                <div>
+                    <div style="display: flex; gap: 1ch; position: relative;">
+                        <input class="form-control" [cpPosition]="'bottom'" style="width: 13ch;" 
+                        [(colorPicker)]="primaryColor" cpWidth='230px' cpHeight="100px"
+                        (colorPickerChange)="colorChanged()"
+                        [style.background]="primaryColor" />
+                        <input 
+                        class="form-control" [cpPosition]="'left'" style="width: 13ch;"  
+                        [(colorPicker)]="accentColor" cpWidth='230px' cpHeight="100px"
+                        (colorPickerChange)="colorChanged()"
+                        [style.background]="accentColor" />
+                    </div>
+                </div>
             </div>
         </div>
-        <div>
-            <mat-label>Opacity</mat-label>
-            <div style="margin-left: 2ch; padding-top: .2em;">
-                <mat-slider 
-                style="margin-top: -0.5em;"
-                (input)="opacity = $event.value; this.emitChange();"
-                aria-label="units"
-                [(ngModel)]="opacity"
-                thumbLabel 
-                step=".01"
-                min="0"
-                max="1"
-                [displayWith]="formatLabel"
-                tickInterval="auto"
-                >
-                </mat-slider>
-            </div>
-        </div>
-    </div>
-    <div>
-        <div style="padding: 10px; display: flex; gap: 10px;"
-            *ngIf="enableBackgroundImage"
-            >
-            <label style="color: white; width: 48px;" 
-            class="custom-file-upload mat-raised-button" 
-            style="background-color: var(--primary-color); font-family: system-ui !important; color: white; width: 78px; display: flex; align-items: center;">
-            Browse           
-            <input 
-                type="file"
-                accept=".png, .jpg, .jpeg"
-                class="text-nowrap text-truncate"
-                style="visibility: hidden;"
-                (change)="attachmentAdded($event)"
-            />
-            </label>    
-        </div>
-        <div *ngIf="!enableBackgroundImage">
-
-        </div>
-        <mat-form-field  *ngIf="enableBackgroundImage" style="width: 224px; padding-left: 20px; padding-top: 10px;" 
-        color="primary"
-        appearance="outline">
-            <mat-label>Background Size</mat-label>
-            <mat-select [(ngModel)]="backgroundSize"
-                
-                (selectionChange)="objectFitModified()"
-            >
-                <mat-option *ngFor="let option of backgroundSizeOptions" [value]="option">{{option}}</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field *ngIf="enableBackgroundImage" style="width: 224px; padding-left: 20px; padding-top: 10px;" appearance="outline">
-            <mat-label>Background Position</mat-label>
-            <mat-select [(ngModel)]="backgroundPosition"
-                (selectionChange)="backgroundPositionModified()"
-            >
-                <mat-option *ngFor="let option of backgroundPositionOptions" [value]="option">{{option}}</mat-option>
-            </mat-select>
-        </mat-form-field>
     </div>
     <div style="bottom: 0; position: absolute; padding-bottom: 0.6em; display: flex; justify-content: center; width: 100%;">
         <div id="bid-lower-right-btns">

@@ -18,6 +18,8 @@ export class User {
     backgroundPositionPreference ?: string;
     opacity ?: number;
     nightMode ?: boolean;
+    primaryColor ?: string;
+    accentColor ?: string;
 }
 
 export class AuthUser{

@@ -4,7 +4,7 @@
 #toolbar-container{
      /*#DA3E3E;*/
     height: 50px;
-    filter: brightness(120%);
+    /*filter: brightness(120%);*/
     box-shadow: 0 0 2px 4px var(--primary-color);
     display: flex;
     align-items: center;
@@ -29,20 +29,19 @@
             &#notif-bell{
                 ::ng-deep mat-icon{
                     span{
-                        background: #26D1A7;
+                        /*background: #26D1A7;*/
+                        background: var(--accent-color);
                         opacity: .7;
                         border-radius: 90%;
+                        
                     }
                 }
+            
             }
-
             &:hover{
-                ::ng-deep mat-icon{
-                    cursor: pointer;
-                    color: #F3F8FF;
-                    filter: brightness(65%);
-                }
-        }
+                cursor: pointer;
+                filter: brightness(65%);
+            }
         }
     }
 }

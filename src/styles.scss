@@ -24,3 +24,17 @@
   
   }   
 }
+
+.color-picker.open{
+  left: 0 !important;
+  top: 2em !important;
+  position: absolute !important;
+}
+
+.arrow.ng-star-inserted.arrow-left{
+  visibility: hidden;
+}
+
+.arrow.ng-star-inserted.arrow-bottom{
+  visibility: hidden;
+}

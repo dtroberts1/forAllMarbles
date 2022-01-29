@@ -4,4 +4,6 @@ export interface Preferences {
     backgroundPosition ?: string;
     opacity ?: number;
     nightMode ?: boolean;
+    primaryColor ?: string;
+    accentColor ?: string;
 }
