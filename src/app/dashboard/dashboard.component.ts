@@ -13,6 +13,7 @@ import { UserService } from '../services/user.service';
 import { YourBidsComponent } from '../your-bids/your-bids.component';
 import {OverlayContainer} from "@angular/cdk/overlay";
 import { BehaviorSubject } from 'rxjs';
+import { ColorServiceService } from '../color-service.service';
 
 const THEME_DARKNESS_SUFFIX = `-dark`;
 export interface Color {
@@ -49,18 +50,21 @@ export class DashboardComponent implements OnInit {
   opacity !: number | undefined;
   preferences !: Preferences;
   isThemeDark !: boolean;
-  primaryColor : string = '#8A2BE2';//'#DA3E3E';
+  primaryColor : string = '#DA3E3E';
   accentColor : string = '#6DFCD9';
   primaryColorPalette: Color[] = [];
   accentColorPalette: Color[] = [];
-
+  user !: User;
+  cssFilter !: string;
+  cssFilterDark !: string;
+  
   constructor(
     private authService: AuthService,
     private router: Router,
     private notificationService: NotificationService,
     private userService: UserService,
     private overlayContainer: OverlayContainer,
-
+    private colorService: ColorServiceService,
   ) {
     this.savePrimaryColor();
     this.saveAccentColor();
@@ -183,6 +187,23 @@ export class DashboardComponent implements OnInit {
             accentColor: user.accentColor,
           }
 
+          this.user = user;
+          let result = this.colorService.getFilters(this.user.primaryColor ? this.user.primaryColor : '#DA3E3E');
+
+          if (result){
+            let index = result?.filter.indexOf(':');
+            result.values[4] = result.values[4] + 100;
+            result.filter = this.colorService.css(result.values);
+            this.cssFilterDark = result?.filter.slice(index + 2, result?.filter.length - 1);    
+          }
+      
+          result = this.colorService.getFilters('#FFFFFF');
+      
+          if (result){
+            let index = result?.filter.indexOf(':')
+            this.cssFilter = result?.filter.slice(index + 2, result?.filter.length - 1);    
+          }
+
           this.backgroundSrc = this.preferences.backgroundUrl;
           this.opacity = this.preferences.opacity;
           this.backgroundPosition = this.preferences.backgroundPosition;
@@ -280,8 +301,21 @@ export class DashboardComponent implements OnInit {
       accentColor: this.accentColor,
     }
 
-    this.updateThemePalette();
+    let result = this.colorService.getFilters(this.primaryColor ? this.primaryColor : '#DA3E3E');
 
+    if (result){
+      let index = result?.filter.indexOf(':')
+      this.cssFilterDark = result?.filter.slice(index + 2, result?.filter.length - 1);    
+    }
+
+    result = this.colorService.getFilters('#fafafa');
+
+    if (result){
+      let index = result?.filter.indexOf(':')
+      this.cssFilter = result?.filter.slice(index + 2, result?.filter.length - 1);    
+    }
+
+    this.updateThemePalette();
 
     setTimeout(() => {
       this.setTheme('standard', isNightMode); // Default theme

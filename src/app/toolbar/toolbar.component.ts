@@ -10,6 +10,8 @@ import { NotificationService } from '../services/notifications.service';
 import { UserService } from '../services/user.service';
 import {HostBinding} from '@angular/core';
 import {OverlayContainer} from "@angular/cdk/overlay";
+import { ColorServiceService } from '../color-service.service';
+import { filter } from 'rxjs';
 const THEME_DARKNESS_SUFFIX = `-dark`;
 
 @Component({
@@ -32,6 +34,8 @@ export class ToolbarComponent implements OnInit {
   @Input() preferences !: Preferences;
   @Output() preferencesChanged = new EventEmitter();
   cssClasses !: string[];
+  @Input() cssFilter !: string;
+  @Input() cssFilterDark !: string;
 
   canSeeAllNotifs : boolean = false;
   notificationUnreadCount : number = 0;
@@ -42,12 +46,14 @@ export class ToolbarComponent implements OnInit {
     public dialog: MatDialog,
     private userService: UserService,
     private overlayContainer: OverlayContainer,
+    private colorService: ColorServiceService,
   ) { 
 //    this.setTheme('purple-green', true); // Default theme
 
   }
 
   ngOnInit(): void {
+
   }
 
   setTheme(theme: string, darkness: boolean | null = null) {
@@ -240,6 +246,7 @@ export class ToolbarComponent implements OnInit {
   }
 
   blurCard(event : any){
+
     if (event.relatedTarget && event.relatedTarget.id === 'profile-dropdown-icon' && this.selectedFooterItem === 'notifications'){
       return;
     }
@@ -279,6 +286,13 @@ export class ToolbarComponent implements OnInit {
             }
           }
           break;
+          case 'isThemeDark':
+            if (this.authUser){
+              this.userService.getSingle(<string>this.authUser?.key)
+              .then((user) => {                
+              });
+            }
+            break;
         }
       }
     }

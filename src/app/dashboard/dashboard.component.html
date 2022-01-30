@@ -7,6 +7,8 @@
     (preferencesChanged)="preferencesChanged($event)"
     [preferences]="preferences"
     [isThemeDark]="isThemeDark"
+    [cssFilter]="cssFilter"
+    [cssFilterDark]="cssFilterDark"
     ></app-toolbar>
     <div id="main-view" style="background-color: #F3F2EF; height: 1200px;"
     [ngStyle]="{'background-image': (backgroundSrc ? 'url(' + backgroundSrc + ')' : 'initial'),
@@ -26,11 +28,19 @@
                     <app-feed
                     [searchText]="searchText"
                     [isThemeDark]="isThemeDark"
+                    [cssFilter]="cssFilterDark"
                     >
 
                     </app-feed>
                 </mat-tab>
-                <mat-tab label="Your Bids" #yourBids><app-your-bids></app-your-bids></mat-tab>
+                <mat-tab label="Your Bids" #yourBids>
+                    <app-your-bids
+                        [isThemeDark]="isThemeDark"
+                        [cssFilter]="cssFilterDark"
+                        >
+
+                    </app-your-bids>
+                </mat-tab>
                 <mat-tab label="Create Bid" #createBid> 
                     <div>
                         <app-create-new-bid
@@ -49,11 +59,12 @@
             align-items: center;"
             [ngStyle]="{'background': isThemeDark ? 'var(--app-bar-color)' : 'var(--app-bar-color)'}"
             >
-                <mat-icon *ngIf="!canDispVis"  style="padding: 0.1em; border-radius: 10px;" id="seach-icon" (click)="toggleSearchVis()"
+                <mat-icon *ngIf="!canDispVis"  style="padding: 0.1em; border-radius: 10px; z-index: 2" 
+                id="seach-icon" (click)="toggleSearchVis()"
                 >search</mat-icon>
                 <div *ngIf="canDispVis" wmAnimate="fadeInRight" speed="normal">
                     <mat-form-field 
-                    style="width: 224px; font-size: .7rem; color: var(--text-color); margin-top: 1em;" appearance="fill">
+                    style="z-index: 2; width: 224px; font-size: .7rem; color: var(--text-color); margin-top: 1em;" appearance="fill">
                     <mat-label>Search</mat-label>                                                   
                     <input #searchinput type="search" style="font-size: 1rem; font-family: system-ui !important;" matInput 
                     [(ngModel)]="searchText"
