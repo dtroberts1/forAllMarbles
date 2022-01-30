@@ -17,6 +17,7 @@
                         aria-label="Toggle Night Mode"
                         [(ngModel)]="nightMode"
                         (change)="nightModeChanged($event)"
+                        style="filter: brightness(1.6)"
                         >
                         </mat-slide-toggle>
                     </div>
@@ -27,6 +28,7 @@
                         <mat-slide-toggle
                         aria-label="Toggle Background Image Source"
                         [(ngModel)]="enableBackgroundImage"
+                        style="filter: brightness(1.6)"
                         >
                         </mat-slide-toggle>
                     </div>
@@ -35,7 +37,7 @@
                     <mat-label>Opacity</mat-label>
                     <div style="margin-left: 2ch; padding-top: .2em;">
                         <mat-slider 
-                        style="margin-top: -0.5em;"
+                        style="margin-top: -0.5em; filter: brightness(1.6);"
                         (input)="opacity = $event.value; this.emitChange();"
                         aria-label="units"
                         [(ngModel)]="opacity"
@@ -106,11 +108,13 @@
                         <input class="form-control" [cpPosition]="'bottom'" style="width: 13ch;" 
                         [(colorPicker)]="primaryColor" cpWidth='230px' cpHeight="100px"
                         (colorPickerChange)="colorChanged()"
+                        [cpOutputFormat]="'hex'"
                         [style.background]="primaryColor" />
                         <input 
                         class="form-control" [cpPosition]="'left'" style="width: 13ch;"  
                         [(colorPicker)]="accentColor" cpWidth='230px' cpHeight="100px"
                         (colorPickerChange)="colorChanged()"
+                        [cpOutputFormat]="'hex'"
                         [style.background]="accentColor" />
                     </div>
                 </div>

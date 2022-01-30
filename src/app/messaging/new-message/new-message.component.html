@@ -69,7 +69,10 @@
                 <div id="right-msg-ctrls">
                     <button [disabled]="!selectedMessageUser || !msgText" 
                     (click)="sendMessage()" 
-                    style="font-family: system-ui !important; color: white;"
+                    [ngStyle]="{'filter': ( (!selectedMessageUser || !msgText) ? 'brightness(.6)': 'brightness(1)' )}"
+                    style="font-family: system-ui !important;
+                    background: var(--primary-color);
+                    color: white;"
                      mat-raised-button color="accent">Send</button>
                 </div>
             </div>

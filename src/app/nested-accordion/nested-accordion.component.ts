@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { firstValueFrom } from 'rxjs';
 import { AdminChooseWinnerComponent } from '../admin-choose-winner/admin-choose-winner.component';
 import { BidConfirmationDialogComponent } from '../bid-confirmation-dialog/bid-confirmation-dialog.component';
+import { ColorServiceService } from '../color-service.service';
 import { DocManagementModalComponent } from '../doc-management-modal/doc-management-modal.component';
 import { Bid } from '../models/bid';
 import { StatusNotification } from '../models/status-notification';
@@ -17,7 +18,7 @@ import { UserService } from '../services/user.service';
 @Component({
   selector: 'app-nested-accordion',
   templateUrl: './nested-accordion.component.html',
-  styleUrls: ['./nested-accordion.component.less'],
+  styleUrls: ['./nested-accordion.component.scss'],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '65px'})),
@@ -64,6 +65,7 @@ export class NestedAccordionComponent implements OnInit {
   amountPositionX !: number;
   @Output() refreshCallback: EventEmitter<any> = new EventEmitter();
   @Output() accordionBaseCallback: EventEmitter<any> = new EventEmitter();
+  @Input() cssFilter !: string;
   
   expandedIndex = 0;
 
@@ -72,11 +74,11 @@ export class NestedAccordionComponent implements OnInit {
     public dialog: MatDialog,
     private userService: UserService,
     private notificationService: NotificationService,
+    private colorService: ColorServiceService,
   ) { }
 
   ngOnInit(): void {
     this.hasWinnerDocs = this.getHasWinnerDocs();
-
 
     this.setFormControlInputs();
 
@@ -163,6 +165,7 @@ export class NestedAccordionComponent implements OnInit {
       .then((res) =>{
         if (Array.isArray(res)){
           let creator = res.find(user => user.key === (<Bid>this.bid).bidCreatorKey);
+
           if (creator){
             this.creatorName = <string>creator.fullName;
           }

@@ -1,7 +1,11 @@
 <div id="toolbar-container" [ngStyle]="{ 'background-color' : (isThemeDark ? 
 'var(--app-bar-color)' : 'var(--primary-color)')}">
     <div style="float: left; width: 50%;">
-        <img style="height: 40px; width: 40px;" src="../../assets/icons/dice.png" />
+        <div id="dice-icon"
+          [ngClass]="{'is-dark' :isThemeDark}"
+          [ngStyle]="{'filter': isThemeDark ? cssFilterDark : 'brightness(300%)'}"
+        >
+        </div>
     </div>
     <div id="toolbar-btns">
         <div class="toolbar-icon" id="notif-bell">
@@ -57,14 +61,12 @@
         color: var(--text-color);">
           <div class="notif-img-container">
             <div>
-                <mat-icon *ngIf="!notification.type"  style="color: forestgreen;"> attach_money</mat-icon>
-                <img *ngIf="notification.type" 
-                [ngClass]="{'victory':notification.type === 'victory',
-                'counter-offer': notification.type === 'counter_offer',
-                'added-document':notification.type === 'added_document',
-                'approved':notification.type === 'approved',
-                'defeat': notification.type === 'defeat'}" 
-                class="notification-icon" style="height: 24px; width: 24px;"  />
+                <mat-icon color="primary" *ngIf="!notification.type"  style="color: forestgreen;"> attach_money</mat-icon>
+                <mat-icon color="primary" *ngIf="notification.type === 'added_document'" color="primary">attach_file</mat-icon>
+                <mat-icon color="primary" *ngIf="notification.type === 'counter_offer'" >supervisor_account</mat-icon>
+                <mat-icon color="primary" *ngIf="notification.type === 'victory'" >star</mat-icon>
+                <mat-icon color="primary" *ngIf="notification.type === 'defeat'" >sentiment_very_dissatisfied</mat-icon>
+                <mat-icon color="primary" *ngIf="notification.type === 'approved'" >star_half</mat-icon>
             </div>
             <div [ngStyle]="{'visibility': !notification.isRead ? 'visible': 'hidden'}" class="mark-notif-as-read">
               <mat-icon 

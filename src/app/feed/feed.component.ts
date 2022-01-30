@@ -21,6 +21,7 @@ export class FeedComponent implements OnInit {
   searchedBids !: (Bid | any)[];
   @Input() searchText !: string;
   @Input() isThemeDark !: boolean;
+  @Input() cssFilter !: string;
 
   constructor(
     private bidService: BidService,

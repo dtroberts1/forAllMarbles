@@ -1,4 +1,4 @@
-import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { Bid } from '../models/bid';
 import { AuthUser } from '../models/user';
@@ -14,7 +14,8 @@ import { BidService } from '../services/bid.service';
 export class YourBidsComponent implements OnInit {
   myBids!: (Bid | any)[];
   authUser !:AuthUser | null;
-
+  @Input() isThemeDark !: boolean;
+  @Input() cssFilter !: string;
 
   constructor(
     private bidService: BidService,

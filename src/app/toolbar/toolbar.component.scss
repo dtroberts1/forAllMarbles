@@ -242,24 +242,6 @@
     }
 }
 
-.notification-icon{
-    &.victory{
-        content:url(../../assets/icons/trophy.png);
-    }
-    &.defeat{
-        content:url(../../assets/icons/broken_chess_peice.jpg);
-    }
-    &.counter-offer{
-        content:url(../../assets/icons/counter_offer_image.jpg);
-    }
-    &.added-document{
-        content:url(../../assets/icons/document.png);
-    }
-    &.approved{
-        content: url(../../assets/icons/handshake.png);
-    }
-}
-
 #notif-collapser{
     background: var(--card-color);
     color: var(--primary-color);
@@ -268,4 +250,19 @@
         filter: brightness(1.4);
     }
 
+}
+
+#dice-icon{
+
+    &.is-dark{
+        background-image: url("../../assets/icons/dice.png");
+    }
+    &:not(.is-dark){
+        background-image: url("../../assets/icons/dice_white.png");
+    }
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 40px; 
+    width: 40px;
 }

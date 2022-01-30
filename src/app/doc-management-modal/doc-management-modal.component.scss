@@ -74,3 +74,10 @@
         }
     }
 }
+
+::ng-deep mat-checkbox{
+    filter: brightness(2.6) !important;
+    .mat-checkbox-label{
+        filter: brightness(2.6) !important;
+    }
+}
